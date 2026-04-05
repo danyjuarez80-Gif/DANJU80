@@ -30,5 +30,8 @@ https://linear-893.frequency.stream/dist/xumo/893/hls/master/playlist_1920x1080.
 #EXTINF:-,Canal 10
 https://bein-esp-xumo.amagi.tv/playlistR720P.m3u8
 
-#EXTINF:-,Canal 12
+#EXTINF:-,Canal 11
 https://channel01-onlymex.akamaized.net/hls/live/2022749/event01/index_6.m3u8
+
+#EXTINF:-,Canal 12
+https://c2657533.wurl.com/manifest/f36d25e7e52f1ba8d7e56eb859c636563214f541/UGxleC1icl9GSUZBUGx1c1BvcnR1Z3Vlc2VfSExT/c5d35a4b-41d1-4bfe-bf2e-261040531afb/5.m3u8
