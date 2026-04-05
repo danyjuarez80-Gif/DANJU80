@@ -9,68 +9,71 @@ http://181.176.155.7:8090/play/a1wl/index.m3u8
 #EXTINF:-,noticias 3
 http://181.176.155.7:8090/play/a1nv/index.m3u8
  
-#EXTINF:-,noticias 5
+#EXTINF:-,noticias 4
 http://181.176.155.7:8090/play/a1vv/index.m3u8
  
 #EXTINF:-,noticias 5
 http://181.176.155.7:8090/play/a1kd/index.m3u8
- 
+
 #EXTINF:-,noticias 6
+https://deportes.ksdjugfsddeports.com:9092/NDUuMTkxLjUzLjI=/21_.m3u8?token=qiaruX0kIdOwdmZICuii4w&expires=1775448724
+
+#EXTINF:-,noticias 7
 http://181.176.155.7:8090/play/a1e8/index.m3u8
  
-#EXTINF:-,noticias 7
+#EXTINF:-,noticias 8
 http://181.176.155.7:8090/play/a1kh/index.m3u8
  
-#EXTINF:-,noticias 8
+#EXTINF:-,noticias 9
 http://181.176.155.7:8090/play/a1ph/index.m3u8
 
-#EXTINF:-,noticias 9
+#EXTINF:-,noticias 10
 https://linear-893.frequency.stream/dist/xumo/893/hls/master/playlist_1920x1080.m3u8
 
-#EXTINF:-,noticias 10
+#EXTINF:-,noticias 11
 https://bein-esp-xumo.amagi.tv/playlistR720P.m3u8
 
-#EXTINF:-,noticias 11
+#EXTINF:-,noticias 12
 https://channel01-onlymex.akamaized.net/hls/live/2022749/event01/index_6.m3u8
 
-#EXTINF:-,noticias 12
+#EXTINF:-,noticias 13
 https://c2657533.wurl.com/manifest/f36d25e7e52f1ba8d7e56eb859c636563214f541/UGxleC1icl9GSUZBUGx1c1BvcnR1Z3Vlc2VfSExT/c5d35a4b-41d1-4bfe-bf2e-261040531afb/5.m3u8
 
-#EXTINF:-,noticias 13
+#EXTINF:-,noticias 14
 https://azt-mun.otteravision.com/azt/mun/mun_360p.m3u8
 
-#EXTINF:-,noticias 14
+#EXTINF:-,noticias 15
 https://regionales.saohgdasregions.fun:9092/NDUuMTkxLjUzLjI=/2_.m3u8?token=4LI_I3QHauP1pZxk1iSXRA&expires=1775448363
 
-#EXTINF:-,noticias 15
+#EXTINF:-,noticias 16
 https://regionales.saohgdasregions.fun:9092/NDUuMTkxLjUzLjI=/1_.m3u8?token=F6ND1pDapW91m8yWy1Frqw&expires=1775450685
 
-#EXTINF:-,noticias 16
-https://8c51.streameasthd.net/tudn_usa/tracks-v1a1/mono.m3u8?ip=45.191.53.2&token=92a927e068f4bab7dde9ffba4b57bee90a214905-5a-1775453078-1775399078
-
 #EXTINF:-,noticias 17
-https://qzv4jmsc.fubohd.com/tycsports/mono.m3u8?token=39875dc147703f71931ec37696ea73090d184b21-2d-1775425558-1775407558
+https://8c51.streameasthd.ne/tudn_usa/tracks-v1a1/mono.m3u8?ip=45.191.53.2&token=92a927e068f4bab7dde9ffba4b57bee90a214905-5a-1775453078-1775399078
 
 #EXTINF:-,noticias 18
-https://8c51.streameasthd.net/global/tntsports/index.m3u8?token=8ad628fb8a7bc751a6c0aa7857ef0ac7955c95c3-30-1775457458-1775403458&ip=45.191.53.2
+https://qzv4jmsc.fubohd.com/tycsports/mono.m3u8?token=39875dc147703f71931ec37696ea73090d184b21-2d-1775425558-1775407558
 
 #EXTINF:-,noticias 19
-https://agvyby.fubohd.com/dsports/mono.m3u8?token=afd9d12549d95bc4f6683a71ec7c2aefdf244623-b4-1775429860-1775411860
+https://8c51.streameasthd.net/global/tntsports/index.m3u8?token=8ad628fb8a7bc751a6c0aa7857ef0ac7955c95c3-30-1775457458-1775403458&ip=45.191.53.2
 
 #EXTINF:-,noticias 20
-https://bgfuzq.fubohd.com/dsports2/mono.m3u8?token=7be0c4af58434004437c6601f9b7fd7957efab51-de-1775430028-1775412028
+https://agvyby.fubohd.com/dsports/mono.m3u8?token=afd9d12549d95bc4f6683a71ec7c2aefdf244623-b4-1775429860-1775411860
 
 #EXTINF:-,noticias 21
-https://24a1.streameasthd.net/global/dsportsplus/index.m3u8?token=b75e174f52fcdc7f1c0aa227fa7632deda86b0e6-e6-1775458024-1775404024&ip=45.191.53.2
+https://bgfuzq.fubohd.com/dsports2/mono.m3u8?token=7be0c4af58434004437c6601f9b7fd7957efab51-de-1775430028-1775412028
 
 #EXTINF:-,noticias 22
-https://pecdl1.streameasthd.net/global/fox1ar/index.m3u8?token=2ca018610cbbeedafc0e3ed6ea56e79c164c5442-90-1775458165-1775404165&ip=45.191.53.2
+https://24a1.streameasthd.net/global/dsportsplus/index.m3u8?token=b75e174f52fcdc7f1c0aa227fa7632deda86b0e6-e6-1775458024-1775404024&ip=45.191.53.2
 
 #EXTINF:-,noticias 23
-https://8c51.streameasthd.net/global/winsports/index.m3u8?token=f380d9af0d69fcb12a3fff0cb6b520926fcba040-f3-1775458490-1775404490&ip=45.191.53.2
+https://pecdl1.streameasthd.net/global/fox1ar/index.m3u8?token=2ca018610cbbeedafc0e3ed6ea56e79c164c5442-90-1775458165-1775404165&ip=45.191.53.2
 
 #EXTINF:-,noticias 24
-https://24a1.streameasthd.net/global/winplus/index.m3u8?token=6ffa854ee0a0df6616653fedb7dd044897324e0c-ee-1775458600-1775404600&ip=45.191.53.2
+https://8c51.streameasthd.net/global/winsports/index.m3u8?token=f380d9af0d69fcb12a3fff0cb6b520926fcba040-f3-1775458490-1775404490&ip=45.191.53.2
 
 #EXTINF:-,noticias 25
+https://24a1.streameasthd.net/global/winplus/index.m3u8?token=6ffa854ee0a0df6616653fedb7dd044897324e0c-ee-1775458600-1775404600&ip=45.191.53.2
+
+#EXTINF:-,noticias 26
 https://dai.google.com/linear/hls/event/yINISWAPQ0CPhPixe-40wQ/master.m3u8
