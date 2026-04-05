@@ -1,5 +1,5 @@
 #EXTM3U
-
+ 
 #EXTINF:-,Canal 1
 http://181.176.155.7:8090/play/a1qh/index.m3u8
  
@@ -31,4 +31,4 @@ https://linear-893.frequency.stream/dist/xumo/893/hls/master/playlist_1920x1080.
 https://bein-esp-xumo.amagi.tv/playlistR720P.m3u8
 
 #EXTINF:-,Canal 12
-http://45.5.119.43:4000/play/a05q/28181737.m3u8
+https://channel01-onlymex.akamaized.net/hls/live/2022749/event01/index_6.m3u8
