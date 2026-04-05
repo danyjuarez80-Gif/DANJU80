@@ -71,3 +71,6 @@ https://8c51.streameasthd.net/global/winsports/index.m3u8?token=f380d9af0d69fcb1
 
 #EXTINF:-,noticias 24
 https://24a1.streameasthd.net/global/winplus/index.m3u8?token=6ffa854ee0a0df6616653fedb7dd044897324e0c-ee-1775458600-1775404600&ip=45.191.53.2
+
+#EXTINF:-,noticias 25
+https://dai.google.com/linear/hls/event/yINISWAPQ0CPhPixe-40wQ/master.m3u8
