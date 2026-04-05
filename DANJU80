@@ -11,12 +11,12 @@ http://181.176.155.7:8090/play/a1nv/index.m3u8
  
 #EXTINF:-,noticias 4
 http://181.176.155.7:8090/play/a1vv/index.m3u8
- 
+
 #EXTINF:-,noticias 5
-http://181.176.155.7:8090/play/a1kd/index.m3u8
+https://deportes.ksdjugfsddeports.com:9092/NDUuMTkxLjUzLjI=/21_.m3u8?token=qiaruX0kIdOwdmZICuii4w&expires=1775448724
 
 #EXTINF:-,noticias 6
-https://deportes.ksdjugfsddeports.com:9092/NDUuMTkxLjUzLjI=/21_.m3u8?token=qiaruX0kIdOwdmZICuii4w&expires=1775448724
+http://181.176.155.7:8090/play/a1kd/index.m3u8
 
 #EXTINF:-,noticias 7
 http://181.176.155.7:8090/play/a1e8/index.m3u8
