@@ -1,5 +1,5 @@
 #EXTM3U
- 
+
 #EXTINF:-,Canal 1
 http://181.176.155.7:8090/play/a1qh/index.m3u8
  
@@ -23,90 +23,12 @@ http://181.176.155.7:8090/play/a1kh/index.m3u8
  
 #EXTINF:-,Canal 8
 http://181.176.155.7:8090/play/a1ph/index.m3u8
- 
+
 #EXTINF:-,Canal 9
 https://linear-893.frequency.stream/dist/xumo/893/hls/master/playlist_1920x1080.m3u8
- 
+
 #EXTINF:-,Canal 10
 https://bein-esp-xumo.amagi.tv/playlistR720P.m3u8
- 
-#EXTINF:-,Canal 11
-http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5ebc8688f3697d00072f7cf8/3321280/playlist.m3u8?terminate=false&sid=0e97a69e-3355-4217-b6fb-8952f0ad1803&deviceDNT=0&deviceModel=web&deviceVersion=unknown&appName=web&deviceId=6c26f5a6-30d3-11ef-9cf5-e9ddff8ff496&appVersion=unknown&deviceType=web&deviceMake=Chrome
- 
-#EXTINF:-,Canal 12
-http://dai.google.com/linear/hls/pa/event/YHoOj51dSKCvBQOBG2OvLQ/stream/be52c2bf-c3ee-4018-8699-65b6c6a78e50:MRN2/variant/8b5cecbeab9ed4727f72acccd67a97b0/bandwidth/1117600.m3u8
- 
-#EXTINF:-,Canal 13
-http://45.5.119.43:4000/play/a05q/28181737.m3u8
- 
-#EXTINF:-,Canal 14
-http://channel01-onlymex.akamaized.net/hls/live/2022749/event01/index_6.m3u8
- 
-#EXTINF:-,Canal 15
-http://c2nvdxq.fubohd.com/beinsportes/mono.m3u8?token=5db0de2d434e59c64e86bd122e344b2b48b0d850-59-1775245445-1775227445
- 
-#EXTINF:-,Canal 16
-http://agvyby.fubohd.com/espn3/mono.m3u8?token=d9f72c2bf6a6c2126c8aafb4715ab1b63cd465b5-cc-1775245580-1775227580
- 
-#EXTINF:-,Canal 17
-http://dw5pdgvk.fubohd.com/tycsports/mono.m3u8?token=642d46d471c4dfa1c0929041c3257ac3d82a309d-c7-1775245624-1775227624
- 
-#EXTINF:-,Canal 18
-http://x4bnd7lq.fubohd.com/espn6/mono.m3u8?token=c1d0c2d086a80a598089c556a674e5024e3ce575-3b-1775245765-1775227765
- 
-#EXTINF:-,Canal 19
-http://qzv4jmsc.fubohd.com/espn5/mono.m3u8?token=cc2640fa1911d324ed751a6c8f2293bae54481e5-2d-1775245816-1775227816
- 
-#EXTINF:-,Canal 20
-http://dw5pdgvk.fubohd.com/dsports2/mono.m3u8?token=813f9dfc3b2aae10c68fb1bdc873816e595a3a21-e5-1775245903-1775227903
- 
-#EXTINF:-,Canal 21
-http://c2nvdxq.fubohd.com/espnpremium/mono.m3u8?token=5960461520cdb1cbb4db86e2d6bfcb24bad5a632-f1-1775246086-1775228086
- 
-#EXTINF:-,Canal 22
-http://rm8zcvk3.fubohd.com/winsportsplus/mono.m3u8?token=d444199726175c9cd06c64f9f83045397bad30dc-d3-1775246316-1775228316
- 
-#EXTINF:-,Canal 23
-http://aw1wcm92zq.fubohd.com/dsportsplus/mono.m3u8?token=e9d0353b4f001764080f9ed835249a986177f0c9-af-1775246874-1775228874
- 
-#EXTINF:-,Canal 24
-http://dw5pdgvk.fubohd.com/winsportsplus/mono.m3u8?token=fae8fe9d37c13332f10a667512f9aebcc9729a2e-f5-1775246954-1775228954
- 
-#EXTINF:-,Canal 25
-http://cgxheq.fubohd.com/espndeportes/mono.m3u8?token=7b323e524ba57b8f55e9d9f0ad85ca44abd11108-ea-1775247105-1775229105
- 
-#EXTINF:-,Canal 26
-http://ym9yzq.fubohd.com/espn7/mono.m3u8?token=cbb9b58c21109febacfa7f5e725b371eeedcd0eb-8d-1775247149-1775229149
- 
-#EXTINF:-,Canal 27
-http://tyg2mnl9.fubohd.com/tntsports/mono.m3u8?token=a769178d17669fb7c84765a5623fa9955d28e710-5e-1775247352-1775229352
- 
-#EXTINF:-,Canal 28
-http://dw5pdgvk.fubohd.com/liga1max/mono.m3u8?token=2a505a394e9f1f2b47cb3f14e73aba9dfd605e1e-1a-1775247398-1775229398
- 
-#EXTINF:-,Canal 29
-http://x4bnd7lq.fubohd.com/espn/mono.m3u8?token=9d3babd2a98d11d0d2337fcb59c6fde9dafede30-ad-1775247427-1775229427
- 
-#EXTINF:-,Canal 30
-http://45.5.119.43:4000/play/a052/38894616.m3u8
- 
-#EXTINF:-,Canal 31
-http://45.5.119.43:4000/play/a053/58454446.m3u8
- 
-#EXTINF:-,Canal 32
-http://45.5.119.43:4000/play/a054/17365090.m3u8
- 
-#EXTINF:-,Canal 33
-http://45.5.119.43:4000/play/a028/36628587.m3u8
- 
-#EXTINF:-,Canal 34
-http://45.5.119.43:4000/play/a0ix/32377931.m3u8
- 
-#EXTINF:-,Canal 35
-http://45.5.119.43:4000/play/a0kj/60793865.m3u8
- 
-#EXTINF:-,Canal 36
-https://rakutenaa-dazn-combat-rakuten-kcybm.amagi.tv/ts-eu-w1-n2/playlist/rakutenAA-dazn-combat-rakuten/cb51381b65736c8f84cf3c78d2d31fdd844c3bdd0b61cb3071aa448f1298410ddafbb2d3932fff695c811fd5716d340f5b63c009967a05dece0be81168297021c8e3eb3fc69c110eacdb093a32c8027a2c8212058c7c087799ce1f0b8e32fc39261bfa0663537ddce95fb3764cc59e0a9b1c78ddfc9f3826785958815e5bf7b408aaf9b40c10d168bcb21c4c913244e6d443d4851bb389c95dcb43d571f810c893f58dd1723eb7ab4291f871a768224050a1c21fbecc45bfd9951b41f61306676e98623ef184231289555754b8dec6ba77f610cff351e9e2d36f65ea22a6358462be06e7cb5ba1bfbec50039513356ed0055c3d78fa5815902a86ff5b6e8d3723cabf91b3220a3088f757b6bc7af8f7ceeb28eaabb861b563b3d41615981b5bdc1b54ffae36b9120d8cef79972614f6d071788676ffb07d404d262a1c21f2013180afdda1df38fd75a3f755cc6ae6a94424bf78bd0c3e807359c34401af0368d12454ddc246079d228fbb13578c67359d27b6ead187dab6ac89500b9e7d7ec0d3ef5f9c241f460a6f529dae40da468730856e5bc7c1115022d90dd670b316bca0ab1809daf245f72999da7c9c95d3c082e04125ddb90805eafce91795346bb104c06531f189108d313af23411221c41b93e149438c082522f1b47d3a7e6985c3a58e97dca915e52c33ae6ba48b953f36d4f8653eb4a209f0a6a4272799c50a/103/1280x720_2657600/index.m3u8
 
-#EXTINF:-,Canal 37
-https://98ca2.streameasthd.net/tudn_usa/tracks-v1a1/mono.m3u8?ip=45.191.53.2&token=937badc6f505915b9164b0d16e5a20f1cea97071-6a-1775366233-1775312233
+#EXTINF:-,Canal 12
+http://45.5.119.43:4000/play/a05q/28181737.m3u8
