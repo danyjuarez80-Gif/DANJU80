@@ -1,0 +1,25 @@
+#EXTM3U
+
+#EXTINF:-1 group-title="TV",noticias 1
+http://181.176.155.7:8090/play/a1qh/index.m3u8
+ 
+#EXTINF:-1 group-title="TV",noticias 2
+http://181.176.155.7:8090/play/a1wl/index.m3u8
+ 
+#EXTINF:-1 group-title="TV",noticias 3
+http://181.176.155.7:8090/play/a1nv/index.m3u8
+ 
+#EXTINF:-1 group-title="TV",noticias 4
+http://181.176.155.7:8090/play/a1vv/index.m3u8
+
+#EXTINF:-1 group-title="TV",noticias 5
+http://181.176.155.7:8090/play/a1kd/index.m3u8
+
+#EXTINF:-1 group-title="TV",noticias 6
+http://181.176.155.7:8090/play/a1e8/index.m3u8
+
+#EXTINF:-1 group-title="TV",noticias 7
+http://181.176.155.7:8090/play/a1kh/index.m3u8
+
+#EXTINF:-1 group-title="TV",noticias 8
+https://linear-893.frequency.stream/dist/xumo/893/hls/master/playlist_1920x1080.m3u8
