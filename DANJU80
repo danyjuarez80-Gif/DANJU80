@@ -71,3 +71,9 @@ https://d368vp0qqzvkid.cloudfront.net/manifest/3fec3e5cac39a52b2132f9c66c83dae04
 
 #EXTINF:-1 group-title="TV",noticias 24
 https://dw5pdgvk.fubohd.com/dsports/mono.m3u8?token=f9cb6792986de3286fc04041f75f5eaf6760fbcb-be-1775947347-1775929347
+
+#EXTINF:-1 group-title="TV",noticias 25
+https://14c51.streameasthd.net/tudn_usa/tracks-v1a1/mono.m3u8?ip=45.191.55.32&token=fbdb86cdf630f99095612cc44c712b39f29efea1-9e-1776282864-1776228864
+
+#EXTINF:-1 group-title="TV",noticias 26
+https://14c51.streameasthd.net:443/tudn_usa/index.m3u8?token=fbdb86cdf630f99095612cc44c712b39f29efea1-9e-1776282864-1776228864&ip=45.191.55.32
