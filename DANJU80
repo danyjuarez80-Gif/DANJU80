@@ -1,8 +1,5 @@
 #EXTM3U
 
-#EXTINF:-,noticias 1
-https://doc1.streameasthd.net/global/disney18/index.m3u8?token=7ac55810f86ff8498fa6fc1e62bfbef4f3e5f860-ed-1775462792-1775408792&ip=45.191.53.2
-
 #EXTINF:-,noticias 2
 http://181.176.155.7:8090/play/a1qh/index.m3u8
  
@@ -15,9 +12,6 @@ http://181.176.155.7:8090/play/a1nv/index.m3u8
 #EXTINF:-,noticias 5
 http://181.176.155.7:8090/play/a1vv/index.m3u8
 
-#EXTINF:-,noticias 6
-https://deportes.ksdjugfsddeports.com:9092/NDUuMTkxLjUzLjI=/21_.m3u8?token=qiaruX0kIdOwdmZICuii4w&expires=1775448724
-
 #EXTINF:-,noticias 7
 http://181.176.155.7:8090/play/a1kd/index.m3u8
 
@@ -26,9 +20,6 @@ http://181.176.155.7:8090/play/a1e8/index.m3u8
  
 #EXTINF:-,noticias 9
 http://181.176.155.7:8090/play/a1kh/index.m3u8
- 
-#EXTINF:-,noticias 10
-http://181.176.155.7:8090/play/a1ph/index.m3u8
 
 #EXTINF:-,noticias 11
 https://linear-893.frequency.stream/dist/xumo/893/hls/master/playlist_1920x1080.m3u8
@@ -39,14 +30,8 @@ https://bein-esp-xumo.amagi.tv/playlistR720P.m3u8
 #EXTINF:-,noticias 13
 https://channel01-onlymex.akamaized.net/hls/live/2022749/event01/index_6.m3u8
 
-#EXTINF:-,noticias 14
-https://c2657533.wurl.com/manifest/f36d25e7e52f1ba8d7e56eb859c636563214f541/UGxleC1icl9GSUZBUGx1c1BvcnR1Z3Vlc2VfSExT/c5d35a4b-41d1-4bfe-bf2e-261040531afb/5.m3u8
-
 #EXTINF:-,noticias 15
 https://azt-mun.otteravision.com/azt/mun/mun_360p.m3u8
-
-#EXTINF:-,noticias 16
-https://regionales.saohgdasregions.fun:9092/NDUuMTkxLjUzLjI=/2_.m3u8?token=4LI_I3QHauP1pZxk1iSXRA&expires=1775448363
 
 #EXTINF:-,noticias 17
 https://regionales.saohgdasregions.fun:9092/NDUuMTkxLjUzLjI=/1_.m3u8?token=F6ND1pDapW91m8yWy1Frqw&expires=1775450685
@@ -75,38 +60,14 @@ https://pecdl1.streameasthd.net/global/fox1ar/index.m3u8?token=2ca018610cbbeedaf
 #EXTINF:-,noticias 25
 https://8c51.streameasthd.net/global/winsports/index.m3u8?token=f380d9af0d69fcb12a3fff0cb6b520926fcba040-f3-1775458490-1775404490&ip=45.191.53.2
 
-#EXTINF:-,noticias 26
-https://24a1.streameasthd.net/global/winplus/index.m3u8?token=6ffa854ee0a0df6616653fedb7dd044897324e0c-ee-1775458600-1775404600&ip=45.191.53.2
-
 #EXTINF:-,noticias 27
 https://dai.google.com/linear/hls/event/yINISWAPQ0CPhPixe-40wQ/master.m3u8
 
 #EXTINF:-,noticias 28
 https://d368vp0qqzvkid.cloudfront.net/11603/88889703/hls/master.m3u8?ads._fw_atts=&ads._fw_h_user_agent=Mozilla%252F5.0%2520%28Linux%253B%2520Android%252015%253B%2520RMX5070%2520Build%252FUKQ1.231108.001%253B%2520wv%29%2520AppleWebKit%252F537.36%2520%28KHTML%252C%2520like%2520Gecko%29%2520Version%252F4.0%2520Chrome%252F146.0.7680.164%2520Mobile%2520Safari%252F537.36&ads._fw_is_lat=0&ads._fw_nielsen_app_id=P06F4DCAF-86D7-4159-AAE9-D3C50FF96F01&ads._fw_player_height=177&ads._fw_player_width=320&ads._fw_site_page=https%253A%252F%252Fwww.telemundo51.com%252Fver%252F&ads._fw_us_privacy=1---&ads.afid=396654223&ads.caid=TelemundoNoticiasFL&ads.channelName=TelemundoNoticiasFL&ads.csid=tm_ots_alldevice_allos_web_wscv_livelinear_virtualchannel&ads.flag=%252Bsltp%252Bemcr%252Bslcb%252Bsbid-fbad%252Baeti%252Bslif-vicb%252Bamcb%252Bplay-uapl%252Bdtrd%252Bexvt&ads.gpp=DBABLA%7EBVQVAAAAAgA.QA&ads.gpp_sid=7&ads.nw=169843&ads.playerVersion=8.30.1&ads.prof=169843%3Anbcu_ots_web_linear&ads.resp=vmap1&ads.sfid=23475402&ads.vcid=&ads.vip=45.191.53.2&ads.xumo_channelId=88889703a&ads.xumo_contentId=3905&ads.xumo_contentName=TelemundoNoticiasFL&ads.xumo_ifaType=&ads.xumo_providerId=3905&ads.xumo_providerName=TelemundoNoticiasFL&ads.xumo_streamId=88889703&ads.xumo_ifa=&ads._fw_did=&ads.site_name=TLMD
 
-#EXTINF:-,noticias 29
-https://regionales.saohgdasregions.fun:9092/NDUuMTkxLjUzLjI=/6_.m3u8?token=qHQR0jL0479d0l-0awhQbQ&expires=1775473611
-
 #EXTINF:-,noticias 30
 https://d368vp0qqzvkid.cloudfront.net/manifest/3fec3e5cac39a52b2132f9c66c83dae043dc17d4/prod_default_nbc-direct/1e4f5edc-8930-4101-a07b-856fc39cf821/5.m3u8
 
-#EXTINF:-,noticias 31
-https://tk0hz.envivoslatam.org/hotflix/universo_usa/index.m3u8?token=6fe73975ce3ad35c5e2213755ae2068a0cd7b1e5-97-1775480472-1775426472&ip=45.191.53.2
-
-#EXTINF:-,noticias 32
-https://24a1.streameasthd.net/global/universo_usa/index.m3u8?token=f2dd9316ba035a16cf81a8383dc6b6769593b34e-3b-1775481311-1775427311&ip=45.191.53.2
-
-EXTINF:-,noticias 33
-https://tyg2mnl9.fubohd.com/telemundo/mono.m3u8?token=f494851b8eb023dc197f49ed26f3f31a659b8388-4a-1775453689-1775435689
-
-EXTINF:-,noticias 34
-https://anvtcax.fubohd.com/universo/mono.m3u8?token=d6314fc602dad2275a215d45e4de3c6b4c62f37c-e0-1775453764-1775435764
-
-EXTINF:-,noticias 35
-https://n5.zohanayaan.com:1686/hls/capodeportes.m3u8?md5=eqwUb9YDmxAifINjIFjgyw&expires=1775717573
-
-EXTINF:-,noticias 36
+#EXTINF:-,noticias 36
 https://dw5pdgvk.fubohd.com/dsports/mono.m3u8?token=f9cb6792986de3286fc04041f75f5eaf6760fbcb-be-1775947347-1775929347
-
-EXTINF:-,noticias 37
-https://51a1.streameasthd.net/global/espnplus2/index.m3u8?token=afd2cbc9315f97ed33ea2036701cf4ab1431c3a6-18-1775976796-1775922796&ip=45.191.53.2
