@@ -116,8 +116,8 @@ https://live-manifest.production-public.tubi.io/live/d906efca-1302-4e29-b0d9-9a1
 #EXTINF:-1 group-title="TV",noticias 39
 http://162.19.255.233:8080/play/UNbAl57p9hXZClOu56FCTZID4SFOqZLZ81NguVP-JxM/m3u8
 
+#EXTINF:-1 group-title="TV",noticias 40
+https://channel01-onlymex.akamaized.net/hls/live/2022749/event01/index.m3u8
 
-
-
-
-
+#EXTINF:-1 group-title="TV",noticias 41
+http://201.217.246.42:44310/Live/3fcb6e26785fd8d415571b26dc3cf5d3/lasestrellas.playlist.m3u8
