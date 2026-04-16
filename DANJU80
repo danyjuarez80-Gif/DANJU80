@@ -101,6 +101,20 @@ https://jmp2.uk/plu-6320d2755e54db000783fd87.m3u8
 #EXTINF:-1 group-title="TV",noticias 34
 https://latam-cache-sv2-cdn.latamlive.net/DS1_ENC_LIVE/index.mpd
 
+#EXTINF:-1 group-title="TV",noticias 35
+https://jmp2.uk/plu-660c29b5aec9680008f5b4a4.m3u8
+
+#EXTINF:-1 group-title="TV",noticias 36
+https://6c849fb3.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/TEctbXhfRklGQVBsdXNTcGFuaXNoLTFfSExT/playlist.m3u8
+
+#EXTINF:-1 group-title="TV",noticias 37
+http://201.217.246.42:44310/Live/b10474c9b1ba4a0986b574d1211c065b/local-92.playlist.m3u8
+
+#EXTINF:-1 group-title="TV",noticias 38
+https://live-manifest.production-public.tubi.io/live/d906efca-1302-4e29-b0d9-9a1d7a305d69/playlist.m3u8
+
+#EXTINF:-1 group-title="TV",noticias 39
+http://162.19.255.233:8080/play/UNbAl57p9hXZClOu56FCTZID4SFOqZLZ81NguVP-JxM/m3u8
 
 
 
