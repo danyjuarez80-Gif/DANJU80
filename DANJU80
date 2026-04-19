@@ -1,173 +1,258 @@
 #EXTM3U
 #EXTINF:-1 group-title="TV",noticias 1
 http://181.176.155.7:8090/play/a1qh/index.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 2
 http://181.176.155.7:8090/play/a1wl/index.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 3
 http://181.176.155.7:8090/play/a1nv/index.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 4
 http://181.176.155.7:8090/play/a1vv/index.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 5
 http://181.176.155.7:8090/play/a1kd/index.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 6
 http://181.176.155.7:8090/play/a1e8/index.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 7
 http://181.176.155.7:8090/play/a1kh/index.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 8
 https://linear-893.frequency.stream/dist/xumo/893/hls/master/playlist_1920x1080.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 9
 https://bein-esp-xumo.amagi.tv/playlistR720P.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 10
 https://channel01-onlymex.akamaized.net/hls/live/2022749/event01/index_6.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 11
 https://azt-mun.otteravision.com/azt/mun/mun_360p.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 12
 https://regionales.saohgdasregions.fun:9092/NDUuMTkxLjUzLjI=/1_.m3u8?token=F6ND1pDapW91m8yWy1Frqw&expires=1775450685
+
 #EXTINF:-1 group-title="TV",noticias 13
 https://deportes.ksdjugfsddeports.com:9092/NDUuMTkxLjUzLjI=/1_.m3u8?token=n6LjzkJvXSymagor_BHYGQ&expires=1775451183
+
 #EXTINF:-1 group-title="TV",noticias 14
 https://qzv4jmsc.fubohd.com/tycsports/mono.m3u8?token=39875dc147703f71931ec37696ea73090d184b21-2d-1775425558-1775407558
+
 #EXTINF:-1 group-title="TV",noticias 15
 https://8c51.streameasthd.net/global/tntsports/index.m3u8?token=8ad628fb8a7bc751a6c0aa7857ef0ac7955c95c3-30-1775457458-1775403458&ip=45.191.53.2
+
 #EXTINF:-1 group-title="TV",noticias 16
 https://agvyby.fubohd.com/dsports/mono.m3u8?token=afd9d12549d95bc4f6683a71ec7c2aefdf244623-b4-1775429860-1775411860
+
 #EXTINF:-1 group-title="TV",noticias 17
 https://bgfuzq.fubohd.com/dsports2/mono.m3u8?token=7be0c4af58434004437c6601f9b7fd7957efab51-de-1775430028-1775412028
+
 #EXTINF:-1 group-title="TV",noticias 18
 https://24a1.streameasthd.net/global/dsportsplus/index.m3u8?token=b75e174f52fcdc7f1c0aa227fa7632deda86b0e6-e6-1775458024-1775404024&ip=45.191.53.2
+
 #EXTINF:-1 group-title="TV",noticias 19
 https://pecdl1.streameasthd.net/global/fox1ar/index.m3u8?token=2ca018610cbbeedafc0e3ed6ea56e79c164c5442-90-1775458165-1775404165&ip=45.191.53.2
+
 #EXTINF:-1 group-title="TV",noticias 20
 https://8c51.streameasthd.net/global/winsports/index.m3u8?token=f380d9af0d69fcb12a3fff0cb6b520926fcba040-f3-1775458490-1775404490&ip=45.191.53.2
+
 #EXTINF:-1 group-title="TV",noticias 21
 https://dai.google.com/linear/hls/event/yINISWAPQ0CPhPixe-40wQ/master.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 22
 https://d368vp0qqzvkid.cloudfront.net/11603/88889703/hls/master.m3u8?ads._fw_atts=&ads._fw_h_user_agent=Mozilla%252F5.0%2520%28Linux%253B%2520Android%252015%253B%2520RMX5070%2520Build%252FUKQ1.231108.001%253B%2520wv%29%2520AppleWebKit%252F537.36%2520%28KHTML%252C%2520like%2520Gecko%29%2520Version%252F4.0%2520Chrome%252F146.0.7680.164%2520Mobile%2520Safari%252F537.36&ads._fw_is_lat=0&ads._fw_nielsen_app_id=P06F4DCAF-86D7-4159-AAE9-D3C50FF96F01&ads._fw_player_height=177&ads._fw_player_width=320&ads._fw_site_page=https%253A%252F%252Fwww.telemundo51.com%252Fver%252F&ads._fw_us_privacy=1---&ads.afid=396654223&ads.caid=TelemundoNoticiasFL&ads.channelName=TelemundoNoticiasFL&ads.csid=tm_ots_alldevice_allos_web_wscv_livelinear_virtualchannel&ads.flag=%252Bsltp%252Bemcr%252Bslcb%252Bsbid-fbad%252Baeti%252Bslif-vicb%252Bamcb%252Bplay-uapl%252Bdtrd%252Bexvt&ads.gpp=DBABLA%7EBVQVAAAAAgA.QA&ads.gpp_sid=7&ads.nw=169843&ads.playerVersion=8.30.1&ads.prof=169843%3Anbcu_ots_web_linear&ads.resp=vmap1&ads.sfid=23475402&ads.vcid=&ads.vip=45.191.53.2&ads.xumo_channelId=88889703a&ads.xumo_contentId=3905&ads.xumo_contentName=TelemundoNoticiasFL&ads.xumo_ifaType=&ads.xumo_providerId=3905&ads.xumo_providerName=TelemundoNoticiasFL&ads.xumo_streamId=88889703&ads.xumo_ifa=&ads._fw_did=&ads.site_name=TLMD
+
 #EXTINF:-1 group-title="TV",noticias 23
 https://d368vp0qqzvkid.cloudfront.net/manifest/3fec3e5cac39a52b2132f9c66c83dae043dc17d4/prod_default_nbc-direct/1e4f5edc-8930-4101-a07b-856fc39cf821/5.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 24
 https://dw5pdgvk.fubohd.com/dsports/mono.m3u8?token=f9cb6792986de3286fc04041f75f5eaf6760fbcb-be-1775947347-1775929347
+
 #EXTINF:-1 group-title="TV",noticias 25
 https://14c51.streameasthd.net/tudn_usa/tracks-v1a1/mono.m3u8?ip=45.191.55.32&token=fbdb86cdf630f99095612cc44c712b39f29efea1-9e-1776282864-1776228864
+
 #EXTINF:-1 group-title="TV",noticias 26
 https://14c51.streameasthd.net:443/tudn_usa/index.m3u8?token=fbdb86cdf630f99095612cc44c712b39f29efea1-9e-1776282864-1776228864&ip=45.191.55.32
+
 #EXTINF:-1 group-title="TV",noticias 27
 https://deportes.ksdjugfsddeports.com:9092/NDUuMTkxLjU1LjMy/1_.m3u8?token=3dzfL3OS1hHR4ceGV7opyA&expires=1776270998
+
 #EXTINF:-1 group-title="TV",noticias 28
 https://deportes.ksdjugfsddeports.com:9092/NDUuMTkxLjU1LjMy/1_.m3u8?token=rcrc-o6OIRVWJ1rbnChLqA&expires=1776271233
+
 #EXTINF:-1 group-title="TV",noticias 29
 https://ym9yzq.fubohd.com/tudn/mono.m3u8?token=9c91e304ead75a5d5265c746c4988af63b07f0f9-63-1776289804-1776271804
+
 #EXTINF:-1 group-title="TV",noticias 30
 https://d35j504z0x2vu2.cloudfront.net/v1/master/0bc8e8376bd8417a1b6761138aa41c26c7309312/bein-sports-xtra/playlist.m3u8?ads.vf=kBQplLldqQO
+
 #EXTINF:-1 group-title="TV",noticias 31
 https://dc1644a9jazgj.cloudfront.net/beIN_Sports_Xtra_Espanol.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 32
 https://d35j504z0x2vu2.cloudfront.net/v1/master/0bc8e8376bd8417a1b6761138aa41c26c7309312/bein-sports-xtra-en-espanol/playlist.m3u8?ads.vf=SylQdpcCl2O
+
 #EXTINF:-1 group-title="TV",noticias 33
 https://jmp2.uk/plu-6320d2755e54db000783fd87.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 34
 https://latam-cache-sv2-cdn.latamlive.net/DS1_ENC_LIVE/index.mpd
+
 #EXTINF:-1 group-title="TV",noticias 35
 https://jmp2.uk/plu-660c29b5aec9680008f5b4a4.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 36
 https://6c849fb3.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/TEctbXhfRklGQVBsdXNTcGFuaXNoLTFfSExT/playlist.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 37
 http://201.217.246.42:44310/Live/b10474c9b1ba4a0986b574d1211c065b/local-92.playlist.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 38
 https://live-manifest.production-public.tubi.io/live/d906efca-1302-4e29-b0d9-9a1d7a305d69/playlist.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 39
 http://162.19.255.233:8080/play/UNbAl57p9hXZClOu56FCTZID4SFOqZLZ81NguVP-JxM/m3u8
+
 #EXTINF:-1 group-title="TV",noticias 40
 https://channel01-onlymex.akamaized.net/hls/live/2022749/event01/index.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 41
 http://201.217.246.42:44310/Live/3fcb6e26785fd8d415571b26dc3cf5d3/lasestrellas.playlist.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 42
 https://a2vlca.fubohd.com/tudn/mono.m3u8?token=4f46bf53845573297cfd997562a252050b894e35-9a-1776346027-1776328027
+
 #EXTINF:-1 group-title="TV",noticias 43
 https://pecdl1.streameasthd.net/tudn_usa/tracks-v1a1/mono.m3u8?ip=45.191.55.32&token=7a56326a97c9cbbd4465ed811f0f3a09b9c6fd2b-e4-1776375557-1776321557
+
 #EXTINF:-1 group-title="TV",noticias 44
 https://mdstrm.com/live-stream-playlist/609ad46a7a441137107d7a81.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 45
 https://jmp2.uk/plu-6582f002a620e3000813b329.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 46
 https://jmp2.uk/plu-65cf60d166eec80008724e6f.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 47
 https://live-manifest.production-public.tubi.io/live/d906efca-1302-4e29-b0d9-9a1d7a305d69/playlist.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 48
 https://jmp2.uk/plu-5dcde07af1c85b0009b18651.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 49
 https://jmp2.uk/plu-63c6e37e636b7e0007ccb635.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 50
 https://live.enhdtv.com:8081/8160/index.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 51
 https://streaming.alwaysdata.net/tudn.php
+
 #EXTINF:-1 group-title="TV",noticias 52
 http://162.19.255.233:8080/play/UNbAl57p9hXZClOu56FCTVL9TbgOeYnXUEC2UjoDBYk/m3u8
+
 #EXTINF:-1 group-title="TV",noticias 53
 https://jmp2.uk/plu-65ea8b928145cb0008509426.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 54
 http://190.60.40.34:8001/play/a0ef
+
 #EXTINF:-1 group-title="TV",noticias 55
 http://190.60.40.34:8001/play/a02r
+
 #EXTINF:-1 group-title="TV",noticias 56
 https://linear-893.frequency.stream:443/dist/xumo/893/hls/master/playlist_1920x1080.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 57
 https://bein-esp-xumo.amagi.tv:443/playlistR720P.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 58
 http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5ebc8688f3697d00072f7cf8/master.m3u8?appName=web&appVersion=unknown&clientTime=0&deviceDNT=0&deviceId=6c26f5a6-30d3-11ef-9cf5-e9ddff8ff496&deviceMake=Chrome&deviceModel=web&deviceType=web&deviceVersion=unknown&includeExtendedEvents=false&serverSideAds=false&sid=0e97a69e-3355-4217-b6fb-8952f0ad1803
+
 #EXTINF:-1 group-title="TV",noticias 59
 http://tv.proyectox.vip:8080/ELLtdmaiz204fj/ScMZEQzYga/9605
+
 #EXTINF:-1 group-title="TV",noticias 60
 http://tv.proyectox.vip:8080/ELLtdmaiz204fj/ScMZEQzYga/9904
+
 #EXTINF:-1 group-title="TV",noticias 61
 http://tv.proyectox.vip:8080/ELLtdmaiz204fj/ScMZEQzYga/9593
+
 #EXTINF:-1 group-title="TV",noticias 62
 http://tv.proyectox.vip:8080/ELLtdmaiz204fj/ScMZEQzYga/9571
+
 #EXTINF:-1 group-title="TV",noticias 63
 http://tv.proyectox.vip:8080/ELLtdmaiz204fj/ScMZEQzYga/9575
+
 #EXTINF:-1 group-title="TV",noticias 64
 http://tv.proyectox.vip:8080/ELLtdmaiz204fj/ScMZEQzYga/179524
+
 #EXTINF:-1 group-title="TV",noticias 65
 http://tv.proyectox.vip:8080/ELLtdmaiz204fj/ScMZEQzYga/9588
+
 #EXTINF:-1 group-title="TV",noticias 66
 http://45.5.119.43:4000/play/a052/index.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 67
 http://45.5.119.43:4000/play/a053/index.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 68
 http://45.5.119.43:4000/play/a054/index.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 69
 http://45.5.119.43:4000/play/a028/index.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 70
 http://45.5.119.43:4000/play/a0ix/index.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 71
 http://45.5.119.43:4000/play/a0kj/index.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 72
 https://dazn-combat-rakuten.amagi.tv/hls/amagi_hls_data_rakutenAA-dazn-combat-rakuten/CDN/master.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 73
 https://dai.google.com/linear/hls/event/YHoOj51dSKCvBQOBG2OvLQ/master.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 74
 http://45.5.119.43:4000/play/a05o/index.m3u8
+
 #EXTINF:-1 group-title="TV",noticias 75
 https://c2nvdxq.fubohd.com/tntsports/mono.m3u8?token=088be9adef976bc21864fb90d18a4c734ec7c071-e7-1776457423-1776439423
+
 #EXTINF:-1 group-title="TV",noticias 76
 https://qzv4jmsc.fubohd.com/foxsports/mono.m3u8?token=8fdf1d0cad74527f9590a51635765ba51a46f5ae-73-1776457475-1776439475
+
 #EXTINF:-1 group-title="TV",noticias 77
 https://wp9xqedt.fubohd.com/espnpremium/mono.m3u8?token=d03e2d20314436b4aeba76078121764312204dde-9-1776457509-1776439509
+
 #EXTINF:-1 group-title="TV",noticias 78
 https://dw5pdgvk.fubohd.com/foxsports3/mono.m3u8?token=0668a46548714dfa14d202f7beb39e0e47580a32-b5-1776457668-1776439668
+
 #EXTINF:-1 group-title="TV",noticias 79
 https://c2nvdxq.fubohd.com/tntsportschile/mono.m3u8?token=606786dc9ef16c04b6697e7369298c387249d728-46-1776457715-1776439715
+
 #EXTINF:-1 group-title="TV",noticias 80
 https://wp9xqedt.fubohd.com/espn/mono.m3u8?token=cee17b343e394f0cf39e723ce919a96032f0672c-1-1776457750-1776439750
+
 #EXTINF:-1 group-title="TV",noticias 81
 https://anvtcax.fubohd.com/tudn/mono.m3u8?token=92727ed5f4e70b4e024856749639ad29a4c82a6f-bc-1776457815-1776439815
+
 #EXTINF:-1 group-title="TV",noticias 82
 https://dw5pdgvk.fubohd.com/premiere1/mono.m3u8?token=fa437edbd6f3a5d51c28e23afbacf73aac919d34-2b-1776457858-1776439858
+
 #EXTINF:-1 group-title="TV",noticias 83
 https://regionales.saohgdasregions.fun:9092/NDUuMTkxLjU1LjMy/24_.m3u8?token=_xiyq0v94wEXwzfvIynLTw&expires=1776484166
+
 #EXTINF:-1 group-title="TV",noticias 84
 https://regionales.saohgdasregions.fun:9092/NDUuMTkxLjU1LjMy/2_.m3u8?token=r6VSMv1Bt4G7cL0l_CF6Gg&expires=1776484201
+
 #EXTINF:-1 group-title="TV",noticias 85
 https://bd2ih.envivoslatam.org/telemundousa/tracks-v1a1/mono.m3u8?ip=45.191.55.32&token=ae57b65f8b934398bcf233d7c8e3757eafe76e38-88-1776606726-1776552726
+
 #EXTINF:-1 group-title="TV",noticias 86
 http://lotv.plus:80/play/Hj0dnDnGA5SElhyAvOzzQq4o_NEXxihiZ5rsY7qSk4o
