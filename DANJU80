@@ -1,5 +1,8 @@
 #EXTM3U
 #EXTINF:-1 group-title="TV",noticias 1
+https://j8nte.envivoslatam.org:443/eventos5/index.m3u8?token=0389a7c67c603a1250cd1e6b769d84214f9f47ed-78-1776874252-1776820252&ip=45.191.55.32
+
+#EXTINF:-1 group-title="TV",noticias 1
 http://181.176.155.7:8090/play/a1qh/index.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 2
