@@ -236,6 +236,12 @@ https://regionales.saohgdasregions.fun:9092/NDUuMTkxLjU1LjMy/2_.m3u8?token=ewiCv
 #EXTINF:-1 group-title="TV",noticias 74
 https://regionales.saohgdasregions.fun:9092/NDUuMTkxLjU1LjMy/2_.m3u8?token=x5kLza4cax7FA0fnYfLG7Q&expires=1776947271
 
+#EXTINF:-1 group-title="TV",noticias 74
+https://vmre6nax.12703830.net:8443/hls/ljtwme.m3u8?s=mqRaO4SjMTLOtZmFbRgxWw&e=1776926112
+
+#EXTINF:-1 group-title="TV",noticias 74
+https://vmre6nax.12703830.net:8443/hls/ljtwme.m3u8?s=AwyIEAKZEUrzgnw1t53DPw&e=1776926194
+
 #EXTINF:-1 group-title="TV",noticias 75
 https://c2nvdxq.fubohd.com/tntsports/mono.m3u8?token=088be9adef976bc21864fb90d18a4c734ec7c071-e7-1776457423-1776439423
 
