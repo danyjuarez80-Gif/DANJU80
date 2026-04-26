@@ -1,32 +1,32 @@
-name: Actualizador Automatico Dany
+name: Actualizador Dany TV
 
 on:
+  workflow_dispatch: # Botón manual
+  push:
+    paths:
+      - 'DANJU80'    # Actualiza al instante si tú editas el archivo
   schedule:
-    - cron: '0 */6 * * *'
-  workflow_dispatch: 
+    - cron: '*/15 * * * *' # ACTUALIZACIÓN CADA 15 MINUTOS AUTOMÁTICA
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Descargar mi repositorio
+      - name: Checkout del código
         uses: actions/checkout@v3
 
       - name: Configurar Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: '3.x'
 
-      - name: Instalar librerias
-        run: pip install requests
-
-      - name: Ejecutar el script extractor
+      - name: Ejecutar Extractor de Canales
         run: python extractor.py
 
       - name: Guardar cambios en GitHub
         run: |
-          git config --global user.name "Dany-Bot"
-          git config --global user.email "bot@github.com"
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
           git add lista_dany.m3u
-          git commit -m "Token actualizado por Action" || exit 0
+          git commit -m "Refresco automático cada 15 min" || exit 0
           git push
