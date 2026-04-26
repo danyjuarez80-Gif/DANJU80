@@ -19,7 +19,6 @@ jobs:
 
       - name: Instalar dependencias
         run: |
-          python -m pip install --upgrade pip
           pip install requests
 
       - name: Ejecutar Extractor de Canales
@@ -30,5 +29,5 @@ jobs:
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Action"
           git add .
-          git commit -m "Actualización automática cada 15 min" || exit 0
+          git commit -m "Actualización automática" || exit 0
           git push
