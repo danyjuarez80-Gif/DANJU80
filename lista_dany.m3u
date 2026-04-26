@@ -1,0 +1,5 @@
+#EXTM3U
+#EXTINF:-1, Telemundo
+https://plts3.envivoslatam.org/telemundousa/tracks-v1a1/mono.m3u8?ip=45.191.55.32&token=190a489df10a45844046708bb1977d461d1589fc
+#EXTINF:-1, Canal 2
+https://ejemplo.com/stream.m3u8?token=190a489df10a45844046708bb1977d461d1589fc
