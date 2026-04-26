@@ -1,5 +1,8 @@
 #EXTM3U
 #EXTINF:-1 group-title="TV",noticias 1
+https://chevy.soyspace.cyou/proxy/dokko1/premium845/mono.css
+
+#EXTINF:-1 group-title="TV",noticias 1
 https://qbk4f.envivoslatam.org/espnmx/tracks-v1a1/mono.m3u8?ip=45.191.55.32&token=bffc74bd5f2198998127b8c625f6e07289f93f62-ac-1776953393-1776899393
 
 #EXTINF:-1 group-title="TV",noticias 1
