@@ -1,4 +1,8 @@
 #EXTM3U
+
+#EXTINF:-1 group-title="TV",noticias 1
+https://plts3.envivoslatam.org/telemundousa/tracks-v1a1/mono.m3u8?ip=45.191.55.32&token=190a489df10a45844046708bb1977d461d1589fc-6a-1777213114-1777159114
+
 #EXTINF:-1 group-title="TV",noticias 1
 https://chevy.soyspace.cyou/proxy/dokko1/premium845/mono.css
 
