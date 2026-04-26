@@ -1,39 +1,45 @@
 import requests
 
-# URL donde está tu lista pegada (la que me acabas de enviar)
+# URL que me proporcionaste
 URL_FUENTE = "https://raw.githubusercontent.com/danyjuarez80-Gif/DANJU80/refs/heads/main/DANJU80"
 
-def generar_lista_final():
+def automatizar_lista():
     try:
-        # 1. Leemos el contenido de tu archivo DANJU80
-        response = requests.get(URL_FUENTE, timeout=20)
-        if response.status_code != 200:
-            print(f"❌ Error al conectar: {response.status_code}")
+        # 1. Intentamos obtener la lista completa
+        print("Descargando lista desde DANJU80...")
+        r = requests.get(URL_FUENTE, timeout=20)
+        
+        if r.status_code != 200:
+            print(f"❌ Error al conectar con GitHub: {r.status_code}")
             return
 
-        lineas = response.text.splitlines()
+        lineas = r.text.splitlines()
         
-        # 2. Creamos el archivo lista_dany.m3u
+        # 2. Creamos el archivo M3U final
         with open("lista_dany.m3u", "w", encoding="utf-8") as f:
-            f.write("#EXTM3U\n")
+            # Escribimos la cabecera
+            f.write("#EXTM3U\n\n")
             
-            for linea in lineas:
-                linea = linea.strip()
+            # Contador para verificar los 86 canales
+            conteo = 0
+            
+            for i in range(len(lineas)):
+                linea = lineas[i].strip()
                 
-                # Si la linea es información del canal
+                # Buscamos las líneas que empiezan con #EXTINF
                 if linea.startswith("#EXTINF"):
-                    # Personalizamos el grupo a "Dany TV" y limpiamos espacios
-                    linea_limpia = linea.replace('group-title="TV"', 'group-title="Dany TV"')
-                    f.write(f"\n{linea_limpia}\n")
-                
-                # Si la linea es una URL (detectamos por http)
-                elif linea.startswith("http"):
-                    f.write(f"{linea}\n")
-        
-        print("✅ ¡Proceso completado! Se generó 'lista_dany.m3u' con éxito.")
+                    # Escribimos la línea de info del canal
+                    f.write(linea + "\n")
+                    # La siguiente línea suele ser la URL, la buscamos
+                    if i + 1 < len(lineas):
+                        url_canal = lineas[i+1].strip()
+                        f.write(url_canal + "\n\n")
+                        conteo += 1
+            
+        print(f"✅ ¡Proceso terminado! Se han procesado {conteo} canales.")
 
     except Exception as e:
         print(f"❌ Error crítico: {e}")
 
 if __name__ == "__main__":
-    generar_lista_final()
+    automatizar_lista()
