@@ -1,1 +1,32 @@
+name: Actualizador Automatico Dany
 
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch: 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar mi repositorio
+        uses: actions/checkout@v3
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Instalar librerias
+        run: pip install requests
+
+      - name: Ejecutar el script extractor
+        run: python extractor.py
+
+      - name: Guardar cambios en GitHub
+        run: |
+          git config --global user.name "Dany-Bot"
+          git config --global user.email "bot@github.com"
+          git add lista_dany.m3u
+          git commit -m "Token actualizado por Action" || exit 0
+          git push
