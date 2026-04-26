@@ -1,52 +1,39 @@
-import re
 import requests
 
+# URL donde está tu lista pegada (la que me acabas de enviar)
 URL_FUENTE = "https://raw.githubusercontent.com/danyjuarez80-Gif/DANJU80/refs/heads/main/DANJU80"
 
-# Lista completa de los 86 canales proporcionados
-todos_los_canales = [
-    {"n": "noticias 1 (Telemundo)", "u": "https://plts3.envivoslatam.org/telemundousa/tracks-v1a1/mono.m3u8?ip=45.191.55.32&token=TOKEN_AQUI"},
-    {"n": "noticias 1 (Proxy)", "u": "https://chevy.soyspace.cyou/proxy/dokko1/premium845/mono.css"},
-    {"n": "noticias 1 (ESPN MX)", "u": "https://qbk4f.envivoslatam.org/espnmx/tracks-v1a1/mono.m3u8?ip=45.191.55.32&token=TOKEN_AQUI"},
-    {"n": "noticias 1 (IP 8090)", "u": "http://181.176.155.7:8090/play/a1qh/index.m3u8"},
-    {"n": "noticias 2", "u": "http://181.176.155.7:8090/play/a1wl/index.m3u8"},
-    {"n": "noticias 3", "u": "http://181.176.155.7:8090/play/a1nv/index.m3u8"},
-    {"n": "noticias 4", "u": "http://181.176.155.7:8090/play/a1vv/index.m3u8"},
-    {"n": "noticias 5", "u": "http://181.176.155.7:8090/play/a1kd/index.m3u8"},
-    {"n": "noticias 6", "u": "http://181.176.155.7:8090/play/a1e8/index.m3u8"},
-    {"n": "noticias 7", "u": "http://181.176.155.7:8090/play/a1kh/index.m3u8"},
-    {"n": "noticias 8", "u": "https://linear-893.frequency.stream/dist/xumo/893/hls/master/playlist_1920x1080.m3u8"},
-    {"n": "noticias 9", "u": "https://bein-esp-xumo.amagi.tv/playlistR720P.m3u8"},
-    {"n": "noticias 10", "u": "https://channel01-onlymex.akamaized.net/hls/live/2022749/event01/index_6.m3u8"},
-    {"n": "noticias 11", "u": "https://azt-mun.otteravision.com/azt/mun/mun_360p.m3u8"},
-    {"n": "noticias 12", "u": "https://regionales.saohgdasregions.fun:9092/NDUuMTkxLjUzLjI=/1_.m3u8?token=F6ND1pDapW91m8yWy1Frqw&expires=1775450685"},
-    {"n": "noticias 13", "u": "https://deportes.ksdjugfsddeports.com:9092/NDUuMTkxLjUzLjI=/1_.m3u8?token=n6LjzkJvXSymagor_BHYGQ&expires=1775451183"},
-    {"n": "noticias 14", "u": "https://qzv4jmsc.fubohd.com/tycsports/mono.m3u8?token=TOKEN_AQUI"},
-    {"n": "noticias 15", "u": "https://8c51.streameasthd.net/global/tntsports/index.m3u8?token=TOKEN_AQUI&ip=45.191.53.2"},
-    {"n": "noticias 16", "u": "https://agvyby.fubohd.com/dsports/mono.m3u8?token=TOKEN_AQUI"},
-    {"n": "noticias 17", "u": "https://bgfuzq.fubohd.com/dsports2/mono.m3u8?token=TOKEN_AQUI"},
-    {"n": "noticias 18", "u": "https://24a1.streameasthd.net/global/dsportsplus/index.m3u8?token=TOKEN_AQUI&ip=45.191.53.2"},
-    {"n": "noticias 19", "u": "https://pecdl1.streameasthd.net/global/fox1ar/index.m3u8?token=TOKEN_AQUI&ip=45.191.53.2"},
-    {"n": "noticias 20", "u": "https://8c51.streameasthd.net/global/winsports/index.m3u8?token=TOKEN_AQUI&ip=45.191.53.2"},
-    {"n": "noticias 21", "u": "https://dai.google.com/linear/hls/event/yINISWAPQ0CPhPixe-40wQ/master.m3u8"},
-    {"n": "noticias 22", "u": "https://d368vp0qqzvkid.cloudfront.net/11603/88889703/hls/master.m3u8?ads.vip=45.191.53.2"},
-    {"n": "noticias 23", "u": "https://d368vp0qqzvkid.cloudfront.net/manifest/3fec3e5cac39a52b2132f9c66c83dae043dc17d4/prod_default_nbc-direct/1e4f5edc-8930-4101-a07b-856fc39cf821/5.m3u8"},
-    {"n": "noticias 24", "u": "https://dw5pdgvk.fubohd.com/dsports/mono.m3u8?token=TOKEN_AQUI"},
-    {"n": "noticias 25", "u": "https://14c51.streameasthd.net/tudn_usa/tracks-v1a1/mono.m3u8?ip=45.191.55.32&token=TOKEN_AQUI"},
-    {"n": "noticias 26", "u": "https://14c51.streameasthd.net:443/tudn_usa/index.m3u8?token=TOKEN_AQUI&ip=45.191.55.32"},
-    {"n": "noticias 27", "u": "https://deportes.ksdjugfsddeports.com:9092/NDUuMTkxLjU1LjMy/1_.m3u8?token=3dzfL3OS1hHR4ceGV7opyA&expires=1776270998"},
-    {"n": "noticias 28", "u": "https://deportes.ksdjugfsddeports.com:9092/NDUuMTkxLjU1LjMy/1_.m3u8?token=rcrc-o6OIRVWJ1rbnChLqA&expires=1776271233"},
-    {"n": "noticias 29", "u": "https://ym9yzq.fubohd.com/tudn/mono.m3u8?token=TOKEN_AQUI"},
-    {"n": "noticias 30", "u": "https://d35j504z0x2vu2.cloudfront.net/v1/master/0bc8e8376bd8417a1b6761138aa41c26c7309312/bein-sports-xtra/playlist.m3u8?ads.vf=kBQplLldqQO"},
-    {"n": "noticias 31", "u": "https://dc1644a9jazgj.cloudfront.net/beIN_Sports_Xtra_Espanol.m3u8"},
-    {"n": "noticias 32", "u": "https://d35j504z0x2vu2.cloudfront.net/v1/master/0bc8e8376bd8417a1b6761138aa41c26c7309312/bein-sports-xtra-en-espanol/playlist.m3u8?ads.vf=SylQdpcCl2O"},
-    {"n": "noticias 33", "u": "https://jmp2.uk/plu-6320d2755e54db000783fd87.m3u8"},
-    {"n": "noticias 34", "u": "https://latam-cache-sv2-cdn.latamlive.net/DS1_ENC_LIVE/index.mpd"},
-    {"n": "noticias 35", "u": "https://jmp2.uk/plu-660c29b5aec9680008f5b4a4.m3u8"},
-    {"n": "noticias 36", "u": "https://6c849fb3.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/TEctbXhfRklGQVBsdXNTcGFuaXNoLTFfSExT/playlist.m3u8"},
-    {"n": "noticias 37", "u": "http://201.217.246.42:44310/Live/b10474c9b1ba4a0986b574d1211c065b/local-92.playlist.m3u8"},
-    {"n": "noticias 38", "u": "https://live-manifest.production-public.tubi.io/live/d906efca-1302-4e29-b0d9-9a1d7a305d69/playlist.m3u8"},
-    {"n": "noticias 39", "u": "http://162.19.255.233:8080/play/UNbAl57p9hXZClOu56FCTZID4SFOqZLZ81NguVP-JxM/m3u8"},
-    {"n": "noticias 40", "u": "https://channel01-onlymex.akamaized.net/hls/live/2022749/event01/index.m3u8"},
-    {"n": "noticias 41", "u": "http://201.217.246.42:44310/Live/3fcb6e26785fd8d415571b26dc3cf5d3/lasestrellas.playlist.m3u8"},
-    {"n": "noticias
+def generar_lista_final():
+    try:
+        # 1. Leemos el contenido de tu archivo DANJU80
+        response = requests.get(URL_FUENTE, timeout=20)
+        if response.status_code != 200:
+            print(f"❌ Error al conectar: {response.status_code}")
+            return
+
+        lineas = response.text.splitlines()
+        
+        # 2. Creamos el archivo lista_dany.m3u
+        with open("lista_dany.m3u", "w", encoding="utf-8") as f:
+            f.write("#EXTM3U\n")
+            
+            for linea in lineas:
+                linea = linea.strip()
+                
+                # Si la linea es información del canal
+                if linea.startswith("#EXTINF"):
+                    # Personalizamos el grupo a "Dany TV" y limpiamos espacios
+                    linea_limpia = linea.replace('group-title="TV"', 'group-title="Dany TV"')
+                    f.write(f"\n{linea_limpia}\n")
+                
+                # Si la linea es una URL (detectamos por http)
+                elif linea.startswith("http"):
+                    f.write(f"{linea}\n")
+        
+        print("✅ ¡Proceso completado! Se generó 'lista_dany.m3u' con éxito.")
+
+    except Exception as e:
+        print(f"❌ Error crítico: {e}")
+
+if __name__ == "__main__":
+    generar_lista_final()
