@@ -27,33 +27,6 @@ https://channel01-onlymex.akamaized.net/hls/live/2022749/event01/index_6.m3u8
 #EXTINF:-1 group-title="TV",noticias 11
 https://azt-mun.otteravision.com/azt/mun/mun_360p.m3u8
 
-#EXTINF:-1 group-title="TV",noticias 12
-https://regionales.saohgdasregions.fun:9092/NDUuMTkxLjUzLjI=/1_.m3u8?token=F6ND1pDapW91m8yWy1Frqw&expires=1775450685
-
-#EXTINF:-1 group-title="TV",noticias 13
-https://deportes.ksdjugfsddeports.com:9092/NDUuMTkxLjUzLjI=/1_.m3u8?token=n6LjzkJvXSymagor_BHYGQ&expires=1775451183
-
-#EXTINF:-1 group-title="TV",noticias 14
-https://qzv4jmsc.fubohd.com/tycsports/mono.m3u8?token=39875dc147703f71931ec37696ea73090d184b21-2d-1775425558-1775407558
-
-#EXTINF:-1 group-title="TV",noticias 15
-https://8c51.streameasthd.net/global/tntsports/index.m3u8?token=8ad628fb8a7bc751a6c0aa7857ef0ac7955c95c3-30-1775457458-1775403458&ip=45.191.53.2
-
-#EXTINF:-1 group-title="TV",noticias 16
-https://agvyby.fubohd.com/dsports/mono.m3u8?token=afd9d12549d95bc4f6683a71ec7c2aefdf244623-b4-1775429860-1775411860
-
-#EXTINF:-1 group-title="TV",noticias 17
-https://bgfuzq.fubohd.com/dsports2/mono.m3u8?token=7be0c4af58434004437c6601f9b7fd7957efab51-de-1775430028-1775412028
-
-#EXTINF:-1 group-title="TV",noticias 18
-https://24a1.streameasthd.net/global/dsportsplus/index.m3u8?token=b75e174f52fcdc7f1c0aa227fa7632deda86b0e6-e6-1775458024-1775404024&ip=45.191.53.2
-
-#EXTINF:-1 group-title="TV",noticias 19
-https://pecdl1.streameasthd.net/global/fox1ar/index.m3u8?token=2ca018610cbbeedafc0e3ed6ea56e79c164c5442-90-1775458165-1775404165&ip=45.191.53.2
-
-#EXTINF:-1 group-title="TV",noticias 20
-https://8c51.streameasthd.net/global/winsports/index.m3u8?token=f380d9af0d69fcb12a3fff0cb6b520926fcba040-f3-1775458490-1775404490&ip=45.191.53.2
-
 #EXTINF:-1 group-title="TV",noticias 21
 https://dai.google.com/linear/hls/event/yINISWAPQ0CPhPixe-40wQ/master.m3u8
 
