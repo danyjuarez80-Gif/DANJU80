@@ -54,20 +54,11 @@ http://201.217.246.42:44310/Live/b10474c9b1ba4a0986b574d1211c065b/local-92.playl
 #EXTINF:-1 group-title="TV",noticias 38
 https://live-manifest.production-public.tubi.io/live/d906efca-1302-4e29-b0d9-9a1d7a305d69/playlist.m3u8
 
-#EXTINF:-1 group-title="TV",noticias 39
-http://162.19.255.233:8080/play/UNbAl57p9hXZClOu56FCTZID4SFOqZLZ81NguVP-JxM/m3u8
-
 #EXTINF:-1 group-title="TV",noticias 40
 https://channel01-onlymex.akamaized.net/hls/live/2022749/event01/index.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 41
 http://201.217.246.42:44310/Live/3fcb6e26785fd8d415571b26dc3cf5d3/lasestrellas.playlist.m3u8
-
-#EXTINF:-1 group-title="TV",noticias 42
-https://a2vlca.fubohd.com/tudn/mono.m3u8?token=4f46bf53845573297cfd997562a252050b894e35-9a-1776346027-1776328027
-
-#EXTINF:-1 group-title="TV",noticias 43
-https://pecdl1.streameasthd.net/tudn_usa/tracks-v1a1/mono.m3u8?ip=45.191.55.32&token=7a56326a97c9cbbd4465ed811f0f3a09b9c6fd2b-e4-1776375557-1776321557
 
 #EXTINF:-1 group-title="TV",noticias 44
 https://mdstrm.com/live-stream-playlist/609ad46a7a441137107d7a81.m3u8
@@ -87,23 +78,11 @@ https://jmp2.uk/plu-5dcde07af1c85b0009b18651.m3u8
 #EXTINF:-1 group-title="TV",noticias 49
 https://jmp2.uk/plu-63c6e37e636b7e0007ccb635.m3u8
 
-#EXTINF:-1 group-title="TV",noticias 50
-https://live.enhdtv.com:8081/8160/index.m3u8
-
 #EXTINF:-1 group-title="TV",noticias 51
 https://streaming.alwaysdata.net/tudn.php
 
-#EXTINF:-1 group-title="TV",noticias 52
-http://162.19.255.233:8080/play/UNbAl57p9hXZClOu56FCTVL9TbgOeYnXUEC2UjoDBYk/m3u8
-
 #EXTINF:-1 group-title="TV",noticias 53
 https://jmp2.uk/plu-65ea8b928145cb0008509426.m3u8
-
-#EXTINF:-1 group-title="TV",noticias 54
-http://190.60.40.34:8001/play/a0ef
-
-#EXTINF:-1 group-title="TV",noticias 55
-http://190.60.40.34:8001/play/a02r
 
 #EXTINF:-1 group-title="TV",noticias 56
 https://linear-893.frequency.stream:443/dist/xumo/893/hls/master/playlist_1920x1080.m3u8
@@ -113,12 +92,6 @@ https://bein-esp-xumo.amagi.tv:443/playlistR720P.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 58
 http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5ebc8688f3697d00072f7cf8/master.m3u8?appName=web&appVersion=unknown&clientTime=0&deviceDNT=0&deviceId=6c26f5a6-30d3-11ef-9cf5-e9ddff8ff496&deviceMake=Chrome&deviceModel=web&deviceType=web&deviceVersion=unknown&includeExtendedEvents=false&serverSideAds=false&sid=0e97a69e-3355-4217-b6fb-8952f0ad1803
-
-#EXTINF:-1 group-title="TV",noticias 59
-http://tv.proyectox.vip:8080/ELLtdmaiz204fj/ScMZEQzYga/9605
-
-#EXTINF:-1 group-title="TV",noticias 60
-http://tv.proyectox.vip:8080/ELLtdmaiz204fj/ScMZEQzYga/9904
 
 #EXTINF:-1 group-title="TV",noticias 61
 http://tv.proyectox.vip:8080/ELLtdmaiz204fj/ScMZEQzYga/9593
