@@ -1,8 +1,5 @@
 #EXTM3U
 
-#EXTINF:-1 group-title="TV",noticias 24
-http://74.63.227.203:30805/adlmwxiuridvzksh/clqf
-
 #EXTINF:-1 group-title="TV",noticias 1
 http://181.176.155.7:8090/play/a1qh/index.m3u8
 
@@ -119,3 +116,7 @@ https://dazn-combat-rakuten.amagi.tv/hls/amagi_hls_data_rakutenAA-dazn-combat-ra
 
 #EXTINF:-1 group-title="TV",noticias 73
 https://dai.google.com/linear/hls/event/YHoOj51dSKCvBQOBG2OvLQ/master.m3u8
+
+#EXTINF:-1 group-title="TV",noticias 74
+https://us-b4-p-e-ja16.cdn.mdstrm.com/live-stream-gdai/609ad46a7a441137107d7a81/linear/hls/pa/event/PNEbbcJZRAaP4wDlQMW2LA/stream/cb2612ac-da72-48ca-be5b-37aafaa3ced8:TUL/variant/3bc23eaad31e3e7e54a0241c1b885340/bandwidth/915200.m3u8?aid=5fea09a071a9945deebf5f7c&adInsertionGoogleStreamId=cb2612ac-da72-48ca-be5b-37aafaa3ced8%3ATUL&pid=vq16Q4tG5JyuFB5Hw3GchJiDxuAcgm9u&sid=i6Hykt2tiEKpTizDNiVfYcFuk7HuDfTN&uid=DC6YBINqDXyPTkk4hebbKoHSFerdZas9&es=us-b4-p-e-ja16.cdn.mdstrm.com&ote=1777610699924&ot=sH1bOKt2IHGOEBfDTR0r8w&proto=https&pz=us&access_token=I0kap1oKzZ0ChEsiaHuCD8M7Z4Iq2hGfW24qyIHjHjRZ7Mc36DQczjRiS9boCep0vR81vkyvPB3
+
