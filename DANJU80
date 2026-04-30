@@ -1,4 +1,6 @@
 #EXTM3U
+#EXTINF:-1 group-title="TV",noticias 1
+ycout.yxponte.com:80
 
 #EXTINF:-1 group-title="TV",noticias 1
 http://181.176.155.7:8090/play/a1qh/index.m3u8
