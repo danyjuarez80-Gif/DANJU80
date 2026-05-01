@@ -60,6 +60,9 @@ https://channel01-onlymex.akamaized.net/hls/live/2022749/event01/index.m3u8
 #EXTINF:-1 group-title="TV",noticias 41
 http://201.217.246.42:44310/Live/3fcb6e26785fd8d415571b26dc3cf5d3/lasestrellas.playlist.m3u8
 
+#EXTINF:-1 group-title="TV",noticias 43
+https://vmre6nax.12703830.net:8443/hls/ljtwme.m3u8?s=fhQ6to2jWg7gK50DJ4qCcQ&e=1777701424
+
 #EXTINF:-1 group-title="TV",noticias 44
 https://mdstrm.com/live-stream-playlist/609ad46a7a441137107d7a81.m3u8
 
