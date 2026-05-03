@@ -118,7 +118,7 @@ https://dai.google.com/linear/hls/event/YHoOj51dSKCvBQOBG2OvLQ/master.m3u8
 https://us-b4-p-e-ja16.cdn.mdstrm.
 
 #EXTINF:-1 group-title="TV",noticias 75
-http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/52191.m3u8
+http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/52191.ts
 
 #EXTINF:-1 group-title="TV",noticias 76
 http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/59594.ts
@@ -127,10 +127,10 @@ http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/59594.ts
 http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/59596.ts
 
 #EXTINF:-1 group-title="TV",noticias 78
-http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/49700.m3u8
+http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/49700.ts
 
 #EXTINF:-1 group-title="TV",noticias 79
-http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/59597.m3u8
+http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/59597.ts
 
 #EXTINF:-1 group-title="TV",noticias 78
 http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/59602.ts
