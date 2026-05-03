@@ -1,151 +1,151 @@
 #EXTM3U
 
 #EXTINF:-1 group-title="TV",noticias 1
-http://181.176.155.7:8090/play/a1qh/index.m3u8|buffer=0|timeout=10
+http://181.176.155.7:8090/play/a1qh/index.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 4
-http://181.176.155.7:8090/play/a1vv/index.m3u8|buffer=0|timeout=10
+http://181.176.155.7:8090/play/a1vv/index.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 5
-http://181.176.155.7:8090/play/a1kd/index.m3u8|buffer=0|timeout=10
+http://181.176.155.7:8090/play/a1kd/index.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 6
-http://181.176.155.7:8090/play/a1e8/index.m3u8|buffer=0|timeout=10
+http://181.176.155.7:8090/play/a1e8/index.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 7
-http://181.176.155.7:8090/play/a1kh/index.m3u8|buffer=0|timeout=10
+http://181.176.155.7:8090/play/a1kh/index.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 8
-https://linear-893.frequency.stream/dist/xumo/893/hls/master/playlist_1920x1080.m3u8|buffer=0|timeout=10
+https://linear-893.frequency.stream/dist/xumo/893/hls/master/playlist_1920x1080.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 9
-https://bein-esp-xumo.amagi.tv/playlistR720P.m3u8|buffer=0|timeout=10
+https://bein-esp-xumo.amagi.tv/playlistR720P.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 10
-https://channel01-onlymex.akamaized.net/hls/live/2022749/event01/index_6.m3u8|buffer=0|timeout=10
+https://channel01-onlymex.akamaized.net/hls/live/2022749/event01/index_6.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 11
-https://azt-mun.otteravision.com/azt/mun/mun_360p.m3u8|buffer=0|timeout=10
+https://azt-mun.otteravision.com/azt/mun/mun_360p.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 21
-https://dai.google.com/linear/hls/event/yINISWAPQ0CPhPixe-40wQ/master.m3u8|buffer=0|timeout=10
+https://dai.google.com/linear/hls/event/yINISWAPQ0CPhPixe-40wQ/master.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 22
-https://d368vp0qqzvkid.cloudfront.net/11603/88889703/hls/master.m3u8?ads._fw_atts=&ads._fw_h_user_agent=Mozilla%252F5.0%2520%28Linux%253B%2520Android%252015%253B%2520RMX5070%2520Build%252FUKQ1.231108.001%253B%2520wv%29%2520AppleWebKit%252F537.36%2520%28KHTML%252C%2520like%2520Gecko%29%2520Version%252F4.0%2520Chrome%252F146.0.7680.164%2520Mobile%2520Safari%252F537.36&ads._fw_is_lat=0&ads._fw_nielsen_app_id=P06F4DCAF-86D7-4159-AAE9-D3C50FF96F01&ads._fw_player_height=177&ads._fw_player_width=320&ads._fw_site_page=https%253A%252F%252Fwww.telemundo51.com%252Fver%252F&ads._fw_us_privacy=1---&ads.afid=396654223&ads.caid=TelemundoNoticiasFL&ads.channelName=TelemundoNoticiasFL&ads.csid=tm_ots_alldevice_allos_web_wscv_livelinear_virtualchannel&ads.flag=%252Bsltp%252Bemcr%252Bslcb%252Bsbid-fbad%252Baeti%252Bslif-vicb%252Bamcb%252Bplay-uapl%252Bdtrd%252Bexvt&ads.gpp=DBABLA%7EBVQVAAAAAgA.QA&ads.gpp_sid=7&ads.nw=169843&ads.playerVersion=8.30.1&ads.prof=169843%3Anbcu_ots_web_linear&ads.resp=vmap1&ads.sfid=23475402&ads.vcid=&ads.vip=45.191.53.2&ads.xumo_channelId=88889703a&ads.xumo_contentId=3905&ads.xumo_contentName=TelemundoNoticiasFL&ads.xumo_ifaType=&ads.xumo_providerId=3905&ads.xumo_providerName=TelemundoNoticiasFL&ads.xumo_streamId=88889703&ads.xumo_ifa=&ads._fw_did=&ads.site_name=TLMD|buffer=0|timeout=10
+https://d368vp0qqzvkid.cloudfront.net/11603/88889703/hls/master.m3u8?ads._fw_atts=&ads._fw_h_user_agent=Mozilla%252F5.0%2520%28Linux%253B%2520Android%252015%253B%2520RMX5070%2520Build%252FUKQ1.231108.001%253B%2520wv%29%2520AppleWebKit%252F537.36%2520%28KHTML%252C%2520like%2520Gecko%29%2520Version%252F4.0%2520Chrome%252F146.0.7680.164%2520Mobile%2520Safari%252F537.36&ads._fw_is_lat=0&ads._fw_nielsen_app_id=P06F4DCAF-86D7-4159-AAE9-D3C50FF96F01&ads._fw_player_height=177&ads._fw_player_width=320&ads._fw_site_page=https%253A%252F%252Fwww.telemundo51.com%252Fver%252F&ads._fw_us_privacy=1---&ads.afid=396654223&ads.caid=TelemundoNoticiasFL&ads.channelName=TelemundoNoticiasFL&ads.csid=tm_ots_alldevice_allos_web_wscv_livelinear_virtualchannel&ads.flag=%252Bsltp%252Bemcr%252Bslcb%252Bsbid-fbad%252Baeti%252Bslif-vicb%252Bamcb%252Bplay-uapl%252Bdtrd%252Bexvt&ads.gpp=DBABLA%7EBVQVAAAAAgA.QA&ads.gpp_sid=7&ads.nw=169843&ads.playerVersion=8.30.1&ads.prof=169843%3Anbcu_ots_web_linear&ads.resp=vmap1&ads.sfid=23475402&ads.vcid=&ads.vip=45.191.53.2&ads.xumo_channelId=88889703a&ads.xumo_contentId=3905&ads.xumo_contentName=TelemundoNoticiasFL&ads.xumo_ifaType=&ads.xumo_providerId=3905&ads.xumo_providerName=TelemundoNoticiasFL&ads.xumo_streamId=88889703&ads.xumo_ifa=&ads._fw_did=&ads.site_name=TLMD
 
 #EXTINF:-1 group-title="TV",noticias 31
-https://dc1644a9jazgj.cloudfront.net/beIN_Sports_Xtra_Espanol.m3u8|buffer=0|timeout=10
+https://dc1644a9jazgj.cloudfront.net/beIN_Sports_Xtra_Espanol.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 32
-https://d35j504z0x2vu2.cloudfront.net/v1/master/0bc8e8376bd8417a1b6761138aa41c26c7309312/bein-sports-xtra-en-espanol/playlist.m3u8?ads.vf=SylQdpcCl2O|buffer=0|timeout=10
+https://d35j504z0x2vu2.cloudfront.net/v1/master/0bc8e8376bd8417a1b6761138aa41c26c7309312/bein-sports-xtra-en-espanol/playlist.m3u8?ads.vf=SylQdpcCl2O
 
 #EXTINF:-1 group-title="TV",noticias 33
-https://jmp2.uk/plu-6320d2755e54db000783fd87.m3u8|buffer=0|timeout=10
+https://jmp2.uk/plu-6320d2755e54db000783fd87.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 35
-https://jmp2.uk/plu-660c29b5aec9680008f5b4a4.m3u8|buffer=0|timeout=10
+https://jmp2.uk/plu-660c29b5aec9680008f5b4a4.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 36
-https://6c849fb3.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/TEctbXhfRklGQVBsdXNTcGFuaXNoLTFfSExT/playlist.m3u8|buffer=0|timeout=10
+https://6c849fb3.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/TEctbXhfRklGQVBsdXNTcGFuaXNoLTFfSExT/playlist.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 37
-http://201.217.246.42:44310/Live/b10474c9b1ba4a0986b574d1211c065b/local-92.playlist.m3u8|buffer=0|timeout=10
+http://201.217.246.42:44310/Live/b10474c9b1ba4a0986b574d1211c065b/local-92.playlist.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 38
-https://live-manifest.production-public.tubi.io/live/d906efca-1302-4e29-b0d9-9a1d7a305d69/playlist.m3u8|buffer=0|timeout=10
+https://live-manifest.production-public.tubi.io/live/d906efca-1302-4e29-b0d9-9a1d7a305d69/playlist.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 40
-https://channel01-onlymex.akamaized.net/hls/live/2022749/event01/index.m3u8|buffer=0|timeout=10
+https://channel01-onlymex.akamaized.net/hls/live/2022749/event01/index.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 41
-http://201.217.246.42:44310/Live/3fcb6e26785fd8d415571b26dc3cf5d3/lasestrellas.playlist.m3u8|buffer=0|timeout=10
+http://201.217.246.42:44310/Live/3fcb6e26785fd8d415571b26dc3cf5d3/lasestrellas.playlist.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 44
-https://mdstrm.com/live-stream-playlist/609ad46a7a441137107d7a81.m3u8|buffer=0|timeout=10
+https://mdstrm.com/live-stream-playlist/609ad46a7a441137107d7a81.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 45
-https://jmp2.uk/plu-6582f002a620e3000813b329.m3u8|buffer=0|timeout=10
+https://jmp2.uk/plu-6582f002a620e3000813b329.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 46
-https://jmp2.uk/plu-65cf60d166eec80008724e6f.m3u8|buffer=0|timeout=10
+https://jmp2.uk/plu-65cf60d166eec80008724e6f.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 47
-https://live-manifest.production-public.tubi.io/live/d906efca-1302-4e29-b0d9-9a1d7a305d69/playlist.m3u8|buffer=0|timeout=10
+https://live-manifest.production-public.tubi.io/live/d906efca-1302-4e29-b0d9-9a1d7a305d69/playlist.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 48
-https://jmp2.uk/plu-5dcde07af1c85b0009b18651.m3u8|buffer=0|timeout=10
+https://jmp2.uk/plu-5dcde07af1c85b0009b18651.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 49
-https://jmp2.uk/plu-63c6e37e636b7e0007ccb635.m3u8|buffer=0|timeout=10
+https://jmp2.uk/plu-63c6e37e636b7e0007ccb635.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 51
 https://streaming.alwaysdata.net/tudn.php
 
 #EXTINF:-1 group-title="TV",noticias 53
-https://jmp2.uk/plu-65ea8b928145cb0008509426.m3u8|buffer=0|timeout=10
+https://jmp2.uk/plu-65ea8b928145cb0008509426.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 56
-https://linear-893.frequency.stream:443/dist/xumo/893/hls/master/playlist_1920x1080.m3u8|buffer=0|timeout=10
+https://linear-893.frequency.stream:443/dist/xumo/893/hls/master/playlist_1920x1080.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 57
-https://bein-esp-xumo.amagi.tv:443/playlistR720P.m3u8|buffer=0|timeout=10
+https://bein-esp-xumo.amagi.tv:443/playlistR720P.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 58
-http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5ebc8688f3697d00072f7cf8/master.m3u8?appName=web&appVersion=unknown&clientTime=0&deviceDNT=0&deviceId=6c26f5a6-30d3-11ef-9cf5-e9ddff8ff496&deviceMake=Chrome&deviceModel=web&deviceType=web&deviceVersion=unknown&includeExtendedEvents=false&serverSideAds=false&sid=0e97a69e-3355-4217-b6fb-8952f0ad1803|buffer=0|timeout=10
+http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5ebc8688f3697d00072f7cf8/master.m3u8?appName=web&appVersion=unknown&clientTime=0&deviceDNT=0&deviceId=6c26f5a6-30d3-11ef-9cf5-e9ddff8ff496&deviceMake=Chrome&deviceModel=web&deviceType=web&deviceVersion=unknown&includeExtendedEvents=false&serverSideAds=false&sid=0e97a69e-3355-4217-b6fb-8952f0ad1803
 
 #EXTINF:-1 group-title="TV",noticias 66
-http://45.5.119.43:4000/play/a052/index.m3u8|buffer=0|timeout=10
+http://45.5.119.43:4000/play/a052/index.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 67
-http://45.5.119.43:4000/play/a053/index.m3u8|buffer=0|timeout=10
+http://45.5.119.43:4000/play/a053/index.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 68
-http://45.5.119.43:4000/play/a054/index.m3u8|buffer=0|timeout=10
+http://45.5.119.43:4000/play/a054/index.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 69
-http://45.5.119.43:4000/play/a028/index.m3u8|buffer=0|timeout=10
+http://45.5.119.43:4000/play/a028/index.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 70
-http://45.5.119.43:4000/play/a0ix/index.m3u8|buffer=0|timeout=10
+http://45.5.119.43:4000/play/a0ix/index.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 71
-http://45.5.119.43:4000/play/a0kj/index.m3u8|buffer=0|timeout=10
+http://45.5.119.43:4000/play/a0kj/index.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 72
-https://dazn-combat-rakuten.amagi.tv/hls/amagi_hls_data_rakutenAA-dazn-combat-rakuten/CDN/master.m3u8|buffer=0|timeout=10
+https://dazn-combat-rakuten.amagi.tv/hls/amagi_hls_data_rakutenAA-dazn-combat-rakuten/CDN/master.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 73
-https://dai.google.com/linear/hls/event/YHoOj51dSKCvBQOBG2OvLQ/master.m3u8|buffer=0|timeout=10
+https://dai.google.com/linear/hls/event/YHoOj51dSKCvBQOBG2OvLQ/master.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 74
 https://us-b4-p-e-ja16.cdn.mdstrm.
 
 #EXTINF:-1 group-title="TV",noticias 75
-http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/52191.ts|buffer=0|timeout=10
+http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/52191.ts
 
 #EXTINF:-1 group-title="TV",noticias 76
-http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/59594.ts|buffer=0|timeout=10
+http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/59594.ts
 
 #EXTINF:-1 group-title="TV",noticias 77
-http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/59596.ts|buffer=0|timeout=10
+http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/59596.ts
 
 #EXTINF:-1 group-title="TV",noticias 78
-http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/49700.ts|buffer=0|timeout=10
+http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/49700.ts
 
 #EXTINF:-1 group-title="TV",noticias 79
-http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/59597.ts|buffer=0|timeout=10
+http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/59597.ts
 
 #EXTINF:-1 group-title="TV",noticias 78
-http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/59602.ts|buffer=0|timeout=10
+http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/59602.ts
 
 #EXTINF:-1 group-title="TV",noticias 79
-http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/59606.ts|buffer=0|timeout=10
+http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/59606.ts
 
 #EXTINF:-1 group-title="TV",noticias 80
-http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/59607.ts|buffer=0|timeout=10
+http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/59607.ts
 
 #EXTINF:-1 group-title="TV",noticias 81
-http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/51115.ts|buffer=0|timeout=10
+http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/51115.ts
 
 #EXTINF:-1 group-title="TV",noticias 82
-http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/51139.ts|buffer=0|timeout=10
+http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/51139.ts
