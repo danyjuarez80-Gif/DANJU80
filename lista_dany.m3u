@@ -60,9 +60,6 @@ https://channel01-onlymex.akamaized.net/hls/live/2022749/event01/index.m3u8
 #EXTINF:-1 group-title="TV",noticias 41
 http://201.217.246.42:44310/Live/3fcb6e26785fd8d415571b26dc3cf5d3/lasestrellas.playlist.m3u8
 
-#EXTINF:-1 group-title="TV",noticias 43
-#EXTVLCOPT:http-referrer=https://www.mexicotv.live/
-
 #EXTINF:-1 group-title="TV",noticias 44
 https://mdstrm.com/live-stream-playlist/609ad46a7a441137107d7a81.m3u8
 
@@ -121,8 +118,32 @@ https://dai.google.com/linear/hls/event/YHoOj51dSKCvBQOBG2OvLQ/master.m3u8
 https://us-b4-p-e-ja16.cdn.mdstrm.
 
 #EXTINF:-1 group-title="TV",noticias 75
-https://dcs-live-ue4.mp.lura.live/server/play/p0d5L5aFqyXYNTGA/rendition.m3u8?track=video-5&anvsid=m177635072-ne26998568d4c1dde7f535d75f0178716&ts=1777524711&anvtrid=91f31b58481926715738b9af3a7a7d9f
+http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/52191.ts
 
 #EXTINF:-1 group-title="TV",noticias 76
-https://shortlink.uk/1oItC
+http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/59594.ts
+
+#EXTINF:-1 group-title="TV",noticias 77
+http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/59596.ts
+
+#EXTINF:-1 group-title="TV",noticias 78
+http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/49700.ts
+
+#EXTINF:-1 group-title="TV",noticias 79
+http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/59597.ts
+
+#EXTINF:-1 group-title="TV",noticias 78
+http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/59602.ts
+
+#EXTINF:-1 group-title="TV",noticias 79
+http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/59606.ts
+
+#EXTINF:-1 group-title="TV",noticias 80
+http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/59607.ts
+
+#EXTINF:-1 group-title="TV",noticias 81
+http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/51115.ts
+
+#EXTINF:-1 group-title="TV",noticias 82
+http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/51139.ts
 
