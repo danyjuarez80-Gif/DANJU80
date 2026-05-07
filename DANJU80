@@ -78,11 +78,20 @@ https://jmp2.uk/plu-5dcde07af1c85b0009b18651.m3u8
 #EXTINF:-1 group-title="TV",noticias 49
 https://jmp2.uk/plu-63c6e37e636b7e0007ccb635.m3u8
 
+#EXTINF:-1 group-title="TV",noticias 50
+https://cdn2.zohanayaan.com:1686/hls/capodeportes.m3u8?md5=zTkD2L57jEQrJ-dx-VHETQ&expires=1778132690
+
 #EXTINF:-1 group-title="TV",noticias 51
 https://streaming.alwaysdata.net/tudn.php
 
+#EXTINF:-1 group-title="TV",noticias 52
+https://dp744.streamingtv339.com/global/tudnus/index.m3u8?token=fc680b411878ace4d5942fabbfd01a4843edea1c-9c-1778170328-1778116328&ip=45.191.55.32
+
 #EXTINF:-1 group-title="TV",noticias 53
 https://jmp2.uk/plu-65ea8b928145cb0008509426.m3u8
+
+#EXTINF:-1 group-title="TV",noticias 54
+https://agvyby.fubohd.com/tudn/mono.m3u8?token=25f20fd3a459163680f68701bd53d039ca7d83a8-b9-1778142656-1778124656
 
 #EXTINF:-1 group-title="TV",noticias 56
 https://linear-893.frequency.stream:443/dist/xumo/893/hls/master/playlist_1920x1080.m3u8
