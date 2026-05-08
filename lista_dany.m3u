@@ -38,6 +38,9 @@ https://lineup-hls-atsc-3.vizio.com/atsc/5.1/playlist.m3u8
 
 https://edge1.vmf.edge-access.net/live/c5mex/playlist.m3u8
 
+#EXTINF:-1 tvg-id="Canal5.mx" tvg-logo="https://i.imgur.com/vH6Z8M3.png" group-title="Mexico", Canal 5
+https://edge1.vmf.edge-access.net/live/c5mex/playlist.m3u8
+
 #EXTINF:-1 tvg-id="Canal5.mx" group-title="Mexico" x-roku-content-type="live", Canal 5
 #EXTVLUM:sub-node
 
