@@ -36,18 +36,6 @@ https://d368vp0qqzvkid.cloudfront.net/11603/88889703/hls/master.m3u8?ads._fw_att
 #EXTINF:-1 group-title="TV",noticias 23
 http://185.56.109.253/Canal5/playlist.m3u8
 
-#EXTINF:-1 group-title="TV",noticias 24
-https://639bc5877c5fe.streamlock.net/tv5hdlive/tv5hdlive/playlist.m3u8
-
-#EXTINF:-1 group-title="TV",noticias 25
-https://video.wilohosting.com:19360/tvmax/tvmax.m3u8
-
-#EXTINF:-1 group-title="TV",noticias 26
-https://api-tv.ipnet.ua/api/v1/manifest/2118742539.m3u8
-
-#EXTINF:-1 group-title="TV",noticias 27
-https://cdn4.skygo.mn/live/disk1/Channel_5/HLSv3-FTA/Channel_5.m3u8
-
 #EXTINF:-1 group-title="TV",noticias 31
 https://dc1644a9jazgj.cloudfront.net/beIN_Sports_Xtra_Espanol.m3u8
 
