@@ -36,13 +36,6 @@ https://d368vp0qqzvkid.cloudfront.net/11603/88889703/hls/master.m3u8?ads._fw_att
 #EXTINF:-1 group-title="TV",noticias 23
 http://185.56.109.253/Canal5/playlist.m3u8
 
-#EXTINF:-1 group-title="TV",noticias 24
-http://104.238.205.28:8989/278329_.m3u8
-
-#EXTINF:-1 group-title="TV",Canal 5 Televisa
-#EXTVLCOPT:http-user-agent=okhttp/4.9.2
-http://104.238.205.28:8989/278329_.m3u8
-
 #EXTINF:-1 group-title="TV",noticias 31
 https://dc1644a9jazgj.cloudfront.net/beIN_Sports_Xtra_Espanol.m3u8
 
