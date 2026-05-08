@@ -33,17 +33,20 @@ https://dai.google.com/linear/hls/event/yINISWAPQ0CPhPixe-40wQ/master.m3u8
 #EXTINF:-1 group-title="TV",noticias 22
 https://d368vp0qqzvkid.cloudfront.net/11603/88889703/hls/master.m3u8?ads._fw_atts=&ads._fw_h_user_agent=Mozilla%252F5.0%2520%28Linux%253B%2520Android%252015%253B%2520RMX5070%2520Build%252FUKQ1.231108.001%253B%2520wv%29%2520AppleWebKit%252F537.36%2520%28KHTML%252C%2520like%2520Gecko%29%2520Version%252F4.0%2520Chrome%252F146.0.7680.164%2520Mobile%2520Safari%252F537.36&ads._fw_is_lat=0&ads._fw_nielsen_app_id=P06F4DCAF-86D7-4159-AAE9-D3C50FF96F01&ads._fw_player_height=177&ads._fw_player_width=320&ads._fw_site_page=https%253A%252F%252Fwww.telemundo51.com%252Fver%252F&ads._fw_us_privacy=1---&ads.afid=396654223&ads.caid=TelemundoNoticiasFL&ads.channelName=TelemundoNoticiasFL&ads.csid=tm_ots_alldevice_allos_web_wscv_livelinear_virtualchannel&ads.flag=%252Bsltp%252Bemcr%252Bslcb%252Bsbid-fbad%252Baeti%252Bslif-vicb%252Bamcb%252Bplay-uapl%252Bdtrd%252Bexvt&ads.gpp=DBABLA%7EBVQVAAAAAgA.QA&ads.gpp_sid=7&ads.nw=169843&ads.playerVersion=8.30.1&ads.prof=169843%3Anbcu_ots_web_linear&ads.resp=vmap1&ads.sfid=23475402&ads.vcid=&ads.vip=45.191.53.2&ads.xumo_channelId=88889703a&ads.xumo_contentId=3905&ads.xumo_contentName=TelemundoNoticiasFL&ads.xumo_ifaType=&ads.xumo_providerId=3905&ads.xumo_providerName=TelemundoNoticiasFL&ads.xumo_streamId=88889703&ads.xumo_ifa=&ads._fw_did=&ads.site_name=TLMD
 
-#EXTINF:-1 tvg-id="Canal5.mx" group-title="Mexico" x-roku-content-type="live", Canal 5
-https://lineup-hls-atsc-3.vizio.com/atsc/5.1/playlist.m3u8
+#EXTINF:-1 group-title="TV",noticias 23
+http://185.56.109.253/Canal5/playlist.m3u8
 
-#EXTINF:-1 tvg-id="Canal5.mx" group-title="Mexico" x-roku-content-type="live", Canal 5
-#EXTVLUM:sub-node
+#EXTINF:-1 group-title="TV",noticias 24
+https://639bc5877c5fe.streamlock.net/tv5hdlive/tv5hdlive/playlist.m3u8
 
-#EXTINF:-1 group-title="Mexico",Canal 5 Televisa
-https://channel05.akamaized.net/hls/live/2033783/event01/index.m3u8
+#EXTINF:-1 group-title="TV",noticias 25
+https://video.wilohosting.com:19360/tvmax/tvmax.m3u8
 
-#EXTINF:-1 group-title="Mexico",Canal 5 Alt
-http://104.238.205.28:8989/278329_.m3u8
+#EXTINF:-1 group-title="TV",noticias 26
+https://api-tv.ipnet.ua/api/v1/manifest/2118742539.m3u8
+
+#EXTINF:-1 group-title="TV",noticias 27
+https://cdn4.skygo.mn/live/disk1/Channel_5/HLSv3-FTA/Channel_5.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 31
 https://dc1644a9jazgj.cloudfront.net/beIN_Sports_Xtra_Espanol.m3u8
