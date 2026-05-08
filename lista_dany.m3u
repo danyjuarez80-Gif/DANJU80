@@ -36,6 +36,8 @@ https://d368vp0qqzvkid.cloudfront.net/11603/88889703/hls/master.m3u8?ads._fw_att
 #EXTINF:-1 tvg-id="Canal5.mx" group-title="Mexico" x-roku-content-type="live", Canal 5
 https://lineup-hls-atsc-3.vizio.com/atsc/5.1/playlist.m3u8
 
+https://edge1.vmf.edge-access.net/live/c5mex/playlist.m3u8
+
 #EXTINF:-1 tvg-id="Canal5.mx" group-title="Mexico" x-roku-content-type="live", Canal 5
 #EXTVLUM:sub-node
 
