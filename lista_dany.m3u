@@ -1,5 +1,8 @@
 #EXTM3U
 
+#EXTINF:-1 group-title="TV",noticias 0c
+https://dp744.streamingtv339.com/global/universo/index.m3u8?token=117dcf124bc08d0a1422fb4328303a7d2220c8d8-a7-1778409076-1778355076&ip=45.191.55.32
+
 #EXTINF:-1 group-title="TV",noticias 0b
 https://fala.skylivehd.com/global/canal5mx/index.m3u8?ip=45.191.55.32&token=9ab5b41d3893de4e8835d023fd74ec8094060f9a-6c-1778408286-1778354286
 
