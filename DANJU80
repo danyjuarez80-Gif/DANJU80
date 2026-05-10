@@ -1,5 +1,8 @@
 #EXTM3U
 
+#EXTINF:-1 group-title="TV",noticias 0e
+https://zb533.streamingtv339.com/global/amazon1/index.m3u8?token=61e35c0dffebdf638d952ffee4a6c6eb9c60b15a-e5-1778419701-1778365701&ip=45.191.55.32
+
 #EXTINF:-1 group-title="TV",noticias 0d
 https://cdn9.zohanayaan.com:1686/hls/capodeportes.m3u8?md5=IaYup_HyoC3X-eHEVZIRXQ&expires=1778381780
 
