@@ -1,23 +1,5 @@
 #EXTM3U
 
-#EXTINF:-1 group-title="TV",noticias 0e
-https://zb533.streamingtv339.com/global/amazon1/index.m3u8?token=61e35c0dffebdf638d952ffee4a6c6eb9c60b15a-e5-1778419701-1778365701&ip=45.191.55.32
-
-#EXTINF:-1 group-title="TV",noticias 0d
-https://cdn9.zohanayaan.com:1686/hls/capodeportes.m3u8?md5=IaYup_HyoC3X-eHEVZIRXQ&expires=1778381780
-
-#EXTINF:-1 group-title="TV",noticias 0c
-https://dp744.streamingtv339.com/global/universo/index.m3u8?token=117dcf124bc08d0a1422fb4328303a7d2220c8d8-a7-1778409076-1778355076&ip=45.191.55.32
-
-#EXTINF:-1 group-title="TV",noticias 0b
-https://fala.skylivehd.com/global/canal5mx/index.m3u8?ip=45.191.55.32&token=9ab5b41d3893de4e8835d023fd74ec8094060f9a-6c-1778408286-1778354286
-
-#EXTINF:-1 group-title="TV",noticias 0a
-https://fala.skylivehd.com/global/telemundo/index.m3u8?ip=45.191.55.32&token=ace1e062ee03ff5565441f7ad8faaf485a852b86-2a-1778408056-1778354056
-
-#EXTINF:-1 group-title="TV",noticias 0
-https://fala.skylivehd.com/global/amazon1/index.m3u8?ip=45.191.55.32&token=8bdaa928915daa8edd0c5d4aa849e578b7b03cb7-b4-1778407888-1778353888
-
 #EXTINF:-1 group-title="TV",noticias 1
 http://181.176.155.7:8090/play/a1qh/index.m3u8
 
@@ -149,37 +131,4 @@ https://dazn-combat-rakuten.amagi.tv/hls/amagi_hls_data_rakutenAA-dazn-combat-ra
 
 #EXTINF:-1 group-title="TV",noticias 73
 https://dai.google.com/linear/hls/event/YHoOj51dSKCvBQOBG2OvLQ/master.m3u8
-
-#EXTINF:-1 group-title="TV",noticias 74
-https://us-b4-p-e-ja16.cdn.mdstrm.
-
-#EXTINF:-1 group-title="TV",noticias 75
-http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/52191.ts
-
-#EXTINF:-1 group-title="TV",noticias 76
-http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/59594.ts
-
-#EXTINF:-1 group-title="TV",noticias 77
-http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/59596.ts
-
-#EXTINF:-1 group-title="TV",noticias 78
-http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/49700.ts
-
-#EXTINF:-1 group-title="TV",noticias 79
-http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/59597.ts
-
-#EXTINF:-1 group-title="TV",noticias 78
-http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/59602.ts
-
-#EXTINF:-1 group-title="TV",noticias 79
-http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/59606.ts
-
-#EXTINF:-1 group-title="TV",noticias 80
-http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/59607.ts
-
-#EXTINF:-1 group-title="TV",noticias 81
-http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/51115.ts
-
-#EXTINF:-1 group-title="TV",noticias 82
-http://xpaneltv.com:8080/channel/JoseVSQZ/66577899/51139.ts
 
