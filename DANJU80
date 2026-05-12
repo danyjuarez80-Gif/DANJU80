@@ -1,5 +1,6 @@
 #EXTM3U
 
+### TUS CANALES MANUALES ###
 ### TUS LINKS (LOS QUE SIRVEN) ###
 ### TUS LINKS (LOS QUE SIRVEN) ###
 ### CANALES MANUALES ###
@@ -172,9 +173,115 @@ https://deportes.ksdjugfsddeports.com:9092/MTMyLjE5Ni4zMi42OA==/8_.m3u8?token=eb
 https://deportes.ksdjugfsddeports.com:9092/MTcyLjE4Mi4yMjYuNzI=/34_.m3u8?token=eFFDUU9xLfdZvvm7hUyt-A&expires=1778631071
 #EXTINF:-1 group-title="Test", Azteca Bot Opcion 2
 https://deportes.ksdjugfsddeports.com:9092/MTcyLjE4Mi4yMjYuNzI=/34_.m3u8?token=eFFDUU9xLfdZvvm7hUyt-A&expires=1778631071
-
 ### PRUEBA BOT (SI FALLAN AVISA) ###
 #EXTINF:-1 group-title="Test", Azteca Bot Opcion 1
 https://deportes.ksdjugfsddeports.com:9092/MjAuMTA5LjM4LjU3/34_.m3u8?token=mPRcoBPBF1pTDN58XADd_g&expires=1778632105
 #EXTINF:-1 group-title="Test", Azteca Bot Opcion 2
 https://deportes.ksdjugfsddeports.com:9092/MjAuMTA5LjM4LjU3/34_.m3u8?token=mPRcoBPBF1pTDN58XADd_g&expires=1778632105
+
+### RASTREO AUTOMATICO (Indice: 0) ###
+### EN VIVO
+
+AZTECA DEPORTES ###
+#EXTINF:-1 group-title="Auto-Total", EN VIVO
+
+AZTECA DEPORTES (Opcion 1)
+https://deportes.ksdjugfsddeports.com:9092/MTcyLjE4NC4yMTkuMjEz/34_.m3u8?token=2-jLS2hWRW8wZo8yXAbhrg&expires=1778633809
+### EN VIVO
+
+SKY SPORTS LA LIGA ###
+#EXTINF:-1 group-title="Auto-Total", EN VIVO
+
+SKY SPORTS LA LIGA (Opcion 1)
+https://deportes.ksdjugfsddeports.com:9092/MTcyLjE4NC4yMTkuMjEz/37_.m3u8?token=hT8bR1zMoh4nWxxnVvNd4g&expires=1778633820
+### EN VIVO
+
+TUDN ###
+#EXTINF:-1 group-title="Auto-Total", EN VIVO
+
+TUDN (Opcion 1)
+https://deportes.ksdjugfsddeports.com:9092/MTcyLjE4NC4yMTkuMjEz/1_.m3u8?token=pNoDVyrzWanWMD0gw4ubLA&expires=1778633831
+### EN VIVO
+
+LIGA 1 ###
+#EXTINF:-1 group-title="Auto-Total", EN VIVO
+
+LIGA 1 (Opcion 1)
+https://deportes.ksdjugfsddeports.com:9092/MTcyLjE4NC4yMTkuMjEz/39_.m3u8?token=QXvcyGUS6uSPLAjE5VO6zg&expires=1778633843
+### EN VIVO
+
+LIGA 1 MAX ###
+#EXTINF:-1 group-title="Auto-Total", EN VIVO
+
+LIGA 1 MAX (Opcion 1)
+https://deportes.ksdjugfsddeports.com:9092/MTcyLjE4NC4yMTkuMjEz/22_.m3u8?token=IG3ZufNMCGuG5YPJNL2ySg&expires=1778633854
+### EN VIVO
+
+TNT SPORTS ###
+#EXTINF:-1 group-title="Auto-Total", EN VIVO
+
+TNT SPORTS (Opcion 1)
+https://deportes.ksdjugfsddeports.com:9092/MTcyLjE4NC4yMTkuMjEz/4_.m3u8?token=O354HtxScyjontdBC9A2-Q&expires=1778633865
+### EN VIVO
+
+TNT SPORTS CHILE ###
+#EXTINF:-1 group-title="Auto-Total", EN VIVO
+
+TNT SPORTS CHILE (Opcion 1)
+https://deportes.ksdjugfsddeports.com:9092/MTcyLjE4NC4yMTkuMjEz/35_.m3u8?token=oV6iboP4AFG2Q9iywL0rKg&expires=1778633876
+### EN VIVO
+
+FOX SPORTS PREMIUM ###
+#EXTINF:-1 group-title="Auto-Total", EN VIVO
+
+FOX SPORTS PREMIUM (Opcion 1)
+https://deportes.ksdjugfsddeports.com:9092/MTcyLjE4NC4yMTkuMjEz/12_.m3u8?token=fHJjkTwJP98CkodUNhARog&expires=1778633887
+### EN VIVO
+
+TYC SPORTS ###
+#EXTINF:-1 group-title="Auto-Total", EN VIVO
+
+TYC SPORTS (Opcion 1)
+https://deportes.ksdjugfsddeports.com:9092/MTcyLjE4NC4yMTkuMjEz/6_.m3u8?token=azMpH2wDdee3hx0Lih98dA&expires=1778633898
+### EN VIVO
+
+DAZN F1 ###
+#EXTINF:-1 group-title="Auto-Total", EN VIVO
+
+DAZN F1 (Opcion 1)
+https://deportes.ksdjugfsddeports.com:9092/MTcyLjE4NC4yMTkuMjEz/27_.m3u8?token=oZpku8XttmNB31YdTG9R-A&expires=1778633910
+### EN VIVO
+
+DAZN LA LIGA ###
+#EXTINF:-1 group-title="Auto-Total", EN VIVO
+
+DAZN LA LIGA (Opcion 1)
+https://deportes.ksdjugfsddeports.com:9092/MTcyLjE4NC4yMTkuMjEz/28_.m3u8?token=xyFoYET5t_La2KQ8jLRjMg&expires=1778633921
+### EN VIVO
+
+DIRECTV SPORTS ###
+#EXTINF:-1 group-title="Auto-Total", EN VIVO
+
+DIRECTV SPORTS (Opcion 1)
+https://deportes.ksdjugfsddeports.com:9092/MTcyLjE4NC4yMTkuMjEz/3_.m3u8?token=oVYb4mWXyqzJvJxSAh5IzQ&expires=1778633932
+### EN VIVO
+
+DIRECTV SPORTS 2 ###
+#EXTINF:-1 group-title="Auto-Total", EN VIVO
+
+DIRECTV SPORTS 2 (Opcion 1)
+https://deportes.ksdjugfsddeports.com:9092/MTcyLjE4NC4yMTkuMjEz/7_.m3u8?token=NVWj3eo2ChFz-8pZ4J5v0w&expires=1778633943
+### EN VIVO
+
+DIRECTV SPORTS PLUS ###
+#EXTINF:-1 group-title="Auto-Total", EN VIVO
+
+DIRECTV SPORTS PLUS (Opcion 1)
+https://deportes.ksdjugfsddeports.com:9092/MTcyLjE4NC4yMTkuMjEz/11_.m3u8?token=IEZWcsICnEako6kc3SVY9Q&expires=1778633954
+### EN VIVO
+
+ESPN PREMIUM ###
+#EXTINF:-1 group-title="Auto-Total", EN VIVO
+
+ESPN PREMIUM (Opcion 1)
+https://deportes.ksdjugfsddeports.com:9092/MTcyLjE4NC4yMTkuMjEz/5_.m3u8?token=umMf05LTvCa1g4NLg7TPag&expires=1778633965
