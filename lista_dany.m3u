@@ -1,5 +1,6 @@
 #EXTM3U
 
+### CANALES MANUALES ###
 ### MIS CANALES MANUALES ###
 #EXTINF:-1 group-title="TV",noticias 1
 https://regionales.saohgdasregions.fun:9092/NDUuMTkxLjU1LjMy/2_.m3u8?token=XzmHpN5SIpCZEmRo5UIKPA&expires=1778603844
@@ -101,7 +102,19 @@ http://45.5.119.43:4000/play/a0kj/index.m3u8
 https://dazn-combat-rakuten.amagi.tv/hls/amagi_hls_data_rakutenAA-dazn-combat-rakuten/CDN/master.m3u8
 #EXTINF:-1 group-title="TV",noticias 73
 https://dai.google.com/linear/hls/event/YHoOj51dSKCvBQOBG2OvLQ/master.m3u8
-
-### ACTUALIZADO POR EL BOT ###
 #EXTINF:-1 group-title="Deportes Auto",Azteca Deportes
 https://deportes.ksdjugfsddeports.com:9092/NjQuMjM2LjE0Mi4xNDk=/34_.m3u8?token=R5tamLd9woRhJiQwRXuiTg&expires=1778605043
+
+### ACTUALIZACIÓN MULTI-SERVIDOR ###
+### AZTECA DEPORTES ###
+#EXTINF:-1 group-title="Auto-Multi", Azteca Deportes (Opción 1)
+https://deportes.ksdjugfsddeports.com:9092/NTIuMTg4LjE5OC45Ng==/34_.m3u8?token=EnHentI6ZsuwsNBF7t9PJg&expires=1778606156
+### TUDN ###
+#EXTINF:-1 group-title="Auto-Multi", TUDN (Opción 1)
+https://deportes.ksdjugfsddeports.com:9092/NTIuMTg4LjE5OC45Ng==/1_.m3u8?token=yhBVzET_LIKVmUlSSPGf1w&expires=1778606215
+### ESPN 2 ###
+#EXTINF:-1 group-title="Auto-Multi", ESPN 2 (Opción 1)
+https://deportes.ksdjugfsddeports.com:9092/NTIuMTg4LjE5OC45Ng==/14_.m3u8?token=0w87qTiOWSqoJcjMqc3C4g&expires=1778606275
+### FOX SPORTS 1 ###
+#EXTINF:-1 group-title="Auto-Multi", Fox Sports 1 (Opción 1)
+https://deportes.ksdjugfsddeports.com:9092/NTIuMTg4LjE5OC45Ng==/8_.m3u8?token=1lrHMMXNsRVSHbPdMFvD_w&expires=1778606335
