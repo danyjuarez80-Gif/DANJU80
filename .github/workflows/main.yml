@@ -2,15 +2,15 @@ name: Actualizador Dany 80
 
 on:
   schedule:
-    - cron: '*/30 * * * *' # Ejecución cada 30 minutos
-  workflow_dispatch: # Permite ejecución manual
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
 
 permissions:
-  contents: write # Permiso necesario para guardar cambios en el repo
+  contents: write
 
 jobs:
   build:
-    runs-on: ubuntu-latest # Corregido: antes decía runs-runs-on
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout del código
         uses: actions/checkout@v4
@@ -34,5 +34,5 @@ jobs:
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Action"
           git add .
-          git commit -m "Auto-update: $(date +'%Y-%m-%d %H:%M')" || exit 0
+          git commit -m "Actualización automática: $(date +'%Y-%m-%d %H:%M')" || exit 0
           git push
