@@ -1,49 +1,54 @@
 import requests
 from playwright.sync_api import sync_playwright
 
+# URL de tu lista en GitHub
 URL_FUENTE = "https://raw.githubusercontent.com/danyjuarez80-Gif/DANJU80/refs/heads/main/DANJU80"
 BASE_EMBED = "https://embed.ksdjugfsddeports.com"
 
+# Lista de canales (puedes seguir agregando según necesites)
 CANALES = [
     {"nombre": "TUDN", "slug": "tudn"},
     {"nombre": "TNT Sports", "slug": "tntsports"},
-    # ... (mantén el resto de tu lista de canales igual)
+    {"nombre": "ESPN Mexico", "slug": "espnmexico"},
+    {"nombre": "Fox Sports Mexico", "slug": "foxsportsmexico"},
+    {"nombre": "Azteca 7", "slug": "azteca7"},
+    {"nombre": "Canal 5", "slug": "canal5"},
 ]
 
 def capturar_m3u8(page, url_inicial):
-    """Navega al PHP, busca el iframe y captura el m3u8 generado por JS."""
+    """Navega al PHP, detecta el iframe y captura el tráfico m3u8."""
     capturados = []
 
     def on_request(request):
         url = request.url
+        # Filtramos por extension m3u8 y que contenga tokens comunes
         if ".m3u8" in url and ("token=" in url or "index" in url):
             capturados.append(url)
 
     page.on("request", on_request)
     
     try:
-        # 1. Ir a la página principal del canal
-        page.goto(url_inicial, timeout=20000, wait_until="networkidle")
+        # 1. Cargar la página principal del canal
+        page.goto(url_inicial, timeout=30000, wait_until="networkidle")
         
-        # 2. Buscar el iframe (según la captura, el m3u8 está ahí dentro)
+        # 2. Intentar saltar al iframe (donde Claude decía que estaba el m3u8)
         iframe_element = page.query_selector("iframe")
         if iframe_element:
             iframe_url = iframe_element.get_attribute("src")
             if iframe_url:
-                # Si la URL es relativa, la completamos
                 if iframe_url.startswith("/"):
                     iframe_url = f"{BASE_EMBED}{iframe_url}"
                 elif not iframe_url.startswith("http"):
                     iframe_url = f"{BASE_EMBED}/{iframe_url}"
                 
-                print(f"  -> Entrando al iframe: {iframe_url}")
-                page.goto(iframe_url, timeout=20000, wait_until="networkidle")
+                print(f"  -> Navegando al iframe interno: {iframe_url}")
+                page.goto(iframe_url, timeout=30000, wait_until="networkidle")
         
-        # Espera extra para que el JS del iframe cargue el m3u8
-        page.wait_for_timeout(5000)
+        # Tiempo de espera para que el reproductor inicie y genere el tráfico
+        page.wait_for_timeout(7000)
         
     except Exception as e:
-        print(f"  Error de navegación: {e}")
+        print(f"  Error en navegación: {e}")
     
     page.remove_listener("request", on_request)
     return capturados[0] if capturados else None
@@ -51,10 +56,8 @@ def capturar_m3u8(page, url_inicial):
 def obtener_lista_base():
     try:
         r = requests.get(URL_FUENTE, timeout=20)
-        if r.status_code == 200:
-            return r.text
-    except Exception as e:
-        print(f"Error descargando lista base: {e}")
+        if r.status_code == 200: return r.text
+    except: pass
     return ""
 
 def generar_lista():
@@ -62,7 +65,7 @@ def generar_lista():
     canales_vistos = set()
     lineas_base = []
 
-    # Limpieza de duplicados en la base
+    # Procesar lista actual para no duplicar
     lineas = lista_base.splitlines()
     i = 0
     while i < len(lineas):
@@ -75,48 +78,40 @@ def generar_lista():
                     lineas_base.append(url)
                     canales_vistos.add(url)
             i += 2
-        else:
-            i += 1
+        else: i += 1
 
     nuevos_canales = []
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
-        # Usamos un perfil más "humano" para evitar bloqueos
         context = browser.new_context(
-            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-            viewport={'width': 1280, 'height': 720}
+            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
         )
         page = context.new_page()
 
         for canal in CANALES:
             url_php = f"{BASE_EMBED}/{canal['slug']}.php"
-            print(f"📺 Procesando: {canal['nombre']}...")
-            
+            print(f"📺 Buscando: {canal['nombre']}...")
             m3u8 = capturar_m3u8(page, url_php)
             
             if m3u8 and m3u8 not in canales_vistos:
                 nuevos_canales.append(f'#EXTINF:-1 group-title="Deportes",{canal["nombre"]}')
                 nuevos_canales.append(m3u8)
                 canales_vistos.add(m3u8)
-                print(f"  ✅ Enlace capturado con éxito")
-            elif m3u8:
-                print(f"  ⚠️ Enlace ya existente (duplicado)")
+                print(f"  ✅ OK")
             else:
-                print(f"  ❌ No se detectó flujo .m3u8 en esta ruta")
+                print(f"  ❌ No capturado / Duplicado")
 
         browser.close()
 
-    # Escritura del archivo final
+    # Guardar archivo m3u
     with open("lista_dany.m3u", "w", encoding="utf-8") as f:
         f.write("#EXTM3U\n\n")
-        for linea in lineas_base:
-            f.write(linea + "\n")
+        for linea in lineas_base: f.write(linea + "\n")
         if nuevos_canales:
             f.write("\n")
-            for linea in nuevos_canales:
-                f.write(linea + "\n")
+            for linea in nuevos_canales: f.write(linea + "\n")
 
-    print(f"\n✅ Proceso terminado. Canales totales: {len(canales_vistos)}")
+    print(f"\nFinalizado. Total canales: {len(canales_vistos)}")
 
 if __name__ == "__main__":
     generar_lista()
