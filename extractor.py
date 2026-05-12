@@ -3,103 +3,74 @@ import re
 from playwright.sync_api import sync_playwright
 
 URL_FUENTE = "https://raw.githubusercontent.com/danyjuarez80-Gif/DANJU80/refs/heads/main/DANJU80"
-BASE_EMBED = "https://embed.ksdjugfsddeports.com"
+# Nueva URL base para el canal solicitado
+URL_AZTECA = "https://www.tvplusgratis2.com/azteca-deportes-en-vivo.html"
 
-# Lista simplificada para asegurar que capture estos primero
-CANALES = [
-    {"nombre": "TUDN HD", "slug": "tudn"},
-    {"nombre": "ESPN 2 HD", "slug": "espn2"},
-    {"nombre": "FOX SPORTS PREMIUM", "slug": "foxsportspremium"},
-    {"nombre": "AZTECA 7", "slug": "azteca7"},
-    {"nombre": "CANAL 5", "slug": "canal5"},
-]
-
-def capturar_con_clic_agresivo(page, url_canal):
+def capturar_azteca_deportes(page):
     enlaces = []
-    # Sniffer de red para atrapar el m3u8 apenas se genere
     page.on("request", lambda req: enlaces.append(req.url) if ".m3u8" in req.url else None)
 
     try:
-        # Cargamos el PHP
-        page.goto(url_canal, timeout=60000, wait_until="networkidle")
+        print(f"📡 Navegando a Azteca Deportes...")
+        page.goto(URL_AZTECA, timeout=60000, wait_until="networkidle")
         
-        # Localizar iframe y navegar a él directamente
-        iframe = page.query_selector("iframe")
-        if iframe:
-            src = iframe.get_attribute("src")
-            target = src if src.startswith("http") else f"{BASE_EMBED}/{src.lstrip('/')}"
-            page.goto(target, timeout=60000, wait_until="domcontentloaded")
-            
-            # Espera para que aparezca el botón de play
-            page.wait_for_timeout(7000)
-            
-            # Forzamos el clic en el centro del reproductor o botón play
-            for selector in ["video", "button", ".play-button", ".vjs-big-play-button"]:
-                if page.query_selector(selector):
-                    page.click(selector, force=True)
-                    break
-            
-            # Espera crucial: Web Video Caster tarda unos segundos en capturar, nosotros igual
-            page.wait_for_timeout(15000)
-    except:
-        pass
+        # Esperamos a que carguen los posibles reproductores o iframes
+        page.wait_for_timeout(8000)
+        
+        # Intentamos interactuar con el reproductor para activar el stream
+        # Buscamos botones de play o el área del video
+        for selector in ["video", "iframe", ".play-button", "button"]:
+            if page.query_selector(selector):
+                print(f"  -> Interactuando con: {selector}")
+                page.click(selector, force=True)
+                break
+        
+        # Espera extendida para capturar el tráfico de red (como lo hace Web Video Caster)
+        page.wait_for_timeout(15000)
+    except Exception as e:
+        print(f"  ❌ Error en la captura: {e}")
     
     return enlaces[0] if enlaces else None
 
 def generar_lista():
-    # 1. Leer lo que tienes en DANJU80 actualmente
+    # 1. Obtener contenido actual de DANJU80
     try:
         r = requests.get(URL_FUENTE, timeout=15)
-        contenido_base = r.text if r.status_code == 200 else ""
+        base_raw = r.text if r.status_code == 200 else ""
     except:
-        contenido_base = ""
+        base_raw = ""
 
-    nuevos_capturados = []
-
+    nuevo_link = None
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
-        # CONFIGURACIÓN MÓVIL: Imita un Android para saltar bloqueos
+        # Usamos configuración de móvil para mayor compatibilidad
         context = browser.new_context(
             user_agent="Mozilla/5.0 (Linux; Android 13; SM-S918B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Mobile Safari/537.36",
-            viewport={'width': 360, 'height': 800},
             is_mobile=True
         )
         page = context.new_page()
-
-        for canal in CANALES:
-            print(f"📡 Intentando capturar: {canal['nombre']}...")
-            url = f"{BASE_EMBED}/{canal['slug']}.php"
-            m3u8 = capturar_con_clic_agresivo(page, url)
-            
-            if m3u8:
-                # Limpiar el link de comillas o basura
-                link_final = m3u8.split("'")[0].split('"')[0]
-                nuevos_capturados.append(f'#EXTINF:-1 group-title="DEPORTES AUTO",{canal["nombre"]}')
-                nuevos_capturados.append(link_final)
-                print(f"  ✅ Capturado: {link_final[:50]}...")
-            else:
-                print(f"  ❌ El servidor no soltó el link")
-
+        
+        nuevo_link = capturar_azteca_deportes(page)
         browser.close()
 
-    # 2. ESCRIBIR EL ARCHIVO FINAL (lista_dany.m3u)
+    # 2. Escribir el archivo final lista_dany.m3u
     with open("lista_dany.m3u", "w", encoding="utf-8") as f:
         f.write("#EXTM3U\n\n")
         
-        # Pegamos tus canales manuales de DANJU80 primero
-        if contenido_base:
-            f.write("### TUS CANALES (DANJU80) ###\n")
-            f.write(contenido_base.replace("#EXTM3U", "").strip() + "\n\n")
+        # Mantener tus canales previos
+        if base_raw:
+            f.write("### CANALES DANJU80 ###\n")
+            f.write(base_raw.replace("#EXTM3U", "").strip() + "\n\n")
         
-        # Pegamos los canales que el bot encontró
-        if nuevos_capturados:
-            f.write("### ACTUALIZADOS POR EL BOT ###\n")
-            for linea in nuevos_capturados:
-                f.write(linea + "\n")
+        # Pegar el nuevo canal si se capturó
+        if nuevo_link:
+            link_limpio = nuevo_link.split("'")[0].split('"')[0]
+            f.write("### AUTO-CAPTURA NOCTURNA ###\n")
+            f.write(f'#EXTINF:-1 group-title="Deportes",Azteca Deportes\n')
+            f.write(f'{link_limpio}\n')
+            print(f"✅ Canal pegado con éxito.")
         else:
-            f.write("### EL BOT NO ENCONTRÓ ENLACES NUEVOS EN ESTA VUELTA ###\n")
-
-    print("\n✅ Archivo editado y guardado.")
+            print("❌ No se pudo capturar el link esta vez.")
 
 if __name__ == "__main__":
     generar_lista()
