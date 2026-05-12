@@ -3,80 +3,75 @@ import re
 from playwright.sync_api import sync_playwright
 
 URL_GITHUB_RAW = "https://raw.githubusercontent.com/danyjuarez80-Gif/DANJU80/refs/heads/main/DANJU80"
-URL_BASE_TV = "https://www.tvplusgratis2.com/"
 
-CANALES_A_MONITOREAR = [
-    {"n": "Azteca Deportes", "u": "https://www.tvplusgratis2.com/azteca-deportes-en-vivo.html"},
-    {"n": "TUDN", "u": "https://www.tvplusgratis2.com/tudn-en-vivo.html"},
-    {"n": "ESPN 2", "u": "https://www.tvplusgratis2.com/espn-2-en-vivo.html"},
-    {"n": "Fox Sports 1", "u": "https://www.tvplusgratis2.com/fox-sports-en-vivo.html"},
-    {"n": "Canal 5", "u": "https://www.tvplusgratis2.com/canal-5-en-vivo-mexico.html"}
-]
+# Vamos a probar solo con Azteca Deportes para asegurar que pegue uno que sirva
+URL_TEST = "https://www.tvplusgratis2.com/azteca-deportes-en-vivo.html"
 
-def es_link_valido(url):
-    bloqueados = ["google", "doubleclick", "ads", "analytics", "pixel", "facebook", "mp4", "log"]
-    return ".m3u8" in url and not any(x in url.lower() for x in bloqueados)
+def capturar_link_real(page):
+    enlaces_buenos = []
+    
+    # Esta función atrapa el tráfico pero filtra solo lo que tiene peso de video real
+    def interceptar(request):
+        u = request.url
+        if ".m3u8" in u and "chunklist" not in u: # El chunklist suele fallar, queremos el master
+            if not any(x in u.lower() for x in ["ads", "pixel", "analytics"]):
+                enlaces_buenos.append(u)
 
-def escanear_canal_completo(page, info_canal):
-    enlaces_servidores = []
-    page.on("request", lambda req: enlaces_servidores.append(req.url) if es_link_valido(req.url) else None)
+    page.on("request", interceptar)
+
     try:
-        print(f"🔍 Escaneando: {info_canal['n']}...")
-        page.goto(info_canal['u'], timeout=60000, wait_until="networkidle")
-        page.wait_for_timeout(6000)
-        elementos_clic = page.query_selector_all("video, iframe, .play-button, button")
-        for el in elementos_clic[:3]: 
-            try:
-                el.click(force=True)
-                page.wait_for_timeout(4000)
-            except:
-                continue
+        print("📡 Entrando a la página como si fuera un celular...")
+        page.goto(URL_TEST, timeout=60000, wait_until="networkidle")
+        page.wait_for_timeout(5000)
+        
+        # Buscamos el reproductor y le damos Play forzado
+        # Si no hay play, el link que sale es basura
+        play_btn = page.query_selector("button.vjs-big-play-button")
+        if play_btn:
+            play_btn.click()
+            print("  ▶️ Play presionado")
+        
         page.wait_for_timeout(10000)
     except:
         pass
-    return list(dict.fromkeys(enlaces_servidores))
+    
+    return enlaces_buenos
 
-def ejecucion_maestra():
+def sincronizar_todo():
+    # 1. Obtener tus links que sí sirven (noticias 100)
     try:
         r = requests.get(URL_GITHUB_RAW, timeout=15)
-        raw_manual = r.text if r.status_code == 200 else ""
+        manual = r.text if r.status_code == 200 else ""
     except:
-        raw_manual = ""
+        manual = ""
 
-    lineas_manuales = [l for l in raw_manual.splitlines() if l.strip() and not l.startswith("#EXTM3U")]
-    bloque_auto = ""
+    lineas_manuales = [l for l in manual.splitlines() if l.strip() and not l.startswith("#EXTM3U")]
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
+        # Usamos identidad de Chrome en Android (muy importante para el servidor)
         context = browser.new_context(
-            user_agent="Mozilla/5.0 (Linux; Android 13; SM-G960F) AppleWebKit/537.36 Mobile Safari/537.36",
+            user_agent="Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36",
             is_mobile=True
         )
         page = context.new_page()
-
-        for canal in CANALES_A_MONITOREAR:
-            opciones = escanear_canal_completo(page, canal)
-            if opciones:
-                bloque_auto += f"### {canal['n'].upper()} ###\n"
-                for i, link in enumerate(opciones[:4]):
-                    link_clean = link.split("'")[0].split('"')[0]
-                    bloque_auto += f'#EXTINF:-1 group-title="Auto-Multi", {canal["n"]} (Opción {i+1})\n{link_clean}\n'
-                print(f"  ✅ {len(opciones[:4])} opciones encontradas.")
-            else:
-                print(f"  ❌ Sin servidores activos.")
+        
+        links_capturados = capturar_link_real(page)
         browser.close()
 
-    # Construcción final sin errores de comillas
-    contenido_total = "#EXTM3U\n\n"
+    # 3. Armar el archivo final
+    final = "#EXTM3U\n\n"
     if lineas_manuales:
-        contenido_total += "### CANALES MANUALES ###\n" + "\n".join(lineas_manuales) + "\n\n"
+        final += "### TUS LINKS (LOS QUE SIRVEN) ###\n" + "\n".join(lineas_manuales) + "\n\n"
     
-    contenido_total += "### ACTUALIZACIÓN MULTI-SERVIDOR ###\n" + bloque_auto
+    if links_capturados:
+        final += "### PRUEBA BOT (SI FALLAN AVISA) ###\n"
+        for i, l in enumerate(links_capturados[:2]):
+            final += f'#EXTINF:-1 group-title="Test", Azteca Bot Opcion {i+1}\n{l}\n'
+    
+    # Guardamos en ambos
+    for f_name in ["DANJU80", "lista_dany.m3u"]:
+        with open(f_name, "w", encoding="utf-8") as f:
+            f.write(final)
 
-    for nombre_archivo in ["DANJU80", "lista_dany.m3u"]:
-        with open(nombre_archivo, "w", encoding="utf-8") as f:
-            f.write(contenido_total)
-    print("\n🚀 Proceso completado exitosamente.")
-
-if __name__ == "__main__":
-    ejecucion_maestra()
+sincronizar_todo()
