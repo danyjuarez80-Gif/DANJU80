@@ -7,32 +7,38 @@ URL_BASE = "https://www.tvplusgratis2.com/"
 
 def es_m3u8(url):
     filtros = ["google", "ads", "analytics", "pixel", "facebook", "mp4", "log"]
-    return ".m3u8" in url and not any(x in url.lower() for x in filtros)
+    # Filtramos también links muy cortos que suelen ser basura
+    return ".m3u8" in url and len(url) > 50 and not any(x in url.lower() for x in filtros)
 
 def escanear_servidores(page, canal):
     links_found = []
+    # Escuchamos el tráfico de red
     page.on("request", lambda req: links_found.append(req.url) if es_m3u8(req.url) else None)
     try:
         print(f"📡 Analizando: {canal['n']}...")
         page.goto(canal['u'], timeout=25000, wait_until="domcontentloaded")
-        page.wait_for_timeout(4000)
-        play = page.query_selector("video, iframe, button")
-        if play: play.click(force=True)
-        page.wait_for_timeout(6000)
-    except:
-        pass
+        page.wait_for_timeout(5000)
+        
+        # Intentamos interactuar con el reproductor para que suelte los links
+        for selector in ["video", "iframe", "button.vjs-big-play-button"]:
+            try:
+                el = page.query_selector(selector)
+                if el: el.click(force=True)
+            except: continue
+            
+        page.wait_for_timeout(8000)
+    except: pass
     return list(dict.fromkeys(links_found))
 
 def ejecutar():
-    # 1. Leer progreso anterior
+    # 1. Memoria de rastreo
     if os.path.exists("progreso.txt"):
         with open("progreso.txt", "r") as f:
             try: ultimo_indice = int(f.read().strip())
             except: ultimo_indice = 0
-    else:
-        ultimo_indice = 0
+    else: ultimo_indice = 0
 
-    # 2. Obtener tus manuales
+    # 2. Cargar tus manuales
     try:
         r = requests.get(URL_GITHUB_RAW, timeout=10)
         manual = r.text if r.status_code == 200 else ""
@@ -41,12 +47,15 @@ def ejecutar():
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
-        context = browser.new_context(user_agent="Mozilla/5.0 (Linux; Android 11)", is_mobile=True)
+        # Usamos un User-Agent de Android moderno para mejor compatibilidad
+        context = browser.new_context(
+            user_agent="Mozilla/5.0 (Linux; Android 13; SM-S918B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Mobile Safari/537.36",
+            is_mobile=True
+        )
         page = context.new_page()
 
-        # PASO 1: Cosechar todos los canales de la portada
         try:
-            page.goto(URL_BASE, timeout=30000, wait_until="domcontentloaded")
+            page.goto(URL_BASE, timeout=30000)
             links = page.query_selector_all("a")
             canales_web = []
             for link in links:
@@ -56,45 +65,45 @@ def ejecutar():
                     canales_web.append({"n": texto, "u": href})
             
             lista_total = list({v['u']: v for v in canales_web}.values())
-            total = len(lista_total)
-
-            # PASO 2: Seleccionar los 15 que siguen
-            inicio = ultimo_indice if ultimo_indice < total else 0
-            fin = inicio + 15
-            canales_vuelta = lista_total[inicio:fin]
-
-            print(f"🚀 Vuelta inteligente: Canales {inicio} al {min(fin, total)} de {total}")
+            
+            # Cargar 10 canales
+            inicio = ultimo_indice if ultimo_indice < len(lista_total) else 0
+            canales_vuelta = lista_total[inicio:inicio+10]
 
             bloque_auto = ""
             for c in canales_vuelta:
                 opciones = escanear_servidores(page, c)
-                if opciones:
-                    bloque_auto += f"### {c['n'].upper()} ###\n"
-                    for i, link in enumerate(opciones[:2]):
-                        clean = link.split("'")[0].split('"')[0]
-                        bloque_auto += f'#EXTINF:-1 group-title="Auto-Total", {c["n"]} (Opcion {i+1})\n{clean}\n'
+                # AQUÍ ESTÁ EL FILTRO: Solo opciones de la 3 en adelante
+                # opciones[2:] significa: salta el índice 0 y 1 (opción 1 y 2)
+                opciones_validas = opciones[2:5] 
 
-            # PASO 3: Actualizar progreso.txt
-            nuevo_indice = fin if fin < total else 0
+                if opciones_validas:
+                    bloque_auto += f"### {c['n'].upper()} ###\n"
+                    for i, link in enumerate(opciones_validas):
+                        # Limpiamos el link de posibles comillas
+                        clean = link.split("'")[0].split('"')[0]
+                        # Agregamos el User-Agent al final del link para que el reproductor lo use
+                        # Esto ayuda a que "agarre" en apps como OTT Navigator o VLC
+                        link_final = f"{clean}|User-Agent=Mozilla/5.0"
+                        bloque_auto += f'#EXTINF:-1 group-title="Auto-Opt", {c["n"]} (Opcion {i+3})\n{link_final}\n'
+
             with open("progreso.txt", "w") as f:
-                f.write(str(nuevo_indice))
+                f.write(str(inicio + 10 if inicio + 10 < len(lista_total) else 0))
 
         except Exception as e:
-            print(f"❌ Error general: {e}")
-            bloque_auto = "### ERROR EN EL ESCANEO ###\n"
+            print(f"❌ Error: {e}")
 
         browser.close()
 
-    # 4. Guardado final
-    final = "#EXTM3U\n\n"
+    # Guardar archivos
+    contenido = "#EXTM3U\n\n"
     if lineas_m:
-        final += "### TUS CANALES MANUALES ###\n" + "\n".join(lineas_m) + "\n\n"
-    final += f"### RASTREO AUTOMATICO (Indice: {inicio}) ###\n" + bloque_auto
+        contenido += "### MANUALES ###\n" + "\n".join(lineas_m) + "\n\n"
+    contenido += bloque_auto
 
     for archivo in ["DANJU80", "lista_dany.m3u"]:
         with open(archivo, "w", encoding="utf-8") as f:
-            f.write(final)
-    print("✅ Proceso terminado y progreso guardado.")
+            f.write(contenido)
 
 if __name__ == "__main__":
     ejecutar()
