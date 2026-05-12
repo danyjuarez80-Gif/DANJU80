@@ -2,16 +2,15 @@ name: Actualizador Dany 80
 
 on:
   schedule:
-    # Se ejecuta cada 30 minutos para mantener los enlaces actualizados
-    - cron: '*/30 * * * *'
-  workflow_dispatch: # Permite que lo ejecutes manualmente desde la pestaña Actions
+    - cron: '*/30 * * * *' # Cada 30 minutos
+  workflow_dispatch:
 
 permissions:
-  contents: write  # Crucial: permite que el bot guarde el archivo .m3u en tu repo
+  contents: write # Permite al script guardar cambios en el repositorio
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-runs-on: ubuntu-latest
     steps:
       - name: Checkout del código
         uses: actions/checkout@v4
@@ -27,12 +26,13 @@ jobs:
           playwright install chromium
           playwright install-deps chromium
 
-      - name: Ejecutar Extractor de Canales
+      - name: Ejecutar Extractor
         run: python extractor.py
 
-      - name: Guardar cambios en GitHub
+      - name: Guardar cambios
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Action"
           git add .
-          # El comando || exit 0 evita que la acción marque error si no hay
+          git commit -m "Auto-update: $(date +'%Y-%m-%d %H:%M')" || exit 0
+          git push
