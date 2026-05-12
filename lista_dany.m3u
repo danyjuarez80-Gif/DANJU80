@@ -3,6 +3,7 @@
 ### CANALES MANUALES ###
 ### CANALES MANUALES ###
 ### CANALES MANUALES ###
+### CANALES MANUALES ###
 ### MIS CANALES MANUALES ###
 #EXTINF:-1 group-title="TV",noticias 1
 https://regionales.saohgdasregions.fun:9092/NDUuMTkxLjU1LjMy/2_.m3u8?token=XzmHpN5SIpCZEmRo5UIKPA&expires=1778603844
@@ -111,17 +112,14 @@ https://deportes.ksdjugfsddeports.com:9092/NjQuMjM2LjE0Mi4xNDk=/34_.m3u8?token=R
 #EXTINF:-1 group-title="Auto-Multi", Azteca Deportes (Opción 1)
 https://deportes.ksdjugfsddeports.com:9092/NTIuMTg4LjE5OC45Ng==/34_.m3u8?token=EnHentI6ZsuwsNBF7t9PJg&expires=1778606156
 ### TUDN ###
-
 #EXTINF:-1 group-title="Auto-Multi", TUDN (Opción 1)
 https://deportes.ksdjugfsddeports.com:9092/NTIuMTg4LjE5OC45Ng==/1_.m3u8?token=yhBVzET_LIKVmUlSSPGf1w&expires=1778606215
-
+#EXTINF:-1 group-title="Auto-Multi", TUDN (Opción 1)
+https://deportes.ksdjugfsddeports.com:9092/NTIuMTg4LjE5OC45Ng==/1_.m3u8?token=yhBVzET_LIKVmUlSSPGf1w&expires=1778606215
 #EXTINF:-1 group-title="TV",noticias 100
 https://deportes.ksdjugfsddeports.com:9092/MjAxLjE1MC4zMy4xODg=/1_.m3u8?token=_SPsu24nn0kSHyDJEkgZvA&expires=1778628413
-
 #EXTINF:-1 group-title="TV",noticias 100
 https://deportes.ksdjugfsddeports.com:9092/MjAxLjE1MC4zMy4xODg=/1_.m3u8?token=OCQ_voDUyNkuNwHrKLvhRA&expires=1778628407
-
-
 ### ESPN 2 ###
 #EXTINF:-1 group-title="Auto-Multi", ESPN 2 (Opción 1)
 https://deportes.ksdjugfsddeports.com:9092/NTIuMTg4LjE5OC45Ng==/14_.m3u8?token=0w87qTiOWSqoJcjMqc3C4g&expires=1778606275
@@ -141,7 +139,6 @@ https://deportes.ksdjugfsddeports.com:9092/MjAuMTY5Ljc0LjIyNQ==/14_.m3u8?token=C
 ### FOX SPORTS 1 ###
 #EXTINF:-1 group-title="Auto-Multi", Fox Sports 1 (Opción 1)
 https://deportes.ksdjugfsddeports.com:9092/MjAuMTY5Ljc0LjIyNQ==/8_.m3u8?token=6u9B9Pmz8gR0NHGJnoDVkg&expires=1778614750
-
 ### ACTUALIZACIÓN MULTI-SERVIDOR ###
 ### AZTECA DEPORTES ###
 #EXTINF:-1 group-title="Auto-Multi", Azteca Deportes (Opción 1)
@@ -156,5 +153,16 @@ https://deportes.ksdjugfsddeports.com:9092/NDguMjE3LjEwNy4xMTU=/14_.m3u8?token=s
 #EXTINF:-1 group-title="Auto-Multi", Fox Sports 1 (Opción 1)
 https://deportes.ksdjugfsddeports.com:9092/NDguMjE3LjEwNy4xMTU=/8_.m3u8?token=VoAKkQTFmbsfaE986As4Og&expires=1778624128
 
-
-https://deportes.ksdjugfsddeports.com:9092/MjAxLjE1MC4zMy4xODg=/8_.m3u8?token=xl5-LYqtx_LsOo7JQR3UCw&expires=1778628219
+### ACTUALIZACIÓN MULTI-SERVIDOR ###
+### AZTECA DEPORTES ###
+#EXTINF:-1 group-title="Auto-Multi", Azteca Deportes (Opción 1)
+https://deportes.ksdjugfsddeports.com:9092/MTMyLjE5Ni4zMi42OA==/34_.m3u8?token=BC1aNQ09dNmpVSQc8qFauw&expires=1778630260
+### TUDN ###
+#EXTINF:-1 group-title="Auto-Multi", TUDN (Opción 1)
+https://deportes.ksdjugfsddeports.com:9092/MTMyLjE5Ni4zMi42OA==/1_.m3u8?token=vkO0HejsKxG2F7ec9R3n-g&expires=1778630287
+### ESPN 2 ###
+#EXTINF:-1 group-title="Auto-Multi", ESPN 2 (Opción 1)
+https://deportes.ksdjugfsddeports.com:9092/MTMyLjE5Ni4zMi42OA==/14_.m3u8?token=5YBc8SeYGVt8VaJ-YqIOwQ&expires=1778630347
+### FOX SPORTS 1 ###
+#EXTINF:-1 group-title="Auto-Multi", Fox Sports 1 (Opción 1)
+https://deportes.ksdjugfsddeports.com:9092/MTMyLjE5Ni4zMi42OA==/8_.m3u8?token=ebYE1QoxEpbFOW15diSERg&expires=1778630407
