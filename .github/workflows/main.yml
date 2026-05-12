@@ -1,8 +1,10 @@
-name: Actualizador Dany 80
+name: Actualizador Inteligente Dany 80
 
 on:
   schedule:
-    - cron: '*/30 * * * *'
+    # Corre cada 2 horas para ir recorriendo toda la página poco a poco
+    - cron: '0 */2 * * *'
+  # Permite ejecutarlo manualmente desde la pestaña Actions
   workflow_dispatch:
 
 permissions:
@@ -14,25 +16,28 @@ jobs:
     steps:
       - name: Checkout del código
         uses: actions/checkout@v4
+        with:
+          # Esto es importante para que el historial de git se mantenga limpio
+          fetch-depth: 0
 
       - name: Configurar Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
-      - name: Instalar dependencias
+      - name: Instalar Dependencias y Navegador
         run: |
           pip install requests playwright
-          playwright install chromium
-          playwright install-deps chromium
+          playwright install --with-deps chromium
 
-      - name: Ejecutar Extractor
+      - name: Ejecutar Rastreador con Memoria
         run: python extractor.py
 
-      - name: Guardar cambios
+      - name: Guardar Cambios (Incluyendo Progreso)
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Action"
+          # El punto (.) asegura que se guarde DANJU80, lista_dany.m3u y progreso.txt
           git add .
-          git commit -m "Auto-update: $(date +'%Y-%m-%d %H:%M')" || exit 0
+          git commit -m "Auto-update: Canales actualizados y progreso guardado [$(date +'%Y-%m-%d %H:%M')]" || exit 0
           git push
