@@ -1,51 +1,67 @@
 import requests
+import re
 from playwright.sync_api import sync_playwright
 
 # URL base del m3u existente en GitHub
 URL_FUENTE = "https://raw.githubusercontent.com/danyjuarez80-Gif/DANJU80/refs/heads/main/DANJU80"
 
-# Todos los canales - solo Opcion 1 (live/slug.php)
+# Paginas de cada canal — el script extrae el PHP link real automaticamente
 CANALES = [
-    {"nombre": "ESPN",                   "php": "https://www.tvplusgratis2.com/live/espn.php"},
-    {"nombre": "ESPN 2",                 "php": "https://www.tvplusgratis2.com/live/espn2.php"},
-    {"nombre": "ESPN 3",                 "php": "https://www.tvplusgratis2.com/live/espn3.php"},
-    {"nombre": "ESPN 4",                 "php": "https://www.tvplusgratis2.com/live/espn4.php"},
-    {"nombre": "ESPN Premium",           "php": "https://www.tvplusgratis2.com/live/espnpremium.php"},
-    {"nombre": "ESPN Mexico",            "php": "https://www.tvplusgratis2.com/live/espnmexico.php"},
-    {"nombre": "ESPN 2 Mexico",          "php": "https://www.tvplusgratis2.com/live/espn2mexico.php"},
-    {"nombre": "ESPN 3 Mexico",          "php": "https://www.tvplusgratis2.com/live/espn3mexico.php"},
-    {"nombre": "Fox Sports",             "php": "https://www.tvplusgratis2.com/live/foxsports.php"},
-    {"nombre": "Fox Sports 2",           "php": "https://www.tvplusgratis2.com/live/foxsports2.php"},
-    {"nombre": "Fox Sports 3",           "php": "https://www.tvplusgratis2.com/live/foxsports3.php"},
-    {"nombre": "Fox Sports Mexico",      "php": "https://www.tvplusgratis2.com/live/foxsportsmx.php"},
-    {"nombre": "Fox Sports 2 Mexico",    "php": "https://www.tvplusgratis2.com/live/foxsports2mx.php"},
-    {"nombre": "Fox Sports 3 Mexico",    "php": "https://www.tvplusgratis2.com/live/foxsports3mx.php"},
-    {"nombre": "Fox Sports Premium",     "php": "https://www.tvplusgratis2.com/live/foxsportspremium.php"},
-    {"nombre": "DirecTV Sports",         "php": "https://www.tvplusgratis2.com/live/directvsports.php"},
-    {"nombre": "DirecTV Sports 2",       "php": "https://www.tvplusgratis2.com/live/directvsports2.php"},
-    {"nombre": "DirecTV Sports Plus",    "php": "https://www.tvplusgratis2.com/live/directvsportsplus.php"},
-    {"nombre": "TNT Sports",             "php": "https://www.tvplusgratis2.com/live/tntsports.php"},
-    {"nombre": "TNT Sports Chile",       "php": "https://www.tvplusgratis2.com/live/tntsportschile.php"},
-    {"nombre": "TUDN",                   "php": "https://www.tvplusgratis2.com/live/tudn.php"},
-    {"nombre": "Liga 1",                 "php": "https://www.tvplusgratis2.com/live/liga1.php"},
-    {"nombre": "Liga 1 Max",             "php": "https://www.tvplusgratis2.com/live/liga1max.php"},
-    {"nombre": "TyC Sports",             "php": "https://www.tvplusgratis2.com/live/tycsports.php"},
-    {"nombre": "DAZN F1",                "php": "https://www.tvplusgratis2.com/live/daznf1.php"},
-    {"nombre": "DAZN La Liga",           "php": "https://www.tvplusgratis2.com/live/daznlaliga.php"},
-    {"nombre": "Sky Sports La Liga",     "php": "https://www.tvplusgratis2.com/live/skysportslaliga.php"},
-    {"nombre": "Telemundo 51",           "php": "https://www.tvplusgratis2.com/live/telemundo51.php"},
-    {"nombre": "Telemundo Puerto Rico",  "php": "https://www.tvplusgratis2.com/live/telemundopr.php"},
-    {"nombre": "Telemundo Internacional","php": "https://www.tvplusgratis2.com/live/telemundoint.php"},
-    {"nombre": "Azteca 7",               "php": "https://www.tvplusgratis2.com/live/azteca7.php"},
-    {"nombre": "Canal 5 Mexico",         "php": "https://www.tvplusgratis2.com/live/canal5mexico.php"},
-    {"nombre": "America TV",             "php": "https://www.tvplusgratis2.com/live/americatv.php"},
-    {"nombre": "Latina",                 "php": "https://www.tvplusgratis2.com/live/latina.php"},
-    {"nombre": "Antena 3",               "php": "https://www.tvplusgratis2.com/live/antena3.php"},
+    {"nombre": "ESPN",                   "pagina": "https://www.tvplusgratis2.com/espn-en-vivo.html"},
+    {"nombre": "ESPN 2",                 "pagina": "https://www.tvplusgratis2.com/espn-2-en-vivo.html"},
+    {"nombre": "ESPN 3",                 "pagina": "https://www.tvplusgratis2.com/espn-3-en-vivo.html"},
+    {"nombre": "ESPN 4",                 "pagina": "https://www.tvplusgratis2.com/espn-4-en-vivo.html"},
+    {"nombre": "ESPN Premium",           "pagina": "https://www.tvplusgratis2.com/espn-premium-en-vivo.html"},
+    {"nombre": "ESPN Mexico",            "pagina": "https://www.tvplusgratis2.com/espn-mexico-en-vivo.html"},
+    {"nombre": "ESPN 2 Mexico",          "pagina": "https://www.tvplusgratis2.com/espn-2-mexico-en-vivo.html"},
+    {"nombre": "ESPN 3 Mexico",          "pagina": "https://www.tvplusgratis2.com/espn-3-mexico-en-vivo.html"},
+    {"nombre": "Fox Sports",             "pagina": "https://www.tvplusgratis2.com/fox-sports-en-vivo.html"},
+    {"nombre": "Fox Sports 2",           "pagina": "https://www.tvplusgratis2.com/fox-sports-2-en-vivo.html"},
+    {"nombre": "Fox Sports 3",           "pagina": "https://www.tvplusgratis2.com/fox-sports-3-en-vivo.html"},
+    {"nombre": "Fox Sports Mexico",      "pagina": "https://www.tvplusgratis2.com/fox-sports-mexico-en-vivo.html"},
+    {"nombre": "Fox Sports 2 Mexico",    "pagina": "https://www.tvplusgratis2.com/fox-sports-2-mexico-en-vivo.html"},
+    {"nombre": "Fox Sports 3 Mexico",    "pagina": "https://www.tvplusgratis2.com/fox-sports-3-mexico-en-vivo.html"},
+    {"nombre": "Fox Sports Premium",     "pagina": "https://www.tvplusgratis2.com/fox-sports-premium-en-vivo.html"},
+    {"nombre": "DirecTV Sports",         "pagina": "https://www.tvplusgratis2.com/directv-sports-en-vivo.html"},
+    {"nombre": "DirecTV Sports 2",       "pagina": "https://www.tvplusgratis2.com/directv-sports-2-en-vivo.html"},
+    {"nombre": "DirecTV Sports Plus",    "pagina": "https://www.tvplusgratis2.com/directv-sports-plus-en-vivo.html"},
+    {"nombre": "TNT Sports",             "pagina": "https://www.tvplusgratis2.com/tnt-sports-en-vivo.html"},
+    {"nombre": "TNT Sports Chile",       "pagina": "https://www.tvplusgratis2.com/tnt-sports-chile-en-vivo.html"},
+    {"nombre": "TUDN",                   "pagina": "https://www.tvplusgratis2.com/tudn-en-vivo.html"},
+    {"nombre": "Liga 1",                 "pagina": "https://www.tvplusgratis2.com/liga-1-en-vivo.html"},
+    {"nombre": "Liga 1 Max",             "pagina": "https://www.tvplusgratis2.com/liga-1-max-en-vivo.html"},
+    {"nombre": "TyC Sports",             "pagina": "https://www.tvplusgratis2.com/tyc-sports-en-vivo.html"},
+    {"nombre": "DAZN F1",                "pagina": "https://www.tvplusgratis2.com/dazn-f1-en-vivo.html"},
+    {"nombre": "DAZN La Liga",           "pagina": "https://www.tvplusgratis2.com/dazn-la-liga-en-vivo.html"},
+    {"nombre": "Sky Sports La Liga",     "pagina": "https://www.tvplusgratis2.com/sky-sports-la-liga-en-vivo.html"},
+    {"nombre": "Telemundo 51",           "pagina": "https://www.tvplusgratis2.com/telemundo-51-en-vivo.html"},
+    {"nombre": "Telemundo Puerto Rico",  "pagina": "https://www.tvplusgratis2.com/telemundo-puerto-rico-en-vivo.html"},
+    {"nombre": "Telemundo Internacional","pagina": "https://www.tvplusgratis2.com/telemundo-internacional-en-vivo.html"},
+    {"nombre": "Azteca 7",               "pagina": "https://www.tvplusgratis2.com/azteca-7-en-vivo.html"},
+    {"nombre": "Canal 5 Mexico",         "pagina": "https://www.tvplusgratis2.com/canal-5-mexico-en-vivo.html"},
+    {"nombre": "America TV",             "pagina": "https://www.tvplusgratis2.com/america-tv-en-vivo.html"},
+    {"nombre": "Latina",                 "pagina": "https://www.tvplusgratis2.com/latina-en-vivo.html"},
+    {"nombre": "Antena 3",               "pagina": "https://www.tvplusgratis2.com/antena-3-en-vivo.html"},
 ]
 
 
+def obtener_php_opcion1(page, url_pagina):
+    """Visita la pagina del canal con requests simple y extrae la Opcion 1 PHP."""
+    try:
+        r = requests.get(url_pagina, timeout=15, headers={
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36"
+        })
+        # Buscar primer link live/*.php
+        match = re.search(r'https://www\.tvplusgratis2\.com/live/[^"\']+\.php', r.text)
+        if match:
+            return match.group(0)
+    except Exception as e:
+        print(f"  Error obteniendo PHP: {e}")
+    return None
+
+
 def capturar_m3u8(page, url_php):
-    """Abre el PHP e intercepta el m3u8."""
+    """Abre el PHP con Playwright e intercepta el m3u8."""
     capturados = []
 
     def on_request(request):
@@ -93,7 +109,18 @@ def generar_lista():
         else:
             i += 1
 
-    # Scrapear solo Opcion 1 de cada canal
+    # Primero obtener todos los PHP links con requests (rapido, sin Playwright)
+    print("Obteniendo links PHP...")
+    canales_con_php = []
+    for canal in CANALES:
+        php = obtener_php_opcion1(None, canal["pagina"])
+        if php:
+            canales_con_php.append({"nombre": canal["nombre"], "php": php})
+            print(f"  ✅ {canal['nombre']}: {php}")
+        else:
+            print(f"  ❌ {canal['nombre']}: no encontrado")
+
+    # Luego capturar m3u8 con Playwright solo para los que tienen PHP
     nuevos_canales = []
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
@@ -102,7 +129,7 @@ def generar_lista():
         )
         page = context.new_page()
 
-        for canal in CANALES:
+        for canal in canales_con_php:
             print(f"📺 {canal['nombre']}...")
             m3u8 = capturar_m3u8(page, canal["php"])
             if m3u8 and m3u8 not in canales_vistos:
