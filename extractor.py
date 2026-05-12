@@ -2,63 +2,55 @@ import requests
 import re
 from playwright.sync_api import sync_playwright
 
+# URL de tu archivo base en GitHub
 URL_FUENTE = "https://raw.githubusercontent.com/danyjuarez80-Gif/DANJU80/refs/heads/main/DANJU80"
 BASE_EMBED = "https://embed.ksdjugfsddeports.com"
 
+# Canales para extraer (puedes añadir más siguiendo este formato)
 CANALES = [
     {"nombre": "TUDN", "slug": "tudn"},
     {"nombre": "ESPN 2 HD", "slug": "espn2"},
     {"nombre": "Fox Sports Mexico", "slug": "foxsportsmexico"},
+    {"nombre": "Azteca 7", "slug": "azteca7"},
+    {"nombre": "Canal 5", "slug": "canal5"},
 ]
 
-def extraccion_con_interaccion(page, url_target):
+def capturar_con_clic(page, url_canal):
     enlaces = []
-    
-    # Interceptamos el tráfico de red
+    # Escuchamos el tráfico de red para atrapar el m3u8 tras el clic
     page.on("request", lambda req: enlaces.append(req.url) if ".m3u8" in req.url else None)
 
     try:
-        # 1. Cargar el PHP inicial
-        page.goto(url_target, timeout=60000, wait_until="networkidle")
+        page.goto(url_canal, timeout=60000, wait_until="networkidle")
         
-        # 2. Localizar el iframe y entrar en él
-        iframe_element = page.query_selector("iframe")
-        if iframe_element:
-            frame_url = iframe_element.get_attribute("src")
-            target_url = frame_url if frame_url.startswith("http") else f"{BASE_EMBED}/{frame_url.lstrip('/')}"
+        # Localizamos el iframe del reproductor
+        iframe = page.query_selector("iframe")
+        if iframe:
+            src = iframe.get_attribute("src")
+            target = src if src.startswith("http") else f"{BASE_EMBED}/{src.lstrip('/')}"
+            print(f"  -> Accediendo al reproductor: {target}")
+            page.goto(target, timeout=60000, wait_until="domcontentloaded")
             
-            print(f"  -> Entrando al reproductor: {target_url}")
-            page.goto(target_url, timeout=60000, wait_until="domcontentloaded")
+            # Esperamos a que cargue el botón de Play
+            page.wait_for_timeout(5000)
             
-            # --- PARTE CLAVE: SIMULAR EL CLIC ---
-            # Esperamos un poco a que aparezca el botón de play
-            page.wait_for_timeout(3000)
-            
-            # Intentamos hacer clic en selectores comunes de reproductores
-            botones_play = [
-                "button.vjs-big-play-button", # VideoJS
-                ".play-button", 
-                "video", # A veces clicar el video mismo inicia la carga
-                "#player",
-                ".jw-display-icon-container" # JWPlayer
-            ]
-            
-            for selector in botones_play:
+            # Intentamos hacer clic en el video o botones de inicio
+            for selector in ["video", "button.vjs-big-play-button", ".play-button", "#player"]:
                 if page.query_selector(selector):
-                    print(f"  -> Simulando clic en el canal...")
+                    print(f"  -> Haciendo clic para activar stream...")
                     page.click(selector, force=True)
                     break
             
-            # Esperamos a que el clic genere el tráfico m3u8
+            # Tiempo para que el servidor suelte el enlace tras el clic
             page.wait_for_timeout(10000)
 
     except Exception as e:
-        print(f"  Error durante la interacción: {e}")
+        print(f"  Error: {e}")
     
     return enlaces[0] if enlaces else None
 
 def generar_lista():
-    # Obtener base actual de tu GitHub
+    # Leemos tu archivo DANJU80 para saber qué canales ya tienes
     try:
         r = requests.get(URL_FUENTE, timeout=15)
         base_raw = r.text if r.status_code == 200 else ""
@@ -76,35 +68,31 @@ def generar_lista():
         page = context.new_page()
 
         for canal in CANALES:
-            print(f"🔍 Activando {canal['nombre']}...")
-            url_target = f"{BASE_EMBED}/{canal['slug']}.php"
-            link = extraccion_con_interaccion(page, url_target)
+            print(f"📺 Procesando {canal['nombre']}...")
+            m3u8 = capturar_con_clic(page, f"{BASE_EMBED}/{canal['slug']}.php")
             
-            if link:
-                link_clean = link.split("'")[0].split('"')[0]
-                if link_clean not in vistos:
+            if m3u8:
+                link_limpio = m3u8.split("'")[0].split('"')[0]
+                if link_limpio not in vistos:
                     nuevos.append(f'#EXTINF:-1 group-title="Deportes",{canal["nombre"]}')
-                    nuevos.append(link_clean)
-                    vistos.add(link_clean)
-                    print(f"  ✅ Enlace capturado tras clic")
+                    nuevos.append(link_limpio)
+                    vistos.add(link_limpio)
+                    print(f"  ✅ Enlace capturado")
                 else:
-                    print(f"  ✅ Ya estaba actualizado")
+                    print(f"  ✅ Ya actualizado")
             else:
-                print(f"  ❌ El clic no generó m3u8")
+                print(f"  ❌ No se detectó enlace")
 
         browser.close()
 
-    # Guardar cambios
-    if nuevos:
-        with open("lista_dany.m3u", "w", encoding="utf-8") as f:
-            f.write("#EXTM3U\n\n")
-            if base_raw:
-                f.write(base_raw.replace("#EXTM3U", "").strip() + "\n\n")
-            for n in nuevos:
-                f.write(n + "\n")
-        print("\n✅ Lista actualizada con éxito.")
-    else:
-        print("\nNo hubo enlaces nuevos.")
+    # Guardamos el resultado en lista_dany.m3u
+    with open("lista_dany.m3u", "w", encoding="utf-8") as f:
+        f.write("#EXTM3U\n\n")
+        if base_raw:
+            f.write(base_raw.replace("#EXTM3U", "").strip() + "\n\n")
+        for n in nuevos:
+            f.write(n + "\n")
+    print("\n✅ Archivo lista_dany.m3u actualizado.")
 
 if __name__ == "__main__":
     generar_lista()
