@@ -2,12 +2,12 @@ name: Actualizador Dany 80
 
 on:
   schedule:
-    # Corre cada 30 minutos
+    # Se ejecuta cada 30 minutos para mantener los enlaces actualizados
     - cron: '*/30 * * * *'
-  workflow_dispatch: # Boton manual activo
+  workflow_dispatch: # Permite que lo ejecutes manualmente desde la pestaña Actions
 
 permissions:
-  contents: write  # IMPORTANTE: Permite subir el archivo actualizado
+  contents: write  # Crucial: permite que el bot guarde el archivo .m3u en tu repo
 
 jobs:
   build:
@@ -35,5 +35,4 @@ jobs:
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Action"
           git add .
-          git commit -m "Auto-update: $(date +'%Y-%m-%d %H:%M')" || exit 0
-          git push
+          # El comando || exit 0 evita que la acción marque error si no hay
