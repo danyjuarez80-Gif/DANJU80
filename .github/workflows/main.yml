@@ -2,15 +2,15 @@ name: Actualizador Dany 80
 
 on:
   schedule:
-    - cron: '*/30 * * * *' # Cada 30 minutos
-  workflow_dispatch:
+    - cron: '*/30 * * * *' # Ejecución cada 30 minutos
+  workflow_dispatch: # Permite ejecución manual
 
 permissions:
-  contents: write # Permite al script guardar cambios en el repositorio
+  contents: write # Permiso necesario para guardar cambios en el repo
 
 jobs:
   build:
-    runs-runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # Corregido: antes decía runs-runs-on
     steps:
       - name: Checkout del código
         uses: actions/checkout@v4
