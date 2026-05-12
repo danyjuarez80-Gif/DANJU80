@@ -1,5 +1,6 @@
 #EXTM3U
 
+### TUS LINKS (LOS QUE SIRVEN) ###
 ### CANALES MANUALES ###
 ### CANALES MANUALES ###
 ### CANALES MANUALES ###
@@ -152,7 +153,6 @@ https://deportes.ksdjugfsddeports.com:9092/NDguMjE3LjEwNy4xMTU=/14_.m3u8?token=s
 ### FOX SPORTS 1 ###
 #EXTINF:-1 group-title="Auto-Multi", Fox Sports 1 (Opción 1)
 https://deportes.ksdjugfsddeports.com:9092/NDguMjE3LjEwNy4xMTU=/8_.m3u8?token=VoAKkQTFmbsfaE986As4Og&expires=1778624128
-
 ### ACTUALIZACIÓN MULTI-SERVIDOR ###
 ### AZTECA DEPORTES ###
 #EXTINF:-1 group-title="Auto-Multi", Azteca Deportes (Opción 1)
@@ -166,3 +166,9 @@ https://deportes.ksdjugfsddeports.com:9092/MTMyLjE5Ni4zMi42OA==/14_.m3u8?token=5
 ### FOX SPORTS 1 ###
 #EXTINF:-1 group-title="Auto-Multi", Fox Sports 1 (Opción 1)
 https://deportes.ksdjugfsddeports.com:9092/MTMyLjE5Ni4zMi42OA==/8_.m3u8?token=ebYE1QoxEpbFOW15diSERg&expires=1778630407
+
+### PRUEBA BOT (SI FALLAN AVISA) ###
+#EXTINF:-1 group-title="Test", Azteca Bot Opcion 1
+https://deportes.ksdjugfsddeports.com:9092/MTcyLjE4Mi4yMjYuNzI=/34_.m3u8?token=eFFDUU9xLfdZvvm7hUyt-A&expires=1778631071
+#EXTINF:-1 group-title="Test", Azteca Bot Opcion 2
+https://deportes.ksdjugfsddeports.com:9092/MTcyLjE4Mi4yMjYuNzI=/34_.m3u8?token=eFFDUU9xLfdZvvm7hUyt-A&expires=1778631071
