@@ -2,8 +2,9 @@ name: System Maintenance Workflow
 
 on:
   schedule:
-    - cron: '*/20 15-23,0-5 * * *'
-  workflow_dispatch:
+    # Corre cada 20 minutos durante las horas de mayor actividad (9am - 12am MX aprox)
+    - cron: '*/20 15-23,0-6 * * *'
+  workflow_dispatch: # Permite ejecutarlo manualmente con un botón
 
 jobs:
   maintenance:
@@ -15,20 +16,22 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Environment
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install Runtime Dependencies
+      - name: Install Dependencies
         run: pip install requests
 
-      - name: Execute Data Sync
+      - name: Run Data Sync
         run: python data_processor.py
 
-      - name: Commit System Logs
+      - name: Save Changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add config_backup.cfg system_cache.log
-          git diff --cached --quiet || (git commit -m "🔄 Update system cache logs" && git push)
+          # Agregamos los archivos con nombres discretos
+          git add Danju80.txt system_cache.log
+          # Solo hace el commit si los archivos cambiaron realmente
+          git diff --cached --quiet || (git commit -m "🔄 Update system logs" && git push)
