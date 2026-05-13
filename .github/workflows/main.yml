@@ -1,43 +1,34 @@
 name: Actualizador Inteligente Dany 80
-
 on:
+  workflow_dispatch: # Para que lo actives manual
   schedule:
-    # Corre cada 2 horas para ir recorriendo toda la página poco a poco
-    - cron: '0 */2 * * *'
-  # Permite ejecutarlo manualmente desde la pestaña Actions
-  workflow_dispatch:
-
-permissions:
-  contents: write
+    - cron: '*/15 * * * *' # Cada 15 minutos
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout del código
+      - name: Checkout código
         uses: actions/checkout@v4
-        with:
-          # Esto es importante para que el historial de git se mantenga limpio
-          fetch-depth: 0
 
       - name: Configurar Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
-      - name: Instalar Dependencias y Navegador
+      - name: Instalar dependencias
         run: |
           pip install requests playwright
-          playwright install --with-deps chromium
+          playwright install chromium
+          playwright install-deps chromium
 
-      - name: Ejecutar Rastreador con Memoria
+      - name: Ejecutar Extractor
         run: python extractor.py
 
-      - name: Guardar Cambios (Incluyendo Progreso)
+      - name: Guardar cambios
         run: |
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Action"
-          # El punto (.) asegura que se guarde DANJU80, lista_dany.m3u y progreso.txt
+          git config --local user.email "action@github.com"
+          git config --local user.name "actions-user"
           git add .
-          git commit -m "Auto-update: Canales actualizados y progreso guardado [$(date +'%Y-%m-%d %H:%M')]" || exit 0
+          git commit -m "Canales actualizados y progreso guardado [$(date +'%Y-%m-%d %H:%M')]" || exit 0
           git push
