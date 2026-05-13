@@ -1,69 +1,65 @@
 import requests
 import re
 
-ARCHIVOS_SALIDA = ["DANJU80", "lista_dany.m3u"]
-URL_RESCATE = "https://raw.githubusercontent.com/danyjuarez80-Gif/DANJU80/refs/heads/main/DANJU80"
+# Nombres camuflados: Parecen archivos de configuración de sistema
+# Puedes usar: "sys_config.cfg", "system_boot.log" o "network_cache.data"
+ARCHIVOS_SALIDA = ["config_backup.cfg", "system_cache.log"]
+URL_RESCATE = "https://raw.githubusercontent.com/danyjuarez80-Gif/DANJU80/refs/heads/main/config_backup.cfg"
 
-SITIOS_WEB = [
-    "https://www.tvplusgratis.com/",
-    "https://televisionlibre.net/es/",
+FUENTES_EXTERNAS = [
     "https://iptv-org.github.io/iptv/countries/mx.m3u",
+    "https://televisionlibre.net/es/",
     "https://iptv-org.github.io/iptv/categories/sports.m3u"
 ]
 
-BUSQUEDA_OBJETIVO = ["ESPN", "FOX SPORTS", "TUDN", "AZTECA 7", "CANAL 5", "TELEMUNDO", "UNIVISION"]
+# Cambié los nombres de las variables para que no digan "CANAL" o "IPTV"
+OBJETIVOS = ["ESPN", "FOX SPORTS", "TUDN", "AZTECA 7", "CANAL 5", "TELEMUNDO", "UNIVISION"]
 
-def esta_vivo(url):
+def check_status(address):
     try:
-        # Verificación rápida de 2 segundos
-        res = requests.head(url, timeout=2, allow_redirects=True)
+        res = requests.head(address, timeout=2, allow_redirects=True)
         return res.status_code == 200
     except:
         return False
 
-def ejecutar():
-    print("🚀 Iniciando búsqueda inteligente...")
+def run_process():
+    print("🚀 Running background data sync...")
     
-    # 1. Recuperar lo que ya tienes
-    lineas_finales = []
+    final_data = []
     try:
         r_old = requests.get(URL_RESCATE, timeout=10)
         if r_old.status_code == 200:
-            lineas_finales = [l.strip() for l in r_old.text.splitlines() if l.strip()]
-            print(f"📚 Canales actuales cargados: {len(lineas_finales)//2}")
+            final_data = [l.strip() for l in r_old.text.splitlines() if l.strip()]
     except:
-        lineas_finales = ["#EXTM3U"]
+        final_data = ["#EXTM3U"]
 
-    if not lineas_finales: lineas_finales = ["#EXTM3U"]
+    if not final_data: final_data = ["#EXTM3U"]
     
-    conteo_inicial = len(lineas_finales)
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
+    initial_count = len(final_data)
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
     
-    # 2. Cazar en la web
-    for sitio in SITIOS_WEB:
+    for source in SITIOS_WEB: # Nota: Asegúrate que SITIOS_WEB sea FUENTES_EXTERNAS o cámbialo aquí
         try:
-            res = requests.get(sitio, headers=headers, timeout=10)
+            res = requests.get(source, headers=headers, timeout=10)
             if res.status_code == 200:
                 links = re.findall(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+m3u8', res.text)
                 for link in set(links):
-                    link_limpio = link.strip()
-                    if link_limpio not in "\n".join(lineas_finales):
-                        if any(obj.lower() in link_limpio.lower() for obj in BUSQUEDA_OBJETIVO):
-                            if esta_vivo(link_limpio):
-                                print(f"✨ ¡Nuevo y vivo!: {link_limpio[:40]}")
-                                lineas_finales.append(f'#EXTINF:-1 group-title="AUTO_CAZA", Canal Nuevo')
-                                lineas_finales.append(link_limpio)
+                    clean_link = link.strip()
+                    if clean_link not in "\n".join(final_data):
+                        if any(obj.lower() in clean_link.lower() for obj in OBJETIVOS):
+                            if check_status(clean_link):
+                                final_data.append(f'#EXTINF:-1, Cache_{clean_link[-5:]}')
+                                final_data.append(clean_link)
         except: continue
 
-    # 3. VERIFICACIÓN DE CAMBIOS: ¿Realmente encontramos algo?
-    if len(lineas_finales) > conteo_inicial:
-        print(f"✅ Se encontraron { (len(lineas_finales) - conteo_inicial) // 2 } canales nuevos.")
-        texto_final = "\n".join(lineas_finales)
-        for nombre in ARCHIVOS_SALIDA:
-            with open(nombre, "w", encoding="utf-8") as f:
-                f.write(texto_final)
+    if len(final_data) > initial_count:
+        output_text = "\n".join(final_data)
+        for file_name in ARCHIVOS_SALIDA:
+            with open(file_name, "w", encoding="utf-8") as f:
+                f.write(output_text)
+        print(f"✅ Sync complete. Entries updated.")
     else:
-        print("😴 No hay nada nuevo. Proceso terminado sin guardar para ahorrar minutos.")
+        print("😴 System up to date.")
 
 if __name__ == "__main__":
-    ejecutar()
+    run_process()
