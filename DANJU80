@@ -1,24 +1,6 @@
 #EXTM3U
 
 #EXTINF:-1 group-title="TV",noticias 1
-https://regionales.saohgdasregions.fun:9092/NDUuMTkxLjU1LjMy/2_.m3u8?token=XzmHpN5SIpCZEmRo5UIKPA&expires=1778603844
-
-#EXTINF:-1 group-title="TV",noticias 1
-https://regionales.saohgdasregions.fun:9092/NDUuMTkxLjU1LjMy/6_.m3u8?token=z79PY0UqG3CJG07zHa5WhQ&expires=1778603807
-
-#EXTINF:-1 group-title="TV",noticias 1
-https://deportes.ksdjugfsddeports.com:9092/NDUuMTkxLjU1LjMy/21_.m3u8?token=TpkAw5iHVhQFY6F8kSlqdQ&expires=1778592927
-
-#EXTINF:-1 group-title="TV",noticias 1
-https://deportes.ksdjugfsddeports.com:9092/NDUuMTkxLjU1LjMy/20_.m3u8?token=UpfsM_xCFkaBGQqzyzbkJA&expires=1778592890
-
-#EXTINF:-1 group-title="TV",noticias 1
-https://deportes.ksdjugfsddeports.com:9092/NDUuMTkxLjU1LjMy/19_.m3u8?token=14U6-e7yOGl04E-RdnFL9w&expires=1778592836
-
-#EXTINF:-1 group-title="TV",noticias 1
-https://deportes.ksdjugfsddeports.com:9092/NDUuMTkxLjU1LjMy/4_.m3u8?token=kn0GE43ZsM14ypSU4KpqvA&expires=1778592664
-
-#EXTINF:-1 group-title="TV",noticias 1
 http://181.176.155.7:8090/play/a1qh/index.m3u8
 
 #EXTINF:-1 group-title="TV",noticias 4
