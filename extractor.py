@@ -7,53 +7,59 @@ URL_BASE = "https://www.tvplusgratis2.com/"
 
 def es_m3u8(url):
     filtros = ["google", "ads", "analytics", "pixel", "facebook", "mp4", "log"]
-    # Filtramos también links muy cortos que suelen ser basura
     return ".m3u8" in url and len(url) > 50 and not any(x in url.lower() for x in filtros)
 
 def escanear_servidores(page, canal):
     links_found = []
-    # Escuchamos el tráfico de red
     page.on("request", lambda req: links_found.append(req.url) if es_m3u8(req.url) else None)
     try:
         print(f"📡 Analizando: {canal['n']}...")
         page.goto(canal['u'], timeout=25000, wait_until="domcontentloaded")
         page.wait_for_timeout(5000)
-        
-        # Intentamos interactuar con el reproductor para que suelte los links
-        for selector in ["video", "iframe", "button.vjs-big-play-button"]:
+        # Intentamos clics en varios elementos para activar el stream
+        for selector in ["video", "iframe", "button"]:
             try:
                 el = page.query_selector(selector)
                 if el: el.click(force=True)
             except: continue
-            
-        page.wait_for_timeout(8000)
+        page.wait_for_timeout(7000)
     except: pass
     return list(dict.fromkeys(links_found))
 
 def ejecutar():
-    # 1. Memoria de rastreo
+    # 1. MEMORIA DE RASTREO
     if os.path.exists("progreso.txt"):
         with open("progreso.txt", "r") as f:
             try: ultimo_indice = int(f.read().strip())
             except: ultimo_indice = 0
     else: ultimo_indice = 0
 
-    # 2. Cargar tus manuales
+    # 2. CARGAR TUS MANUALES (IMPORTANTE: NO BORRAR)
+    # Si falla la descarga, intentamos leer el archivo local para no perder nada
+    lineas_m = []
     try:
         r = requests.get(URL_GITHUB_RAW, timeout=10)
-        manual = r.text if r.status_code == 200 else ""
-    except: manual = ""
-    lineas_m = [l for l in manual.splitlines() if l.strip() and not l.startswith("#EXTM3U")]
+        if r.status_code == 200:
+            lineas_m = [l for l in r.text.splitlines() if l.strip() and not l.startswith("#EXTM3U") and "Auto" not in l]
+        else:
+            with open("DANJU80", "r", encoding="utf-8") as f:
+                lineas_m = [l for l in f.read().splitlines() if l.strip() and not l.startswith("#EXTM3U") and "Auto" not in l]
+    except: pass
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
-        # Usamos un User-Agent de Android moderno para mejor compatibilidad
+        # Configuración de "Engaño" al servidor (Headers de México)
         context = browser.new_context(
-            user_agent="Mozilla/5.0 (Linux; Android 13; SM-S918B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Mobile Safari/537.36",
-            is_mobile=True
+            user_agent="Mozilla/5.0 (Linux; Android 13; SM-G960F) AppleWebKit/537.36",
+            is_mobile=True,
+            extra_http_headers={
+                "Referer": "https://www.tvplusgratis2.com/",
+                "Origin": "https://www.tvplusgratis2.com/"
+            }
         )
         page = context.new_page()
 
+        bloque_auto = ""
         try:
             page.goto(URL_BASE, timeout=30000)
             links = page.query_selector_all("a")
@@ -66,26 +72,28 @@ def ejecutar():
             
             lista_total = list({v['u']: v for v in canales_web}.values())
             
-            # Cargar 10 canales
             inicio = ultimo_indice if ultimo_indice < len(lista_total) else 0
             canales_vuelta = lista_total[inicio:inicio+10]
 
-            bloque_auto = ""
             for c in canales_vuelta:
                 opciones = escanear_servidores(page, c)
-                # AQUÍ ESTÁ EL FILTRO: Solo opciones de la 3 en adelante
-                # opciones[2:] significa: salta el índice 0 y 1 (opción 1 y 2)
-                opciones_validas = opciones[2:5] 
+                
+                # Si pediste saltar 1 y 2, pero el canal tiene pocos, 
+                # regresamos a la opción 1 para que al menos salga algo.
+                if len(opciones) >= 3:
+                    finales = opciones[2:5]
+                    base_idx = 3
+                else:
+                    finales = opciones[:2]
+                    base_idx = 1
 
-                if opciones_validas:
+                if finales:
                     bloque_auto += f"### {c['n'].upper()} ###\n"
-                    for i, link in enumerate(opciones_validas):
-                        # Limpiamos el link de posibles comillas
+                    for i, link in enumerate(finales):
                         clean = link.split("'")[0].split('"')[0]
-                        # Agregamos el User-Agent al final del link para que el reproductor lo use
-                        # Esto ayuda a que "agarre" en apps como OTT Navigator o VLC
-                        link_final = f"{clean}|User-Agent=Mozilla/5.0"
-                        bloque_auto += f'#EXTINF:-1 group-title="Auto-Opt", {c["n"]} (Opcion {i+3})\n{link_final}\n'
+                        # El pipe con Referer ayuda a que las apps lo abran mejor
+                        link_final = f"{clean}|Referer=https://www.tvplusgratis2.com/&User-Agent=Mozilla/5.0"
+                        bloque_auto += f'#EXTINF:-1 group-title="Auto-Total", {c["n"]} (Opcion {i+base_idx})\n{link_final}\n'
 
             with open("progreso.txt", "w") as f:
                 f.write(str(inicio + 10 if inicio + 10 < len(lista_total) else 0))
@@ -95,15 +103,9 @@ def ejecutar():
 
         browser.close()
 
-    # Guardar archivos
+    # 3. CONSTRUCCIÓN DEL ARCHIVO FINAL
     contenido = "#EXTM3U\n\n"
     if lineas_m:
-        contenido += "### MANUALES ###\n" + "\n".join(lineas_m) + "\n\n"
-    contenido += bloque_auto
-
-    for archivo in ["DANJU80", "lista_dany.m3u"]:
-        with open(archivo, "w", encoding="utf-8") as f:
-            f.write(contenido)
-
-if __name__ == "__main__":
-    ejecutar()
+        contenido += "### TUS CANALES MANUALES ###\n" + "\n".join(lineas_m) + "\n\n"
+    
+    contenido
