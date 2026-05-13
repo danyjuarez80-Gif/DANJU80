@@ -2,13 +2,15 @@ name: System Maintenance Workflow
 
 on:
   schedule:
+    # Corre cada 20 minutos
     - cron: '*/20 * * * *'
-  workflow_dispatch:
+  workflow_dispatch: # Botón manual
 
 jobs:
   maintenance:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # Le damos 10 minutos para estar súper seguros
+    timeout-minutes: 10
     permissions:
       contents: write
 
@@ -24,14 +26,13 @@ jobs:
       - name: Install
         run: pip install requests
 
-      - name: Run
+      - name: Run Magic
         run: python data_processor.py
 
-      - name: Save Changes
+      - name: Save Results
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add Danju80.txt system_cache.log
-          # El "|| true" evita que el bot se cancele si no hay nada nuevo
-          git commit -m "🔄 Sincronizacion masiva de canales" || true
+          git commit -m "🔄 Actualizacion por peticion" || exit 0
           git push
