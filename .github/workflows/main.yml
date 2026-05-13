@@ -8,7 +8,7 @@ on:
 jobs:
   maintenance:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     permissions:
       contents: write
 
@@ -24,7 +24,7 @@ jobs:
       - name: Install requests
         run: pip install requests
 
-      - name: Run
+      - name: Run Magic
         run: python data_processor.py
 
       - name: Save
@@ -32,6 +32,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add Danju80.txt DANJU80 system_cache.log
-          # Si no hay cambios, no explota
-          git commit -m "🔄 Manteniendo avance y sumando nuevos" || exit 0
+          git commit -m "🔄 Registro de canales sin pérdida de avances" || exit 0
           git push
