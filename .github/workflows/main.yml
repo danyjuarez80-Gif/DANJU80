@@ -2,45 +2,36 @@ name: System Maintenance Workflow
 
 on:
   schedule:
-    # Esto corre cada 20 minutos automáticamente
     - cron: '*/20 * * * *'
-  workflow_dispatch: # Esto activa el botón de "Run workflow" manual que ya sabes usar
+  workflow_dispatch:
 
 jobs:
   maintenance:
     runs-on: ubuntu-latest
-    # Le damos 10 minutos de margen, aunque con el nuevo script terminará en 1
     timeout-minutes: 10
     permissions:
       contents: write
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Python Environment
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install Dependencies
+      - name: Install requests
         run: pip install requests
 
-      - name: Run Data Processor
-        # Aquí es donde GitHub llama a tu script de Python
+      - name: Run
         run: python data_processor.py
 
-      - name: Save and Push Changes
+      - name: Save
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          
-          # IMPORTANTE: Agregamos ambos archivos para que se actualicen a la vez
           git add Danju80.txt DANJU80 system_cache.log
-          
-          # Hacemos el commit. El "|| exit 0" es para que si NO hay canales nuevos, 
-          # el proceso no marque error y simplemente termine en verde.
-          git commit -m "🔄 Sincronización doble: TXT y RAW" || exit 0
-          
-          # Subimos los cambios al repositorio
+          # Si no hay cambios, no explota
+          git commit -m "🔄 Manteniendo avance y sumando nuevos" || exit 0
           git push
