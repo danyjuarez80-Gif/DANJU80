@@ -6,32 +6,32 @@ URL_RESCATE = "https://raw.githubusercontent.com/danyjuarez80-Gif/DANJU80/refs/h
 def ejecutar():
     lineas = ["#EXTM3U"]
     try:
+        # Rescatamos lo que ya tienes para no perder canales anteriores
         r = requests.get(URL_RESCATE, timeout=10)
         if r.status_code == 200:
-            # Recuperamos todo lo que no sea el Azteca que falló
-            lineas = [l.strip() for l in r.text.splitlines() if l.strip() and "Azteca 7" not in l and "samsung" not in l]
+            lineas = [l.strip() for l in r.text.splitlines() if l.strip() and "Azteca" not in l]
     except: pass
 
-    # --- LINK DE ALTA DISPONIBILIDAD ---
-    # Este link es un espejo estable que no suele pedir tokens de IP
-    nuevo_azteca = [
-        '#EXTINF:-1 group-title="MEXICO",Azteca 7 (Respaldo)',
-        'https://stream.tvazteca.com/live/azteca7/playlist.m3u8'
+    # --- CANAL DE PRUEBA: TELEMUNDO (USA) ---
+    # Este link debería abrir sin problemas desde la IP de GitHub y en tu red
+    nuevo_canal = [
+        '#EXTINF:-1 group-title="PRUEBA USA",Telemundo',
+        'https://telemundo-usa-east-1-mx.samsung.wurl.com/manifest/playlist.m3u8'
     ]
 
-    # Armamos la lista asegurando que #EXTM3U esté al inicio
+    # Armamos la lista asegurando el formato correcto
     if not lineas or "#EXTM3U" not in lineas[0]:
         lineas.insert(0, "#EXTM3U")
     
-    resultado = lineas + nuevo_azteca
+    resultado = lineas + nuevo_canal
     texto = "\n".join(resultado)
 
-    # Guardamos ahora que ya tenemos permisos
+    # Guardamos los archivos
     for nombre in GITHUB_FILES:
         with open(nombre, "w", encoding="utf-8") as f:
             f.write(texto)
     
-    print("✅ ¡Bot actualizó con el link de respaldo estable!")
+    print("✅ ¡Prueba de Telemundo lista! Archivos actualizados.")
 
 if __name__ == "__main__":
     ejecutar()
