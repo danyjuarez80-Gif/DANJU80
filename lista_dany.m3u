@@ -112,3 +112,23 @@ https://streaming.alwaysdata.net/tudn.php
 http://185.56.109.253/Canal5/playlist.m3u8
 #EXTINF:-1 group-title="AUTO", Canal 5
 https://video0.rogohosting.com:19360/tvcozumel/tvcozumel.m3u8
+#EXTINF:-1 group-title="CAZADOS", CANAL 5 (Auto)
+https://stream.oursnetworktv.com/latin/juarez50/playlist.m3u8
+#EXTINF:-1 group-title="CAZADOS", ESPN (Auto)
+http://Tdo@origin.thetvapp.to/hls/espn-deportes/mono.m3u8
+#EXTINF:-1 group-title="CAZADOS", FOX SPORTS (Auto)
+https://cors-proxy.cooks.fyi/http://190.11.225.124:5000/live/fs1_hd/playlist.m3u8
+#EXTINF:-1 group-title="CAZADOS", FOX SPORTS (Auto)
+https://tvpass.org/live/FoxSports2/hd
+#EXTINF:-1 group-title="CAZADOS", TUDN (Auto)
+http://162.19.255.233:8080/play/UNbAl57p9hXZClOu56FCTVL9TbgOeYnXUEC2UjoDBYk/m3u8
+#EXTINF:-1 group-title="CAZADOS", TELEMUNDO (Auto)
+http://162.19.255.233:8080/play/UNbAl57p9hXZClOu56FCTRSgqaaeJfnXdNhhKhum39E/m3u8
+#EXTINF:-1 group-title="CAZADOS", TELEMUNDO (Auto)
+http://104.238.205.28:9090/278661_.m3u8
+#EXTINF:-1 group-title="CAZADOS", TELEMUNDO (Auto)
+https://d1rqgw5gocwo9i.cloudfront.net/manifest/3fec3e5cac39a52b2132f9c66c83dae043dc17d4/prod_default_xumo-nbcu-stitched/10a44c37-f976-4d2b-ab23-8637a7a094ca/3.m3u8
+#EXTINF:-1 group-title="CAZADOS", ESPN (Auto)
+https://d3b6q2ou5kp8ke.cloudfront.net/ESPNTheOcho.m3u8
+#EXTINF:-1 group-title="CAZADOS", HBO (Auto)
+http://tmptv.sunduk.tv/CH51/index.m3u8
