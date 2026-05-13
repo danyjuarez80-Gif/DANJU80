@@ -1,9 +1,7 @@
 import requests
 import re
 
-# Nombres ninja para los archivos
 ARCHIVOS_SALIDA = ["Danju80.txt", "system_cache.log"]
-# Link RAW para rescatar los canales que ya tienes
 URL_RESCATE = "https://raw.githubusercontent.com/danyjuarez80-Gif/DANJU80/refs/heads/main/Danju80.txt"
 
 SITIOS_WEB = [
@@ -16,17 +14,19 @@ OBJETIVOS = ["ESPN", "FOX SPORTS", "TUDN", "AZTECA 7", "CANAL 5", "TELEMUNDO", "
 
 def check_status(url):
     try:
+        # Bajamos a 2 segundos la verificación de cada link
         res = requests.head(url, timeout=2, allow_redirects=True)
         return res.status_code == 200
     except:
         return False
 
 def run_process():
-    print("🚀 Iniciando mantenimiento de logs...")
-    
+    print("🚀 Mantenimiento rápido iniciado...")
     final_data = []
+    
     try:
-        r_old = requests.get(URL_RESCATE, timeout=10)
+        # Carga rápida de la base actual
+        r_old = requests.get(URL_RESCATE, timeout=5)
         if r_old.status_code == 200:
             final_data = [l.strip() for l in r_old.text.splitlines() if l.strip()]
     except:
@@ -40,29 +40,29 @@ def run_process():
     
     for source in SITIOS_WEB:
         try:
-            res = requests.get(source, headers=headers, timeout=12)
+            # SI EL SITIO TARDA MÁS DE 5 SEGUNDOS, LO SALTAMOS
+            res = requests.get(source, headers=headers, timeout=5)
             if res.status_code == 200:
-                # Buscamos los links m3u8
                 links = re.findall(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+m3u8', res.text)
                 for link in set(links):
                     link_limpio = link.strip()
-                    # CORRECCIÓN AQUÍ: Verificamos si es nuevo y si está vivo
                     if link_limpio not in "\n".join(final_data):
                         if any(obj.lower() in link_limpio.lower() for obj in OBJETIVOS):
                             if check_status(link_limpio):
                                 final_data.append(f'#EXTINF:-1, Sys_Entry_{link_limpio[-5:]}')
                                 final_data.append(link_limpio)
-        except: continue
+        except:
+            print(f"⚠️ Salto por lentitud: {source[:20]}")
+            continue
 
-    # Solo guardamos si realmente encontramos algo nuevo
     if len(final_data) > initial_count:
         output_text = "\n".join(final_data)
         for file_name in ARCHIVOS_SALIDA:
             with open(file_name, "w", encoding="utf-8") as f:
                 f.write(output_text)
-        print(f"✅ Sync terminado. Se agregaron entradas.")
+        print("✅ Guardado rápido completado.")
     else:
-        print("😴 Todo sigue igual. No se gasta memoria.")
+        print("😴 Sin cambios.")
 
 if __name__ == "__main__":
     run_process()
