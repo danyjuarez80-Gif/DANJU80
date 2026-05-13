@@ -8,7 +8,7 @@ FUENTES = [
     "https://iptv-org.github.io/iptv/countries/ar.m3u",
     "https://iptv-org.github.io/iptv/countries/co.m3u",
     "https://iptv-org.github.io/iptv/countries/es.m3u",
-    "https://iptv-org.github.io/iptv/categories/sports.m3u",  # ⭐ Todos los deportes
+    "https://iptv-org.github.io/iptv/categories/sports.m3u",
 ]
 
 CANALES_GENERALES = [
@@ -22,16 +22,32 @@ CANALES_DEPORTES = [
     "beIN Sports", "Sport TV", "Eurosport", "NBC Sports",
     "NFL Network", "NBA TV", "MLB Network", "Golf Channel",
     "Tennis Channel", "Motorsport", "Sport", "Deportes",
-    "Multicanal", "Canal Sur Deportes", "Real Madrid TV",
-    "Barcelona TV", "Antena 3 Deportes"
+    "Canal Sur Deportes", "Real Madrid TV", "Antena 3 Deportes"
 ]
 
 CANALES_DESEADOS = CANALES_GENERALES + CANALES_DEPORTES
 
-def extraer_canales(m3u_texto, nombres_deseados):
+
+def leer_lista_existente(archivo):
+    """Lee tu lista actual y extrae las URLs ya guardadas para no duplicar."""
+    try:
+        with open(archivo, "r", encoding="utf-8") as f:
+            contenido = f.read()
+        urls_existentes = set()
+        lineas = contenido.splitlines()
+        for linea in lineas:
+            linea = linea.strip()
+            if linea.startswith("http"):
+                urls_existentes.add(linea)
+        return contenido.rstrip(), urls_existentes
+    except FileNotFoundError:
+        return "#EXTM3U", set()
+
+
+def extraer_canales(m3u_texto, nombres_deseados, urls_existentes):
+    """Extrae canales que NO están ya en tu lista."""
     lineas = m3u_texto.splitlines()
     resultado = []
-    vistos = set()
     i = 0
     while i < len(lineas):
         linea = lineas[i]
@@ -40,39 +56,46 @@ def extraer_canales(m3u_texto, nombres_deseados):
             if any(d.lower() in nombre_canal.lower() for d in nombres_deseados):
                 if i + 1 < len(lineas):
                     url = lineas[i + 1].strip()
-                    clave = nombre_canal.lower()
-                    if clave not in vistos:  # Evita duplicados
-                        vistos.add(clave)
+                    if url not in urls_existentes:  # Solo si es nuevo
                         resultado.append((nombre_canal, url))
+                        urls_existentes.add(url)  # Marca como visto
         i += 1
     return resultado
 
+
 def ejecutar():
-    canales = []
+    # 1. Leer tu lista actual
+    contenido_actual, urls_existentes = leer_lista_existente(ARCHIVO_SALIDA)
+    print(f"📋 Lista actual: {len(urls_existentes)} canales existentes")
+
+    # 2. Buscar canales nuevos en las fuentes
+    canales_nuevos = []
     for fuente in FUENTES:
         try:
             r = requests.get(fuente, timeout=15)
             r.raise_for_status()
-            encontrados = extraer_canales(r.text, CANALES_DESEADOS)
-            canales += encontrados
-            print(f"📡 {fuente.split('/')[-1]}: {len(encontrados)} canales")
+            encontrados = extraer_canales(r.text, CANALES_DESEADOS, urls_existentes)
+            canales_nuevos += encontrados
+            print(f"📡 {fuente.split('/')[-1]}: {len(encontrados)} canales nuevos")
         except Exception as e:
             print(f"⚠️ Error en {fuente}: {e}")
 
-    if not canales:
-        print("❌ No se encontraron canales.")
+    if not canales_nuevos:
+        print("✅ No hay canales nuevos que agregar.")
         return
 
-    # Ordenar: primero generales, luego deportes
-    lineas = ["#EXTM3U"]
-    for nombre, url in canales:
-        lineas.append(f"#EXTINF:-1,{nombre}")
-        lineas.append(url)
+    # 3. Agregar al FINAL de tu lista sin tocar nada
+    nuevas_lineas = []
+    for nombre, url in canales_nuevos:
+        nuevas_lineas.append(f"#EXTINF:-1,{nombre}")
+        nuevas_lineas.append(url)
+
+    contenido_final = contenido_actual + "\n" + "\n".join(nuevas_lineas)
 
     with open(ARCHIVO_SALIDA, "w", encoding="utf-8") as f:
-        f.write("\n".join(lineas))
+        f.write(contenido_final)
 
-    print(f"\n✅ {len(canales)} canales guardados en {ARCHIVO_SALIDA}")
+    print(f"\n✅ {len(canales_nuevos)} canales nuevos agregados al final de {ARCHIVO_SALIDA}")
 
-if __name__ == "__main__":
-    ejecutar()
+
+if __nam
