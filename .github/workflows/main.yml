@@ -1,34 +1,19 @@
-name: Actualizador Inteligente Dany 80
+# .github/workflows/actualizar.yml
 on:
-  workflow_dispatch: # Para que lo actives manual
   schedule:
-    - cron: '*/15 * * * *' # Cada 15 minutos
+    - cron: '0 6 * * *'  # cada día a las 6am UTC
+  workflow_dispatch:
 
 jobs:
-  build:
+  update:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout código
-        uses: actions/checkout@v4
-
-      - name: Configurar Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
-      - name: Instalar dependencias
-        run: |
-          pip install requests playwright
-          playwright install chromium
-          playwright install-deps chromium
-
-      - name: Ejecutar Extractor
-        run: python extractor.py
-
-      - name: Guardar cambios
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "actions-user"
+      - uses: actions/checkout@v3
+      - run: pip install requests
+      - run: python tu_script.py
+      - run: |
+          git config user.email "bot@github.com"
+          git config user.name "Bot"
           git add .
-          git commit -m "Canales actualizados y progreso guardado [$(date +'%Y-%m-%d %H:%M')]" || exit 0
+          git commit -m "Update lista" || echo "Sin cambios"
           git push
