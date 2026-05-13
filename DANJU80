@@ -1,3 +1,7 @@
 #EXTM3U
+
+#EXTINF:-1 group-title="TV",noticias 1
+Https://deportes.ksdjugfsddeports.com:9092/NDUuMTkxLjU1LjMy/34_.m3u8?token=1MZOBNRoBqOd6rO3rLFVqA&expires=1778678573
+
 #EXTINF:-1 group-title="DEPORTES",Azteca Deportes TEST
 https://deportes.ksdjugfsddeports.com:9092/MTM1LjIzMi4yMjcuMTQ5/34_.m3u8?token=bOFQxIMu-5HymY3FB7Z0Fg&expires=1778678935|Referer=https://www.tvplusgratis2.com/&User-Agent=Mozilla/5.0
