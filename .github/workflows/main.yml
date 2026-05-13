@@ -8,8 +8,8 @@ on:
 jobs:
   maintenance:
     runs-on: ubuntu-latest
-    # SI TARDA MÁS DE 5 MINUTOS, EL PROCESO SE DETIENE A LA FUERZA
-    timeout-minutes: 5
+    # Subimos a 8 min para que alcance a guardar los cambios antes de que lo corten
+    timeout-minutes: 8
     permissions:
       contents: write
 
