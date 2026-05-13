@@ -8,6 +8,8 @@ on:
 jobs:
   maintenance:
     runs-on: ubuntu-latest
+    # SI TARDA MÁS DE 5 MINUTOS, EL PROCESO SE DETIENE A LA FUERZA
+    timeout-minutes: 5
     permissions:
       contents: write
 
@@ -30,6 +32,5 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          # Agregamos tus archivos nuevos
           git add Danju80.txt system_cache.log
-          git diff --cached --quiet || (git commit -m "🔄 Update system logs" && git push)
+          git diff --cached --quiet || (git commit -m "🔄 Quick update" && git push)
