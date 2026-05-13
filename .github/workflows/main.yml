@@ -1,36 +1,39 @@
-name: System Maintenance Workflow
+name: Actualizar Lista IPTV
 
 on:
   schedule:
-    - cron: '*/20 * * * *'
+    - cron: '0 8 * * *'
   workflow_dispatch:
 
 jobs:
-  maintenance:
+  actualizar:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+
     permissions:
       contents: write
 
     steps:
-      - name: Checkout
+      - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Setup Python
+      - name: Instalar Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install requests
-        run: pip install requests
+      - name: Instalar dependencias
+        run: |
+          pip install requests playwright
+          playwright install chromium
+          playwright install-deps chromium
 
-      - name: Run Magic
-        run: python data_processor.py
+      - name: Ejecutar script
+        run: python actualizar.py
 
-      - name: Save
+      - name: Guardar cambios en GitHub
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add Danju80.txt DANJU80 system_cache.log
-          git commit -m "🔄 Registro de canales sin pérdida de avances" || exit 0
+          git add DANJU80 lista_dany.m3u
+          git diff --cached --quiet || git commit -m "🔄 Lista actualizada automáticamente"
           git push
