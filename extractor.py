@@ -16,7 +16,6 @@ def escanear_servidores(page, canal):
         print(f"📡 Analizando: {canal['n']}...")
         page.goto(canal['u'], timeout=25000, wait_until="domcontentloaded")
         page.wait_for_timeout(5000)
-        # Intentamos clics en varios elementos para activar el stream
         for selector in ["video", "iframe", "button"]:
             try:
                 el = page.query_selector(selector)
@@ -34,28 +33,31 @@ def ejecutar():
             except: ultimo_indice = 0
     else: ultimo_indice = 0
 
-    # 2. CARGAR TUS MANUALES (IMPORTANTE: NO BORRAR)
-    # Si falla la descarga, intentamos leer el archivo local para no perder nada
+    # 2. FILTRAR MANUALES (Solo lo que NO es automático)
     lineas_m = []
     try:
+        # Intentamos descargar el archivo actual de GitHub
         r = requests.get(URL_GITHUB_RAW, timeout=10)
         if r.status_code == 200:
-            lineas_m = [l for l in r.text.splitlines() if l.strip() and not l.startswith("#EXTM3U") and "Auto" not in l]
+            raw_text = r.text
         else:
+            # Si falla GitHub, leemos el archivo local
             with open("DANJU80", "r", encoding="utf-8") as f:
-                lineas_m = [l for l in f.read().splitlines() if l.strip() and not l.startswith("#EXTM3U") and "Auto" not in l]
+                raw_text = f.read()
+        
+        # AQUÍ ESTÁ EL TRUCO: Solo guardamos líneas que NO tengan "Auto-Total" o "ACTUALIZACIÓN"
+        # Así limpiamos los canales automáticos viejos en cada corrida
+        for linea in raw_text.splitlines():
+            if linea.strip() and not linea.startswith("#EXTM3U") and "Auto-Total" not in linea and "###" not in linea:
+                lineas_m.append(linea)
     except: pass
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
-        # Configuración de "Engaño" al servidor (Headers de México)
         context = browser.new_context(
             user_agent="Mozilla/5.0 (Linux; Android 13; SM-G960F) AppleWebKit/537.36",
             is_mobile=True,
-            extra_http_headers={
-                "Referer": "https://www.tvplusgratis2.com/",
-                "Origin": "https://www.tvplusgratis2.com/"
-            }
+            extra_http_headers={"Referer": URL_BASE}
         )
         page = context.new_page()
 
@@ -72,40 +74,31 @@ def ejecutar():
             
             lista_total = list({v['u']: v for v in canales_web}.values())
             
+            # Seleccionamos los 10 siguientes según el progreso
             inicio = ultimo_indice if ultimo_indice < len(lista_total) else 0
             canales_vuelta = lista_total[inicio:inicio+10]
+            print(f"🚀 Procesando canales nuevos del {inicio} al {inicio+10}")
 
             for c in canales_vuelta:
                 opciones = escanear_servidores(page, c)
-                
-                # Si pediste saltar 1 y 2, pero el canal tiene pocos, 
-                # regresamos a la opción 1 para que al menos salga algo.
-                if len(opciones) >= 3:
-                    finales = opciones[2:5]
-                    base_idx = 3
-                else:
-                    finales = opciones[:2]
-                    base_idx = 1
+                # Seleccionamos opción 3 si existe, si no, la 1
+                finales = opciones[2:5] if len(opciones) >= 3 else opciones[:2]
+                base_idx = 3 if len(opciones) >= 3 else 1
 
                 if finales:
                     bloque_auto += f"### {c['n'].upper()} ###\n"
                     for i, link in enumerate(finales):
                         clean = link.split("'")[0].split('"')[0]
-                        # El pipe con Referer ayuda a que las apps lo abran mejor
-                        link_final = f"{clean}|Referer=https://www.tvplusgratis2.com/&User-Agent=Mozilla/5.0"
+                        link_final = f"{clean}|Referer={URL_BASE}&User-Agent=Mozilla/5.0"
                         bloque_auto += f'#EXTINF:-1 group-title="Auto-Total", {c["n"]} (Opcion {i+base_idx})\n{link_final}\n'
 
+            # Guardar el nuevo índice para la siguiente ejecución
             with open("progreso.txt", "w") as f:
                 f.write(str(inicio + 10 if inicio + 10 < len(lista_total) else 0))
 
         except Exception as e:
             print(f"❌ Error: {e}")
-
         browser.close()
 
-    # 3. CONSTRUCCIÓN DEL ARCHIVO FINAL
-    contenido = "#EXTM3U\n\n"
-    if lineas_m:
-        contenido += "### TUS CANALES MANUALES ###\n" + "\n".join(lineas_m) + "\n\n"
-    
-    contenido
+    # 3. CONSTRUCCIÓN LIMPIA DEL ARCHIVO
+    # Solo ponemos tus manuales (sin lo viejo automático) + lo nuevo que se
