@@ -2,19 +2,19 @@ name: System Maintenance Workflow
 
 on:
   schedule:
-    - cron: '*/20 15-23,0-6 * * *'
+    - cron: '*/20 * * * *'
   workflow_dispatch:
 
 jobs:
   maintenance:
     runs-on: ubuntu-latest
-    # Subimos a 8 min para que alcance a guardar los cambios antes de que lo corten
-    timeout-minutes: 8
+    # Le damos 15 minutos para que nunca se cancele por tiempo
+    timeout-minutes: 15
     permissions:
       contents: write
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Python
@@ -22,15 +22,16 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install Dependencies
+      - name: Install
         run: pip install requests
 
-      - name: Run Data Sync
+      - name: Run
         run: python data_processor.py
 
-      - name: Save Changes
+      - name: Save
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add Danju80.txt system_cache.log
-          git diff --cached --quiet || (git commit -m "🔄 Quick update" && git push)
+          git commit -m "🔄 Update list" || exit 0
+          git push
