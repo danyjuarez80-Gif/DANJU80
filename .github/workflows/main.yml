@@ -1,19 +1,36 @@
-# .github/workflows/actualizar.yml
+name: Actualizar Lista IPTV
+
 on:
   schedule:
-    - cron: '0 6 * * *'  # cada día a las 6am UTC
+    - cron: '0 8 * * *'
   workflow_dispatch:
 
 jobs:
-  update:
+  actualizar:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
     steps:
-      - uses: actions/checkout@v3
-      - run: pip install requests
-      - run: python tu_script.py
-      - run: |
-          git config user.email "bot@github.com"
-          git config user.name "Bot"
-          git add .
-          git commit -m "Update lista" || echo "Sin cambios"
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Instalar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependencias
+        run: pip install requests
+
+      - name: Ejecutar script
+        run: python actualizar.py
+
+      - name: Guardar cambios en GitHub
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add DANJU80 lista_dany.m3u
+          git diff --cached --quiet || git commit -m "🔄 Lista actualizada automáticamente"
           git push
