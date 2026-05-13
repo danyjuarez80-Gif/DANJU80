@@ -3,26 +3,30 @@ import requests
 GITHUB_FILES = ["DANJU80", "lista_dany.m3u"]
 
 def ejecutar():
-    # Usaremos un link de Telemundo que es muy estable en USA
-    # Pero le agregamos el 'User-Agent' al final para que no lo bloqueen
-    user_agent = "|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+    # Este 'disfraz' es el mismo que usa Web Video Caster (Chrome en Android)
+    disfraz = "|User-Agent=Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36"
     
-    canal_telemundo = "https://telemundo-usa-east-1-mx.samsung.wurl.com/manifest/playlist.m3u8"
-    
-    contenido = [
-        "#EXTM3U",
-        f'#EXTINF:-1 group-title="PRUEBA",Telemundo (Con Disfraz)',
-        f'{canal_telemundo}{user_agent}'
+    # Canales directos de Samsung (Wurl) que funcionan en Mexico
+    canales = [
+        {"n": "Azteca 7 HD", "u": "https://televisa-latam-azteca7-1-mx.samsung.wurl.com/manifest/playlist.m3u8"},
+        {"n": "Telemundo", "u": "https://telemundo-usa-east-1-mx.samsung.wurl.com/manifest/playlist.m3u8"},
+        {"n": "NASA TV (Prueba)", "u": "https://ntv1.akamaized.net/hls/live/2014049/NASA-NTV1/master.m3u8"}
     ]
 
-    texto = "\n".join(contenido)
+    lineas = ["#EXTM3U"]
+    for c in canales:
+        lineas.append(f'#EXTINF:-1 group-title="CANALES", {c["n"]}')
+        # Pegamos el link con el disfraz al final
+        lineas.append(f'{c["u"]}{disfraz}')
 
-    # El bot guarda los cambios gracias a tus permisos
+    texto = "\n".join(lineas)
+
+    # El bot guarda los cambios (esto ya sabemos que funciona)
     for nombre in GITHUB_FILES:
         with open(nombre, "w", encoding="utf-8") as f:
             f.write(texto)
     
-    print("✅ Bot actualizó la lista con inyección de User-Agent.")
+    print("✅ Bot configurado con disfraz de Web Video Caster")
 
 if __name__ == "__main__":
     ejecutar()
