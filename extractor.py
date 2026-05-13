@@ -11,78 +11,85 @@ def es_m3u8(url):
     return ".m3u8" in url and len(url) > 50 and not any(x in url.lower() for x in filtros)
 
 def ejecutar():
-    lineas_preservadas = []
+    lineas_viejas = []
     ultimo_num = 70
     try:
         r = requests.get(URL_GITHUB_RAW, timeout=15)
         if r.status_code == 200:
             for l in r.text.splitlines():
                 if l.strip() and "#EXTM3U" not in l:
-                    lineas_preservadas.append(l.strip())
-                    nums = re.findall(r'\d+', l)
-                    if nums and "noticia" in l.lower():
-                        n = int(nums[-1])
-                        if n > ultimo_num: ultimo_num = n
+                    lineas_viejas.append(l.strip())
+                    if "noticia" in l.lower() or "cine" in l.lower():
+                        nums = re.findall(r'\d+', l)
+                        if nums:
+                            n = int(nums[-1])
+                            if n > ultimo_num: ultimo_num = n
     except: pass
 
     canales_nuevos = []
 
     with sync_playwright() as p:
         try:
-            # LANZAMOS NAVEGADOR CON MÁS RECURSOS
+            # LANZAMOS UN NAVEGADOR QUE PAREZCA MÁS HUMANO
             browser = p.chromium.launch(headless=True)
-            # Simulamos un usuario real de Chrome en Windows para evitar el "Reintentando"
+            # Usamos una configuración de iPhone para despistar al servidor
             context = browser.new_context(
-                user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-                viewport={'width': 1280, 'height': 720}
+                user_agent="Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Mobile/15E148 Safari/604.1",
+                viewport={'width': 375, 'height': 667},
+                device_scale_factor=2,
+                is_mobile=True
             )
             page = context.new_page()
 
-            # Tanda de canales de películas (CineCanal, etc)
+            # CANALES DE PELÍCULAS QUE SÍ O SÍ DEBEN FUNCIONAR
             tanda = [
                 ["cine canal", "cinecanal-en-vivo.html"],
-                ["azteca 7", "azteca-7-en-vivo.html"],
-                ["canal 5", "canal-5-en-vivo.html"]
+                ["fx movies", "fx-movies-en-vivo.html"],
+                ["tnt series", "tnt-series-en-vivo.html"]
             ]
 
             for nombre, slug in tanda:
                 vivos = []
                 page.on("request", lambda r: vivos.append(r.url) if es_m3u8(r.url) else None)
+                
                 try:
-                    print(f"📡 Entrando a {nombre}...")
+                    print(f"🕵️ Intentando entrar a: {nombre}")
                     page.goto(f"{URL_BASE}{slug}", timeout=60000, wait_until="load")
                     
-                    # ESPERA ACTIVA: Esperamos a que el video cargue o falle
-                    page.wait_for_timeout(20000) 
-                    
-                    # Intentamos dar clic en las diferentes "Opciones" para forzar el link
-                    for i in range(1, 4):
-                        opcion = page.get_by_text(f"Opción {i}")
-                        if opcion.is_visible():
-                            opcion.click()
-                            page.wait_for_timeout(5000)
-                            if vivos: break
+                    # Si detectamos el mensaje de error o bucle, refrescamos una vez
+                    page.wait_for_timeout(10000)
+                    if not vivos:
+                        print("🔄 Detectado posible bloqueo. Reintentando...")
+                        page.reload(wait_until="load")
+                        page.wait_for_timeout(15000)
+
+                    # Simular clics en el centro para despertar al reproductor
+                    page.mouse.click(180, 300)
+                    page.wait_for_timeout(5000)
 
                     if vivos:
                         ultimo_num += 1
-                        # CAPTURA PURA DEL ENLACE
-                        link_raw = vivos[-1].split('?')[0].split('"')[0]
+                        # Limpieza profunda del link capturado
+                        link_raw = vivos[-1].split('?')[0].split('"')[0].split("'")[0]
                         link_final = f"{link_raw}|Referer={URL_BASE}&User-Agent=Mozilla/5.0"
-                        canales_nuevos.append(f'#EXTINF:-1 group-title="TV",{nombre} {ultimo_num}')
+                        
+                        canales_nuevos.append(f'#EXTINF:-1 group-title="CINE",{nombre} {ultimo_num}')
                         canales_nuevos.append(link_final)
-                        print(f"✅ ¡Capturado!")
-                    else:
-                        print(f"⚠️ {nombre} sigue en bucle de reintento.")
-                except: pass
+                        print(f"✅ ¡Canal pescado!")
+                except Exception as e:
+                    print(f"❌ Falló {nombre}: {e}")
+                
                 page.remove_listener("request", lambda r: None)
+            
             browser.close()
         except: pass
 
-    resultado = ["#EXTM3U"] + lineas_preservadas + canales_nuevos
-    final_str = "\n".join(resultado)
+    # GUARDADO FINAL: LO QUE YA TENÍAS + LO NUEVO DE CINE
+    resultado = ["#EXTM3U"] + lineas_viejas + canales_nuevos
+    final_text = "\n".join(resultado)
     for f in ["DANJU80", "lista_dany.m3u"]:
         with open(f, "w", encoding="utf-8") as file:
-            file.write(final_str)
+            file.write(final_text)
 
 if __name__ == "__main__":
     ejecutar()
