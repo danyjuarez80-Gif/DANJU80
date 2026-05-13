@@ -1,24 +1,20 @@
 import requests
 import re
 
-# Nombres camuflados para que nadie sospeche
+# Nombres ninja para los archivos
 ARCHIVOS_SALIDA = ["Danju80.txt", "system_cache.log"]
-# Link RAW para que el bot rescate lo que ya tenías guardado
+# Link RAW para rescatar los canales que ya tienes
 URL_RESCATE = "https://raw.githubusercontent.com/danyjuarez80-Gif/DANJU80/refs/heads/main/Danju80.txt"
 
-# Sitios donde el bot buscará links escondidos
 SITIOS_WEB = [
     "https://iptv-org.github.io/iptv/countries/mx.m3u",
     "https://televisionlibre.net/es/",
-    "https://iptv-org.github.io/iptv/categories/sports.m3u",
-    "https://www.tvplusgratis.com/"
+    "https://iptv-org.github.io/iptv/categories/sports.m3u"
 ]
 
-# Canales que el bot tiene orden de capturar
-OBJETIVOS = ["ESPN", "FOX SPORTS", "TUDN", "AZTECA 7", "CANAL 5", "TELEMUNDO", "UNIVISION", "LAS ESTRELLAS"]
+OBJETIVOS = ["ESPN", "FOX SPORTS", "TUDN", "AZTECA 7", "CANAL 5", "TELEMUNDO", "UNIVISION"]
 
 def check_status(url):
-    """Prueba si el link responde en menos de 2 segundos"""
     try:
         res = requests.head(url, timeout=2, allow_redirects=True)
         return res.status_code == 200
@@ -26,15 +22,13 @@ def check_status(url):
         return False
 
 def run_process():
-    print("🚀 Iniciando mantenimiento de logs de sistema...")
+    print("🚀 Iniciando mantenimiento de logs...")
     
     final_data = []
     try:
-        # Intentamos leer lo que ya existe para no borrarlo
         r_old = requests.get(URL_RESCATE, timeout=10)
         if r_old.status_code == 200:
             final_data = [l.strip() for l in r_old.text.splitlines() if l.strip()]
-            print(f"📚 Base de datos cargada. Registros actuales: {len(final_data)//2}")
     except:
         final_data = ["#EXTM3U"]
 
@@ -42,18 +36,33 @@ def run_process():
         final_data = ["#EXTM3U"]
     
     initial_count = len(final_data)
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
     
-    # Buscamos en cada sitio de la lista
     for source in SITIOS_WEB:
         try:
-            print(f"🔍 Escaneando fuente: {source[:30]}...")
             res = requests.get(source, headers=headers, timeout=12)
             if res.status_code == 200:
-                # Extraemos links m3u8 con expresiones regulares
+                # Buscamos los links m3u8
                 links = re.findall(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+m3u8', res.text)
-                
                 for link in set(links):
                     link_limpio = link.strip()
-                    # Si el link es nuevo y coincide con lo que buscamos
-                    if link_limpio not in "\n".join(
+                    # CORRECCIÓN AQUÍ: Verificamos si es nuevo y si está vivo
+                    if link_limpio not in "\n".join(final_data):
+                        if any(obj.lower() in link_limpio.lower() for obj in OBJETIVOS):
+                            if check_status(link_limpio):
+                                final_data.append(f'#EXTINF:-1, Sys_Entry_{link_limpio[-5:]}')
+                                final_data.append(link_limpio)
+        except: continue
+
+    # Solo guardamos si realmente encontramos algo nuevo
+    if len(final_data) > initial_count:
+        output_text = "\n".join(final_data)
+        for file_name in ARCHIVOS_SALIDA:
+            with open(file_name, "w", encoding="utf-8") as f:
+                f.write(output_text)
+        print(f"✅ Sync terminado. Se agregaron entradas.")
+    else:
+        print("😴 Todo sigue igual. No se gasta memoria.")
+
+if __name__ == "__main__":
+    run_process()
