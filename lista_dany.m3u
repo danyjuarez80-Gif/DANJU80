@@ -139,3 +139,13 @@ http://103.157.248.140:8000/play/a01m/index.m3u8
 https://rightsboosterltd-scl-2-eu.rakuten.wurl.tv/playlist.m3u8
 #EXTINF:-1,TyC Sports Latin America (1080p)
 http://201.217.246.42:44310/Live/d93a7c495cb5f5d236b25a3ffea95003/local-90.playlist.m3u8
+#EXTINF:-1,ESPN
+https://deportes.ksdjugfsddeports.com:9092/MjAuMTI3LjI0Ny4zNw==/13_.m3u8?token=ka4rMG3teCfDwPKbenozCQ&expires=1778747060
+#EXTINF:-1,ESPN Mexico
+https://deportes.ksdjugfsddeports.com:9092/MjAuMTI3LjI0Ny4zNw==/14_.m3u8?token=CpILHjKlYIliweGMAWNE_A&expires=1778747085
+#EXTINF:-1,Fox Sports
+https://deportes.ksdjugfsddeports.com:9092/MjAuMTI3LjI0Ny4zNw==/8_.m3u8?token=fM8TtI6nbBfO03NfqDUORQ&expires=1778747121
+#EXTINF:-1,beIN SPORTS Xtra (1080p)
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0
+#EXTINF:-1,Fox Sports (1080p)
+#EXTVLCOPT:http-referrer=https://foxsports.com.ar/
