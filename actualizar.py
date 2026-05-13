@@ -1,4 +1,6 @@
+import asyncio
 import requests
+from scraper_tvplus import scrape_tvplus
 
 ARCHIVOS_SALIDA = ["DANJU80", "lista_dany.m3u"]
 
@@ -11,21 +13,17 @@ FUENTES = [
     "https://iptv-org.github.io/iptv/categories/sports.m3u",
 ]
 
-CANALES_GENERALES = [
-    "Telemundo", "Azteca 7", "Canal 5", "Las Estrellas", "Univision"
+CANALES_DESEADOS = [
+    "ESPN", "Fox One", "Fox Deportes", "Fox Sports",
+    "Univision", "TUDN", "UniMas", "Unimas",
+    "Telemundo", "beIN", "bein",
+    "Champions", "Claro Sports", "Caliente",
+    "TyC Sports", "DirecTV Sports", "Win Sports",
+    "DAZN", "Sky Sports", "NBC Sports", "Eurosport",
+    "NFL Network", "NBA TV", "MLB Network",
+    "Star Sports", "One Sports", "Deportes",
+    "Las Estrellas", "Canal 5", "Azteca 7",
 ]
-
-CANALES_DEPORTES = [
-    "ESPN", "Fox Sports", "TUDN", "Claro Sports", "Win Sports",
-    "Marca", "Gol", "DAZN", "Teledeporte", "TyC Sports",
-    "DirecTV Sports", "Star Sports", "One Sports", "Sky Sports",
-    "beIN Sports", "Sport TV", "Eurosport", "NBC Sports",
-    "NFL Network", "NBA TV", "MLB Network", "Golf Channel",
-    "Tennis Channel", "Motorsport", "Sport", "Deportes",
-    "Canal Sur Deportes", "Real Madrid TV", "Antena 3 Deportes"
-]
-
-CANALES_DESEADOS = CANALES_GENERALES + CANALES_DEPORTES
 
 
 def leer_lista_existente(archivo):
@@ -61,27 +59,41 @@ def extraer_canales(m3u_texto, nombres_deseados, urls_existentes):
 
 
 def ejecutar():
-    # Leer lista actual del primer archivo (ambos son iguales)
+    # 1. Leer lista actual
     contenido_actual, urls_existentes = leer_lista_existente(ARCHIVOS_SALIDA[0])
-    print(f"📋 Lista actual: {len(urls_existentes)} canales existentes")
+    print(f"📋 Lista actual: {len(urls_existentes)} canales existentes\n")
 
-    # Buscar canales nuevos
     canales_nuevos = []
+
+    # 2. Scrapear tvplusgratis2.com con Playwright
+    print("🌐 Scrapeando tvplusgratis2.com...")
+    try:
+        canales_scrapeados = asyncio.run(scrape_tvplus())
+        for nombre, url in canales_scrapeados:
+            if url not in urls_existentes:
+                canales_nuevos.append((nombre, url))
+                urls_existentes.add(url)
+        print(f"✅ {len(canales_scrapeados)} canales obtenidos de tvplusgratis2\n")
+    except Exception as e:
+        print(f"⚠️ Error en scraper: {e}\n")
+
+    # 3. Buscar en fuentes iptv-org
+    print("📡 Buscando en fuentes iptv-org...")
     for fuente in FUENTES:
         try:
             r = requests.get(fuente, timeout=15)
             r.raise_for_status()
             encontrados = extraer_canales(r.text, CANALES_DESEADOS, urls_existentes)
             canales_nuevos += encontrados
-            print(f"📡 {fuente.split('/')[-1]}: {len(encontrados)} canales nuevos")
+            print(f"  {fuente.split('/')[-1]}: {len(encontrados)} canales nuevos")
         except Exception as e:
-            print(f"⚠️ Error en {fuente}: {e}")
+            print(f"  ⚠️ Error en {fuente}: {e}")
 
     if not canales_nuevos:
-        print("✅ No hay canales nuevos que agregar.")
+        print("\n✅ No hay canales nuevos que agregar.")
         return
 
-    # Armar contenido final
+    # 4. Armar contenido y guardar en ambos archivos
     nuevas_lineas = []
     for nombre, url in canales_nuevos:
         nuevas_lineas.append(f"#EXTINF:-1,{nombre}")
@@ -89,12 +101,11 @@ def ejecutar():
 
     contenido_final = contenido_actual + "\n" + "\n".join(nuevas_lineas)
 
-    # Guardar en AMBOS archivos
     for archivo in ARCHIVOS_SALIDA:
         with open(archivo, "w", encoding="utf-8") as f:
             f.write(contenido_final)
 
-    print(f"\n✅ {len(canales_nuevos)} canales nuevos agregados a: {', '.join(ARCHIVOS_SALIDA)}")
+    print(f"\n✅ {len(canales_nuevos)} canales nuevos en: {', '.join(ARCHIVOS_SALIDA)}")
 
 
 if __name__ == "__main__":
