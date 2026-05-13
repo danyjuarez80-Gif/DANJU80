@@ -11,11 +11,8 @@ def es_m3u8(url):
     return ".m3u8" in url and len(url) > 50 and not any(x in url.lower() for x in filtros)
 
 def ejecutar():
-    # 1. LEER ARCHIVO ACTUAL Y BUSCAR EL ÚLTIMO NÚMERO
     lineas_finales = []
-    ultimo_num = 70 # Empezamos base si no hay nada
-    canales_existentes = {} # Para rastrear nombres y no repetir
-
+    ultimo_num = 70
     try:
         r = requests.get(URL_GITHUB_RAW, timeout=10)
         content = r.text if r.status_code == 200 else ""
@@ -24,55 +21,71 @@ def ejecutar():
 
         for linea in content.splitlines():
             if "noticia" in linea.lower():
-                # Extraer el número de la línea "noticia 74"
                 nums = re.findall(r'\d+', linea)
                 if nums:
-                    num_actual = int(nums[-1])
-                    if num_actual > ultimo_num: ultimo_num = num_actual
+                    n = int(nums[-1])
+                    if n > ultimo_num: ultimo_num = n
             lineas_finales.append(linea)
     except: pass
 
     with sync_playwright() as p:
+        # LUNCH MÁS LENTO: Para que el servidor no sospeche
         browser = p.chromium.launch(headless=True)
-        context = browser.new_context(user_agent="Mozilla/5.0 (iPhone; CPU iPhone OS 14_7_1)")
+        context = browser.new_context(
+            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+            extra_http_headers={"Referer": URL_BASE}
+        )
         page = context.new_page()
 
         links_vivos = []
         page.on("request", lambda req: links_vivos.append(req.url) if es_m3u8(req.url) else None)
 
         try:
-            # Ejemplo: Rastreamos un canal nuevo
             nombre_canal = "noticia" 
-            page.goto(f"{URL_BASE}tudn-en-vivo.html", timeout=30000)
-            page.wait_for_timeout(12000)
+            print(f"📡 Entrando a buscar el link para {nombre_canal}...")
+            # Entramos a la página del canal (puedes cambiar esto por el que quieras rastrear)
+            page.goto(f"{URL_BASE}tudn-en-vivo.html", timeout=45000, wait_until="networkidle")
             
+            # ESPERA CRÍTICA: Le damos 15 segundos reales para que cargue el video
+            # tal como lo haces tú cuando esperas en Web Video Caster
+            page.wait_for_timeout(15000) 
+            
+            # Intentamos forzar el clic en el centro para que suelte el m3u8
+            page.mouse.click(400, 300)
+            page.wait_for_timeout(5000)
+
             if links_vivos:
                 nuevo_link = links_vivos[-1].split("'")[0].split('"')[0]
+                print(f"✅ ¡Link atrapado!: {nuevo_link[:50]}...")
                 
-                # VERIFICAR SI EL CANAL YA EXISTE PARA ACTUALIZARLO
                 encontrado = False
                 for i, linea in enumerate(lineas_finales):
                     if f"{nombre_canal} {ultimo_num}" in linea:
-                        # Si lo encuentra, actualiza la línea de abajo (el link)
                         if i + 1 < len(lineas_finales):
                             lineas_finales[i+1] = nuevo_link
                             encontrado = True
-                            print(f"🔄 Actualizado: {nombre_canal} {ultimo_num}")
                             break
                 
-                # SI ES NUEVO, USA EL SIGUIENTE NÚMERO
                 if not encontrado:
                     ultimo_num += 1
                     lineas_finales.append(f'#EXTINF:-1 group-title="TV",{nombre_canal} {ultimo_num}')
                     lineas_finales.append(nuevo_link)
-                    print(f"➕ Agregado: {nombre_canal} {ultimo_num}")
+            else:
+                print("❌ No se detectó ningún flujo m3u8 en esta vuelta.")
 
-        except Exception as e: print(f"❌ Error: {e}")
+        except Exception as e:
+            print(f"⚠️ Error durante el rastreo: {e}")
+        
         browser.close()
 
-    # 3. GUARDAR TODO LIMPIO
-    # Evitamos que el header #EXTM3U se repita
+    # GUARDADO FINAL (Asegurando que no se repita el header)
     resultado = ["#EXTM3U"] + [l for l in lineas_finales if l.strip() and "#EXTM3U" not in l]
-    
     with open("DANJU80", "w", encoding="utf-8") as f:
         f.write("\n".join(resultado))
+    
+    # También actualizamos el archivo .m3u para tu app
+    with open("lista_dany.m3u", "w", encoding="utf-8") as f:
+        f.write("\n".join(resultado))
+
+if __name__ == "__main__":
+    ejecutar()
