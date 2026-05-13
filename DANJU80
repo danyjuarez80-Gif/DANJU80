@@ -1,29 +1,17 @@
 #EXTM3U
 #EXTINF:-1 group-title="TV",en vivo
-azteca deportes 71
 https://deportes.ksdjugfsddeports.com:9092/NjQuMjM2LjEzNC4xNjc=/34_.m3u8|Referer=https://www.tvplusgratis2.com/&User-Agent=Mozilla/5.0
-#EXTINF:-1 group-title="TV",en vivo
-sky sports la liga 72
 https://deportes.ksdjugfsddeports.com:9092/NjQuMjM2LjEzNC4xNjc=/37_.m3u8|Referer=https://www.tvplusgratis2.com/&User-Agent=Mozilla/5.0
-#EXTINF:-1 group-title="TV",en vivo
-tudn 73
 https://deportes.ksdjugfsddeports.com:9092/NjQuMjM2LjEzNC4xNjc=/1_.m3u8|Referer=https://www.tvplusgratis2.com/&User-Agent=Mozilla/5.0
-#EXTINF:-1 group-title="TV",en vivo
-liga 1 74
 https://deportes.ksdjugfsddeports.com:9092/NjQuMjM2LjEzNC4xNjc=/39_.m3u8|Referer=https://www.tvplusgratis2.com/&User-Agent=Mozilla/5.0
-#EXTINF:-1 group-title="TV",en vivo
-liga 1 max 75
 https://deportes.ksdjugfsddeports.com:9092/NjQuMjM2LjEzNC4xNjc=/22_.m3u8|Referer=https://www.tvplusgratis2.com/&User-Agent=Mozilla/5.0
-#EXTINF:-1 group-title="TV",en vivo
-tnt sports chile 76
 https://deportes.ksdjugfsddeports.com:9092/NjQuMjM2LjEzNC4xNjc=/35_.m3u8|Referer=https://www.tvplusgratis2.com/&User-Agent=Mozilla/5.0
-#EXTINF:-1 group-title="TV",en vivo
-fox sports premium 77
 https://deportes.ksdjugfsddeports.com:9092/NjQuMjM2LjEzNC4xNjc=/12_.m3u8|Referer=https://www.tvplusgratis2.com/&User-Agent=Mozilla/5.0
 #EXTINF:-1 group-title="TV",EN VIVO
-AZTECA DEPORTES 78
 https://deportes.ksdjugfsddeports.com:9092/MTMuODMuNDIuOTc=/34_.m3u8|Referer=https://www.tvplusgratis2.com/&User-Agent=Mozilla/5.0
 #EXTINF:-1 group-title="CINE",canal 5 mx 71
 https://regionales.saohgdasregions.fun:9092/NzQuMjM1Ljc5LjQx/2_.m3u8|Referer=https://www.tvplusgratis2.com/&User-Agent=Mozilla/5.0
 #EXTINF:-1 group-title="CINE",cine canal 72
 https://regionales.saohgdasregions.fun:9092/MTcyLjIxMi4xNjUuNjY=/59_.m3u8|Referer=https://www.tvplusgratis2.com/&User-Agent=Mozilla/5.0
+#EXTINF:-1 group-title="CINE",CINE CANAL
+https://regionales.saohgdasregions.fun:9092/OS4yMzQuMTQ5Ljgz/59_.m3u8|Referer=https://www.tvplusgratis2.com/&User-Agent=Mozilla/5.0
