@@ -1,79 +1,58 @@
 import requests
 import os
-import re
 from playwright.sync_api import sync_playwright
 
+# Tu archivo en GitHub para mantener lo que ya tienes
 URL_GITHUB_RAW = "https://raw.githubusercontent.com/danyjuarez80-Gif/DANJU80/refs/heads/main/DANJU80"
-URL_BASE = "https://www.tvplusgratis2.com/"
-
-def es_m3u8(url):
-    filtros = ["google", "ads", "analytics", "facebook", "mp4", "log", "pixel"]
-    return ".m3u8" in url and len(url) > 50 and not any(x in url.lower() for x in filtros)
 
 def ejecutar():
-    # 1. LEER LO QUE YA TIENES (PARA NO PERDER TUS CANALES)
-    lineas_manuales = []
+    lineas_finales = ["#EXTM3U"]
+    
+    # 1. Mantenemos tus canales manuales (los de ###)
     try:
-        r = requests.get(URL_GITHUB_RAW, timeout=15)
+        r = requests.get(URL_GITHUB_RAW, timeout=10)
         if r.status_code == 200:
             for l in r.text.splitlines():
-                if l.strip() and "#EXTM3U" not in l:
-                    # Guardamos solo líneas que no sean basura del bot anterior
-                    if "|" not in l and not l.startswith("http") and "#EXTINF" not in l:
-                        continue # Saltamos basura
-                    lineas_manuales.append(l.strip())
+                if "###" in l: lineas_finales.append(l.strip())
     except: pass
 
-    canales_capturados = []
-
-    with sync_playwright() as p:
-        try:
-            browser = p.chromium.launch(headless=True)
-            # Simulamos iPhone para evitar el bloqueo "Latam - Reintentando"
-            context = browser.new_context(user_agent="Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Mobile/15E148 Safari/604.1")
-            page = context.new_page()
-
-            # Tanda de canales de CINE (Más estables para probar)
-            tanda = [
-                ["CINE CANAL", "cinecanal-en-vivo.html"],
-                ["FX MOVIES", "fx-movies-en-vivo.html"],
-                ["TNT SERIES", "tnt-series-en-vivo.html"]
-            ]
-
-            for nombre, slug in tanda:
-                vivos = []
-                page.on("request", lambda r: vivos.append(r.url) if es_m3u8(r.url) else None)
-                try:
-                    page.goto(f"{URL_BASE}{slug}", timeout=60000, wait_until="load")
-                    page.wait_for_timeout(15000)
-                    page.mouse.click(200, 300) # Clic para activar video
-                    
-                    if vivos:
-                        link_final = f"{vivos[-1].split('?')[0]}|Referer={URL_BASE}&User-Agent=Mozilla/5.0"
-                        # ESTRUCTURA CRITICA: Etiqueta y link pegados
-                        canales_capturados.append(f'#EXTINF:-1 group-title="CINE",{nombre}')
-                        canales_capturados.append(link_final)
-                except: pass
-                page.remove_listener("request", lambda r: None)
-            browser.close()
-        except: pass
-
-    # 2. ARMADO FINAL (LIMPIO)
-    final_m3u = ["#EXTM3U"]
+    # 2. EL RETO: Vamos a la página que genera el link que me pasaste
+    # (Ajusta esta URL si la del canal es distinta)
+    url_pagina_canal = "https://www.tvplusgratis2.com/azteca-deportes-en-vivo.html" 
     
-    # Agregamos tus canales que ya tenías
-    for l in lineas_manuales:
-        if l not in final_m3u:
-            final_m3u.append(l)
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        # Simulamos tu celular para que nos dé el mismo token que a ti
+        context = browser.new_context(user_agent="Mozilla/5.0 (Linux; Android 10; SM-G960F)")
+        page = context.new_page()
+        
+        vivos = []
+        # Solo atrapamos links que tengan el token de deportes
+        page.on("request", lambda r: vivos.append(r.url) if ".m3u8?token=" in r.url else None)
+        
+        try:
+            print("📡 Intentando entrar a la página del canal...")
+            page.goto(url_pagina_canal, timeout=60000)
+            page.wait_for_timeout(20000) # Esperamos 20 seg para que cargue el token
             
-    # Agregamos los nuevos con la estructura que pediste
-    final_m3u.extend(canales_capturados)
+            if vivos:
+                # ESTRUCTURA LIMPIA: Etiqueta arriba, Link abajo
+                # Usamos el link completo con token y le pegamos el Referer
+                link_con_token = vivos[-1]
+                lineas_finales.append('#EXTINF:-1 group-title="DEPORTES",Azteca Deportes TEST')
+                lineas_finales.append(f"{link_con_token}|Referer=https://www.tvplusgratis2.com/&User-Agent=Mozilla/5.0")
+                print("✅ ¡Token capturado!")
+            else:
+                print("❌ El bot no vio ningún link con token. Posible bloqueo de IP.")
+        except Exception as e:
+            print(f"❌ Error: {e}")
+        
+        browser.close()
 
-    # 3. GUARDAR ARCHIVOS
-    output = "\n".join(final_m3u)
-    for f_name in ["DANJU80", "lista_dany.m3u"]:
-        with open(f_name, "w", encoding="utf-8") as f:
-            f.write(output)
+    # 3. Guardar con estructura manual perfecta
+    contenido = "\n".join(lineas_finales)
+    with open("DANJU80", "w", encoding="utf-8") as f: f.write(contenido)
+    with open("lista_dany.m3u", "w", encoding="utf-8") as f: f.write(contenido)
 
 if __name__ == "__main__":
     ejecutar()
