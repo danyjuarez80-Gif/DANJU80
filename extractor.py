@@ -1,64 +1,58 @@
 import requests
 from playwright.sync_api import sync_playwright
 
-# Tu lista principal en GitHub
 URL_GITHUB_RAW = "https://raw.githubusercontent.com/danyjuarez80-Gif/DANJU80/refs/heads/main/DANJU80"
 
 def ejecutar():
-    lineas_finales = ["#EXTM3U"]
-    
-    # 1. Conservamos tus canales manuales (los de ###)
+    # 1. RECUPERACIÓN: Intentamos leer lo que tenías antes del error
+    lineas_seguras = ["#EXTM3U"]
     try:
         r = requests.get(URL_GITHUB_RAW, timeout=10)
         if r.status_code == 200:
-            for l in r.text.splitlines():
-                if "###" in l: lineas_finales.append(l.strip())
-    except: pass
+            # Filtramos para no meter líneas vacías o basura
+            lineas_seguras = [l.strip() for l in r.text.splitlines() if l.strip()]
+            if not lineas_seguras: lineas_seguras = ["#EXTM3U"]
+    except:
+        print("⚠️ No se pudo leer GitHub, usando base limpia.")
 
-    # 2. RASTREO DINÁMICO: Vamos a la fuente de Azteca 7
+    # 2. RASTREO: Buscamos el patrón que me pasaste (34_.m3u8)
     url_fuente = "https://www.tvplusgratis2.com/azteca-7-en-vivo.html"
+    canal_nuevo = []
 
     with sync_playwright() as p:
-        # Usamos un navegador con disfraz de celular para que nos dé el token
-        browser = p.chromium.launch(headless=True)
-        context = browser.new_context(
-            user_agent="Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15"
-        )
-        page = context.new_page()
-        
-        links_capturados = []
-        # El bot aprende a buscar el patrón '34_.m3u8' que me pasaste
-        page.on("request", lambda r: links_capturados.append(r.url) 
-                if "34_.m3u8?token=" in r.url else None)
-        
         try:
-            print("🕵️ El bot está rastreando el código de Azteca 7...")
-            page.goto(url_fuente, timeout=60000)
+            browser = p.chromium.launch(headless=True)
+            context = browser.new_context(user_agent="Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X)")
+            page = context.new_page()
             
-            # Esperamos a que el reproductor cargue el token fresco
+            links = []
+            # Atrapamos cualquier cosa que termine en .m3u8 y tenga token
+            page.on("request", lambda r: links.append(r.url) if ".m3u8?token=" in r.url else None)
+            
+            page.goto(url_fuente, timeout=60000)
             page.wait_for_timeout(20000) 
             
-            if links_capturados:
-                # Tomamos el link más reciente con el token nuevo
-                link_nuevo = links_capturados[-1]
-                
-                # Estructura manual limpia
-                lineas_finales.append('#EXTINF:-1 group-title="TV",Azteca 7')
-                lineas_finales.append(f"{link_nuevo}|Referer=https://www.tvplusgratis2.com/&User-Agent=Mozilla/5.0")
-                print("✅ ¡Código rastreado y actualizado!")
-            else:
-                print("❌ No se detectó el código 34_.m3u8 en la página.")
+            if links:
+                # Buscamos específicamente el que tú identificaste como bueno
+                link_real = next((l for l in reversed(links) if "34_.m3u8" in l), links[-1])
+                canal_nuevo.append('#EXTINF:-1 group-title="TV",Azteca 7')
+                canal_nuevo.append(f"{link_real}|Referer=https://www.tvplusgratis2.com/&User-Agent=Mozilla/5.0")
+            browser.close()
         except Exception as e:
-            print(f"❌ Error en el rastreo: {e}")
-        
-        browser.close()
+            print(f"❌ Error rastreando: {e}")
 
-    # 3. Guardar el archivo DANJU80 con el nuevo link
-    contenido = "\n".join(lineas_finales)
-    with open("DANJU80", "w", encoding="utf-8") as f:
-        f.write(contenido)
-    with open("lista_dany.m3u", "w", encoding="utf-8") as f:
-        f.write(contenido)
+    # 3. GUARDADO INTELIGENTE: Si falló el rastreo, NO borramos lo anterior
+    if len(canal_nuevo) > 0:
+        # Si encontramos el canal, lo agregamos (o actualizamos si ya estaba)
+        # Para esta prueba, simplemente lo añadimos al final
+        resultado = lineas_seguras + canal_nuevo
+    else:
+        # Si no encontró nada, dejamos el archivo como estaba para no dejarlo en blanco
+        resultado = lineas_seguras
+
+    contenido = "\n".join(resultado)
+    with open("DANJU80", "w", encoding="utf-8") as f: f.write(contenido)
+    with open("lista_dany.m3u", "w", encoding="utf-8") as f: f.write(contenido)
 
 if __name__ == "__main__":
     ejecutar()
