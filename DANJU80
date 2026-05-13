@@ -1,17 +1,3 @@
 #EXTM3U
-#EXTINF:-1 group-title="TV",en vivo
-https://deportes.ksdjugfsddeports.com:9092/NjQuMjM2LjEzNC4xNjc=/34_.m3u8|Referer=https://www.tvplusgratis2.com/&User-Agent=Mozilla/5.0
-https://deportes.ksdjugfsddeports.com:9092/NjQuMjM2LjEzNC4xNjc=/37_.m3u8|Referer=https://www.tvplusgratis2.com/&User-Agent=Mozilla/5.0
-https://deportes.ksdjugfsddeports.com:9092/NjQuMjM2LjEzNC4xNjc=/1_.m3u8|Referer=https://www.tvplusgratis2.com/&User-Agent=Mozilla/5.0
-https://deportes.ksdjugfsddeports.com:9092/NjQuMjM2LjEzNC4xNjc=/39_.m3u8|Referer=https://www.tvplusgratis2.com/&User-Agent=Mozilla/5.0
-https://deportes.ksdjugfsddeports.com:9092/NjQuMjM2LjEzNC4xNjc=/22_.m3u8|Referer=https://www.tvplusgratis2.com/&User-Agent=Mozilla/5.0
-https://deportes.ksdjugfsddeports.com:9092/NjQuMjM2LjEzNC4xNjc=/35_.m3u8|Referer=https://www.tvplusgratis2.com/&User-Agent=Mozilla/5.0
-https://deportes.ksdjugfsddeports.com:9092/NjQuMjM2LjEzNC4xNjc=/12_.m3u8|Referer=https://www.tvplusgratis2.com/&User-Agent=Mozilla/5.0
-#EXTINF:-1 group-title="TV",EN VIVO
-https://deportes.ksdjugfsddeports.com:9092/MTMuODMuNDIuOTc=/34_.m3u8|Referer=https://www.tvplusgratis2.com/&User-Agent=Mozilla/5.0
-#EXTINF:-1 group-title="CINE",canal 5 mx 71
-https://regionales.saohgdasregions.fun:9092/NzQuMjM1Ljc5LjQx/2_.m3u8|Referer=https://www.tvplusgratis2.com/&User-Agent=Mozilla/5.0
-#EXTINF:-1 group-title="CINE",cine canal 72
-https://regionales.saohgdasregions.fun:9092/MTcyLjIxMi4xNjUuNjY=/59_.m3u8|Referer=https://www.tvplusgratis2.com/&User-Agent=Mozilla/5.0
-#EXTINF:-1 group-title="CINE",CINE CANAL
-https://regionales.saohgdasregions.fun:9092/OS4yMzQuMTQ5Ljgz/59_.m3u8|Referer=https://www.tvplusgratis2.com/&User-Agent=Mozilla/5.0
+#EXTINF:-1 group-title="DEPORTES",Azteca Deportes TEST
+https://deportes.ksdjugfsddeports.com:9092/MTM1LjIzMi4yMjcuMTQ5/34_.m3u8?token=bOFQxIMu-5HymY3FB7Z0Fg&expires=1778678935|Referer=https://www.tvplusgratis2.com/&User-Agent=Mozilla/5.0
