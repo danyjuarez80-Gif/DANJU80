@@ -1,6 +1,6 @@
 import requests
 
-ARCHIVO_SALIDA = "DANJU80"
+ARCHIVOS_SALIDA = ["DANJU80", "lista_dany.m3u"]
 
 FUENTES = [
     "https://iptv-org.github.io/iptv/countries/mx.m3u",
@@ -29,13 +29,11 @@ CANALES_DESEADOS = CANALES_GENERALES + CANALES_DEPORTES
 
 
 def leer_lista_existente(archivo):
-    """Lee tu lista actual y extrae las URLs ya guardadas para no duplicar."""
     try:
         with open(archivo, "r", encoding="utf-8") as f:
             contenido = f.read()
         urls_existentes = set()
-        lineas = contenido.splitlines()
-        for linea in lineas:
+        for linea in contenido.splitlines():
             linea = linea.strip()
             if linea.startswith("http"):
                 urls_existentes.add(linea)
@@ -45,7 +43,6 @@ def leer_lista_existente(archivo):
 
 
 def extraer_canales(m3u_texto, nombres_deseados, urls_existentes):
-    """Extrae canales que NO están ya en tu lista."""
     lineas = m3u_texto.splitlines()
     resultado = []
     i = 0
@@ -56,19 +53,19 @@ def extraer_canales(m3u_texto, nombres_deseados, urls_existentes):
             if any(d.lower() in nombre_canal.lower() for d in nombres_deseados):
                 if i + 1 < len(lineas):
                     url = lineas[i + 1].strip()
-                    if url not in urls_existentes:  # Solo si es nuevo
+                    if url not in urls_existentes:
                         resultado.append((nombre_canal, url))
-                        urls_existentes.add(url)  # Marca como visto
+                        urls_existentes.add(url)
         i += 1
     return resultado
 
 
 def ejecutar():
-    # 1. Leer tu lista actual
-    contenido_actual, urls_existentes = leer_lista_existente(ARCHIVO_SALIDA)
+    # Leer lista actual del primer archivo (ambos son iguales)
+    contenido_actual, urls_existentes = leer_lista_existente(ARCHIVOS_SALIDA[0])
     print(f"📋 Lista actual: {len(urls_existentes)} canales existentes")
 
-    # 2. Buscar canales nuevos en las fuentes
+    # Buscar canales nuevos
     canales_nuevos = []
     for fuente in FUENTES:
         try:
@@ -84,7 +81,7 @@ def ejecutar():
         print("✅ No hay canales nuevos que agregar.")
         return
 
-    # 3. Agregar al FINAL de tu lista sin tocar nada
+    # Armar contenido final
     nuevas_lineas = []
     for nombre, url in canales_nuevos:
         nuevas_lineas.append(f"#EXTINF:-1,{nombre}")
@@ -92,10 +89,13 @@ def ejecutar():
 
     contenido_final = contenido_actual + "\n" + "\n".join(nuevas_lineas)
 
-    with open(ARCHIVO_SALIDA, "w", encoding="utf-8") as f:
-        f.write(contenido_final)
+    # Guardar en AMBOS archivos
+    for archivo in ARCHIVOS_SALIDA:
+        with open(archivo, "w", encoding="utf-8") as f:
+            f.write(contenido_final)
 
-    print(f"\n✅ {len(canales_nuevos)} canales nuevos agregados al final de {ARCHIVO_SALIDA}")
+    print(f"\n✅ {len(canales_nuevos)} canales nuevos agregados a: {', '.join(ARCHIVOS_SALIDA)}")
 
 
-if __nam
+if __name__ == "__main__":
+    ejecutar()
