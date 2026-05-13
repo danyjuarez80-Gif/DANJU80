@@ -22,7 +22,8 @@ CANALES_DESEADOS = [
     "DAZN", "Sky Sports", "NBC Sports", "Eurosport",
     "NFL Network", "NBA TV", "MLB Network",
     "Star Sports", "One Sports", "Deportes",
-    "Las Estrellas", "Canal 5", "Azteca 7",
+    "Las Estrellas", "Canal 5", "Azteca",
+    "Imagen", "Multimedios", "Galavision",
 ]
 
 
@@ -40,6 +41,11 @@ def leer_lista_existente(archivo):
         return "#EXTM3U", set()
 
 
+def limpiar_url(url):
+    # Quita parámetros, agente y referer — solo el link m3u8 limpio
+    return url.split("?")[0]
+
+
 def extraer_canales(m3u_texto, nombres_deseados, urls_existentes):
     lineas = m3u_texto.splitlines()
     resultado = []
@@ -50,7 +56,7 @@ def extraer_canales(m3u_texto, nombres_deseados, urls_existentes):
             nombre_canal = linea.split(",")[-1].strip()
             if any(d.lower() in nombre_canal.lower() for d in nombres_deseados):
                 if i + 1 < len(lineas):
-                    url = lineas[i + 1].strip()
+                    url = limpiar_url(lineas[i + 1].strip())
                     if url not in urls_existentes:
                         resultado.append((nombre_canal, url))
                         urls_existentes.add(url)
@@ -59,13 +65,12 @@ def extraer_canales(m3u_texto, nombres_deseados, urls_existentes):
 
 
 def ejecutar():
-    # 1. Leer lista actual
     contenido_actual, urls_existentes = leer_lista_existente(ARCHIVOS_SALIDA[0])
     print(f"📋 Lista actual: {len(urls_existentes)} canales existentes\n")
 
     canales_nuevos = []
 
-    # 2. Scrapear tvplusgratis2.com con Playwright
+    # 1. Scrapear tvplusgratis2.com
     print("🌐 Scrapeando tvplusgratis2.com...")
     try:
         canales_scrapeados = asyncio.run(scrape_tvplus())
@@ -77,7 +82,7 @@ def ejecutar():
     except Exception as e:
         print(f"⚠️ Error en scraper: {e}\n")
 
-    # 3. Buscar en fuentes iptv-org
+    # 2. Buscar en fuentes iptv-org
     print("📡 Buscando en fuentes iptv-org...")
     for fuente in FUENTES:
         try:
@@ -93,11 +98,11 @@ def ejecutar():
         print("\n✅ No hay canales nuevos que agregar.")
         return
 
-    # 4. Armar contenido y guardar en ambos archivos
+    # 3. Guardar — formato limpio sin agente ni referer
     nuevas_lineas = []
     for nombre, url in canales_nuevos:
         nuevas_lineas.append(f"#EXTINF:-1,{nombre}")
-        nuevas_lineas.append(url)
+        nuevas_lineas.append(url)  # Solo el link, nada más
 
     contenido_final = contenido_actual + "\n" + "\n".join(nuevas_lineas)
 
