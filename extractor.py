@@ -4,55 +4,57 @@ from playwright.sync_api import sync_playwright
 URL_GITHUB_RAW = "https://raw.githubusercontent.com/danyjuarez80-Gif/DANJU80/refs/heads/main/DANJU80"
 
 def ejecutar():
-    # 1. RECUPERACIÓN: Intentamos leer lo que tenías antes del error
+    # 1. Recuperamos tus manuales para no perder nada
     lineas_seguras = ["#EXTM3U"]
     try:
         r = requests.get(URL_GITHUB_RAW, timeout=10)
         if r.status_code == 200:
-            # Filtramos para no meter líneas vacías o basura
             lineas_seguras = [l.strip() for l in r.text.splitlines() if l.strip()]
-            if not lineas_seguras: lineas_seguras = ["#EXTM3U"]
-    except:
-        print("⚠️ No se pudo leer GitHub, usando base limpia.")
+    except: pass
 
-    # 2. RASTREO: Buscamos el patrón que me pasaste (34_.m3u8)
-    url_fuente = "https://www.tvplusgratis2.com/azteca-7-en-vivo.html"
-    canal_nuevo = []
+    # 2. LISTA DE FUENTES (Si una falla, el bot intenta la siguiente)
+    fuentes = [
+        "https://www.tvplusgratis2.com/azteca-7-en-vivo.html",
+        "https://rvep.org/azteca-7.html" # Ejemplo de fuente alterna
+    ]
+
+    link_encontrado = None
 
     with sync_playwright() as p:
-        try:
-            browser = p.chromium.launch(headless=True)
-            context = browser.new_context(user_agent="Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X)")
-            page = context.new_page()
-            
-            links = []
-            # Atrapamos cualquier cosa que termine en .m3u8 y tenga token
-            page.on("request", lambda r: links.append(r.url) if ".m3u8?token=" in r.url else None)
-            
-            page.goto(url_fuente, timeout=60000)
-            page.wait_for_timeout(20000) 
-            
-            if links:
-                # Buscamos específicamente el que tú identificaste como bueno
-                link_real = next((l for l in reversed(links) if "34_.m3u8" in l), links[-1])
-                canal_nuevo.append('#EXTINF:-1 group-title="TV",Azteca 7')
-                canal_nuevo.append(f"{link_real}|Referer=https://www.tvplusgratis2.com/&User-Agent=Mozilla/5.0")
-            browser.close()
-        except Exception as e:
-            print(f"❌ Error rastreando: {e}")
+        browser = p.chromium.launch(headless=True)
+        context = browser.new_context(user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
+        page = context.new_page()
 
-    # 3. GUARDADO INTELIGENTE: Si falló el rastreo, NO borramos lo anterior
-    if len(canal_nuevo) > 0:
-        # Si encontramos el canal, lo agregamos (o actualizamos si ya estaba)
-        # Para esta prueba, simplemente lo añadimos al final
-        resultado = lineas_seguras + canal_nuevo
+        for url in fuentes:
+            if link_encontrado: break
+            try:
+                print(f"🔎 Probando fuente: {url}")
+                vivos = []
+                page.on("request", lambda r: vivos.append(r.url) if "34_.m3u8?token=" in r.url else None)
+                
+                page.goto(url, timeout=45000)
+                page.wait_for_timeout(15000)
+                
+                if vivos:
+                    link_encontrado = vivos[-1]
+                    print(f"✅ ¡Éxito en {url}!")
+            except:
+                print(f"❌ Falló la fuente {url}")
+        
+        browser.close()
+
+    # 3. GUARDADO: Solo si encontramos algo nuevo actualizamos
+    if link_encontrado:
+        # Formato manual estricto
+        nueva_lista = lineas_seguras + [
+            '#EXTINF:-1 group-title="TV",Azteca 7 (Auto)',
+            f"{link_encontrado}|Referer=https://www.tvplusgratis2.com/&User-Agent=Mozilla/5.0"
+        ]
     else:
-        # Si no encontró nada, dejamos el archivo como estaba para no dejarlo en blanco
-        resultado = lineas_seguras
+        nueva_lista = lineas_seguras # No borramos nada
 
-    contenido = "\n".join(resultado)
-    with open("DANJU80", "w", encoding="utf-8") as f: f.write(contenido)
-    with open("lista_dany.m3u", "w", encoding="utf-8") as f: f.write(contenido)
+    with open("DANJU80", "w", encoding="utf-8") as f:
+        f.write("\n".join(nueva_lista))
 
 if __name__ == "__main__":
     ejecutar()
