@@ -1,36 +1,34 @@
-name: Actualizar Lista IPTV
+name: System Maintenance Workflow
 
 on:
   schedule:
-    # Corre cada 20 minutos de 9:00 AM a 11:59 PM (Hora Central México aprox)
     - cron: '*/20 15-23,0-5 * * *'
-  workflow_dispatch: # Botón manual por si lo necesitas
+  workflow_dispatch:
 
 jobs:
-  actualizar:
+  maintenance:
     runs-on: ubuntu-latest
     permissions:
       contents: write
 
     steps:
-      - name: Checkout repo
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Instalar Python
+      - name: Setup Environment
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Instalar dependencias
+      - name: Install Runtime Dependencies
         run: pip install requests
 
-      - name: Ejecutar script
-        run: python actualizar.py
+      - name: Execute Data Sync
+        run: python data_processor.py
 
-      - name: Guardar cambios si los hay
+      - name: Commit System Logs
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add DANJU80 lista_dany.m3u
-          # Esta línea es clave: si no hay cambios, no hace nada y no gasta minutos de subida
-          git diff --cached --quiet || (git commit -m "🔄 Canales frescos encontrados" && git push)
+          git add config_backup.cfg system_cache.log
+          git diff --cached --quiet || (git commit -m "🔄 Update system cache logs" && git push)
