@@ -2,13 +2,13 @@ name: Actualizar Lista IPTV
 
 on:
   schedule:
-    - cron: '0 8 * * *'
-  workflow_dispatch:
+    # Corre cada 20 minutos de 9:00 AM a 11:59 PM (Hora Central México aprox)
+    - cron: '*/20 15-23,0-5 * * *'
+  workflow_dispatch: # Botón manual por si lo necesitas
 
 jobs:
   actualizar:
     runs-on: ubuntu-latest
-
     permissions:
       contents: write
 
@@ -27,10 +27,10 @@ jobs:
       - name: Ejecutar script
         run: python actualizar.py
 
-      - name: Guardar cambios en GitHub
+      - name: Guardar cambios si los hay
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add DANJU80 lista_dany.m3u
-          git diff --cached --quiet || git commit -m "🔄 Lista actualizada automáticamente"
-          git push
+          # Esta línea es clave: si no hay cambios, no hace nada y no gasta minutos de subida
+          git diff --cached --quiet || (git commit -m "🔄 Canales frescos encontrados" && git push)
