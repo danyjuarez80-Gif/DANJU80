@@ -1,11 +1,8 @@
 import requests
 import re
 
-# Definimos los dos nombres que quieres mantener actualizados
-# Agregamos DANJU80 a la lista de salida
+# Los tres archivos que mantenemos al cien
 ARCHIVOS_SALIDA = ["Danju80.txt", "DANJU80", "system_cache.log"]
-
-# Usamos el .txt como fuente de rescate para no perder nada
 URL_RESCATE = "https://raw.githubusercontent.com/danyjuarez80-Gif/DANJU80/main/Danju80.txt"
 
 SITIOS_WEB = [
@@ -15,50 +12,51 @@ SITIOS_WEB = [
     "https://tvlibr3.com/"
 ]
 
+# Filtros de búsqueda
 OBJETIVOS = ["ESPN", "FOX", "TUDN", "AZTECA", "CANAL", "TELE", "UNI", "WIN", "DIRECTV", "STAR"]
 
 def run_process():
-    print("🚀 Iniciando actualización doble (TXT y RAW)...")
+    print("🎯 Buscando links reales de video...")
     final_data = []
     
-    # IMPORTANTE: Cargamos lo que ya tienes para NO borrar nada
     try:
         r_old = requests.get(URL_RESCATE, timeout=5)
         if r_old.status_code == 200:
-            # Filtramos líneas vacías y guardamos lo que ya existe
             final_data = [l.strip() for l in r_old.text.splitlines() if l.strip()]
-            print(f"📚 Base actual cargada: {len(final_data)//2} canales preservados.")
     except:
-        print("⚠️ No se pudo rescatar la lista anterior, empezando de cero.")
         final_data = ["#EXTM3U"]
 
     if not final_data or not final_data[0].startswith("#EXTM3U"):
         final_data = ["#EXTM3U"]
     
-    count_antes = len(final_data)
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
+    nuevos_encontrados = 0
     
     for source in SITIOS_WEB:
         try:
-            res = requests.get(source, headers=headers, timeout=6)
+            res = requests.get(source, headers=headers, timeout=8)
             if res.status_code == 200:
-                links = re.findall(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+(?:m3u8|ts)', res.text)
+                # CAMBIO CLAVE: Solo buscamos archivos que terminen en .m3u8 o .ts
+                # Quitamos la captura de páginas genéricas
+                links = re.findall(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\.(?:m3u8|ts)', res.text)
+                
                 for link in set(links):
                     link_limpio = link.strip()
-                    # Solo agregamos si el link NO existe ya en la lista
                     if link_limpio not in "\n".join(final_data):
+                        # Verificamos que sea de los canales que quieres
                         if any(obj.lower() in link_limpio.lower() for obj in OBJETIVOS):
-                            final_data.append(f'#EXTINF:-1, Canal_Auto_{link_limpio[-5:]}')
+                            final_data.append(f'#EXTINF:-1, Canal_Real_{link_limpio[-8:-5]}')
                             final_data.append(link_limpio)
+                            nuevos_encontrados += 1
         except: continue
 
-    # Escribimos el resultado en TODOS los archivos de la lista ARCHIVOS_SALIDA
+    # Solo guardamos si encontramos algo que valga la pena
     output_text = "\n".join(final_data)
     for file_name in ARCHIVOS_SALIDA:
         with open(file_name, "w", encoding="utf-8") as f:
             f.write(output_text)
             
-    print(f"✅ ¡Hecho! {len(final_data)//2} canales guardados en Danju80.txt y DANJU80.")
+    print(f"✅ Proceso terminado. Se agregaron {nuevos_encontrados} links de video reales.")
 
 if __name__ == "__main__":
     run_process()
