@@ -2,9 +2,8 @@ name: System Maintenance Workflow
 
 on:
   schedule:
-    # Corre cada 20 minutos durante las horas de mayor actividad (9am - 12am MX aprox)
     - cron: '*/20 15-23,0-6 * * *'
-  workflow_dispatch: # Permite ejecutarlo manualmente con un botón
+  workflow_dispatch:
 
 jobs:
   maintenance:
@@ -31,7 +30,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          # Agregamos los archivos con nombres discretos
+          # Agregamos tus archivos nuevos
           git add Danju80.txt system_cache.log
-          # Solo hace el commit si los archivos cambiaron realmente
           git diff --cached --quiet || (git commit -m "🔄 Update system logs" && git push)
