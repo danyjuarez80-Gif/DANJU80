@@ -8,7 +8,6 @@ on:
 jobs:
   maintenance:
     runs-on: ubuntu-latest
-    # Le damos 15 minutos para que nunca se cancele por tiempo
     timeout-minutes: 15
     permissions:
       contents: write
@@ -28,10 +27,11 @@ jobs:
       - name: Run
         run: python data_processor.py
 
-      - name: Save
+      - name: Save Changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add Danju80.txt system_cache.log
-          git commit -m "🔄 Update list" || exit 0
+          # El "|| true" evita que el bot se cancele si no hay nada nuevo
+          git commit -m "🔄 Sincronizacion masiva de canales" || true
           git push
