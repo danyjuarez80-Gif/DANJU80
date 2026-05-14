@@ -1,42 +1,71 @@
 import requests
 import re
 
-# Configuración
+# Configuración de archivos
 ARCHIVO_FIJOS = "fijos.m3u"
-ARCHIVO_FINAL = "lista_para_ver.m3u"
-URL_FUTBOL = "https://futbollibre.ec/"
+ARCHIVO_FINAL = "lista_danju80.m3u"
+URL_FUENTE = "https://futbollibre.ec/"
 
-def extraer_m3u8():
+def extraer_canales():
+    canales_encontrados = []
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+        'Referer': URL_FUENTE
+    }
+    
     try:
-        # El bot entra a la web
-        headers = {'User-Agent': 'Mozilla/5.0'}
-        response = requests.get(URL_FUTBOL, headers=headers, timeout=10)
+        # 1. El bot visita la página principal
+        response = requests.get(URL_FUENTE, headers=headers, timeout=15)
+        if response.status_status != 200:
+            return canales_encontrados
+
+        # 2. Buscamos enlaces a los partidos/canales (suelen estar en etiquetas <a>)
+        # Este regex busca patrones comunes de canales en esa web
+        patrones = re.findall(r'href="(https?://futbollibre.ec/embed/[^"]+)"', response.text)
         
-        # BUSCADOR (Regex): Busca cualquier cosa que termine en .m3u8
-        # Nota: Esto es un ejemplo, la web puede cambiar su estructura
-        enlaces = re.findall(r'https?://[\w\.\-/]+\.m3u8', response.text)
+        # Eliminamos duplicados
+        enlaces_unicos = list(set(patrones))
         
-        return enlaces[0] if enlaces else None
-    except:
-        return None
+        for i, link in enumerate(enlaces_unicos):
+            # Formateamos para M3U
+            # Nota: Algunos reproductores necesitan el User-Agent y Referer para abrir estos links
+            nombre = f"Futbol Libre Canal {i+1}"
+            canales_encontrados.append({
+                "nombre": nombre,
+                "url": link
+            })
+            
+        return canales_encontrados
+    except Exception as e:
+        print(f"Error al extraer: {e}")
+        return []
 
 def generar_lista():
-    # 1. Leer tus canales de siempre
-    with open(ARCHIVO_FIJOS, "r") as f:
-        contenido_fijo = f.read()
+    # Leer tus canales fijos que creaste en el paso anterior
+    try:
+        with open(ARCHIVO_FIJOS, "r", encoding="utf-8") as f:
+            contenido_fijo = f.read()
+    except FileNotFoundError:
+        contenido_fijo = "#EXTM3U\n"
 
-    # 2. Obtener el link nuevo del bot
-    link_nuevo = extraer_m3u8()
+    # Obtener los nuevos canales del bot
+    nuevos_canales = extraer_canales()
 
-    # 3. Crear el archivo final combinando ambos
-    with open(ARCHIVO_FINAL, "w") as f:
-        f.write(contenido_fijo) # Escribe lo viejo
-        if link_nuevo:
-            f.write(f"\n#EXTINF:-1, [BOT] Futbol Libre En Vivo\n")
-            f.write(f"{link_nuevo}\n")
-            print("¡Link de fútbol actualizado!")
+    # Escribir la lista final combinada
+    with open(ARCHIVO_FINAL, "w", encoding="utf-8") as f:
+        # Escribimos tus canales fijos primero (para no borrarlos)
+        f.write(contenido_fijo.strip() + "\n")
+        
+        # Agregamos los que encontró el bot
+        if nuevos_canales:
+            f.write("\n# --- CANALES AGREGADOS POR EL BOT ---\n")
+            for canal in nuevos_canales:
+                f.write(f"#EXTINF:-1, [LIVE] {canal['nombre']}\n")
+                # Agregamos parámetros de red para que funcionen mejor
+                f.write(f"{canal['url']}|User-Agent=Mozilla/5.0&Referer={URL_FUENTE}\n")
+            print(f"Se agregaron {len(nuevos_canales)} canales.")
         else:
-            print("No se encontró link nuevo, se mantuvo la lista original.")
+            print("No se encontraron canales nuevos en esta vuelta.")
 
 if __name__ == "__main__":
     generar_lista()
