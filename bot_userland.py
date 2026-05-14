@@ -1,55 +1,63 @@
 import requests
 import re
+import time
 
-# Nombres de tus archivos en el repo DANJU80
 ARCHIVO_FIJOS = "fijos.m3u"
 ARCHIVO_FINAL = "lista_danju80.m3u"
-URL_BASE = "https://futbollibre.ec"
 
-def cazar_canales():
+def infiltrar_futbol():
     enlaces = []
-    # Usamos headers para que la web crea que somos un celular
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36',
-        'Referer': URL_BASE + '/'
-    }
+    # Usamos una lista de dominios espejo por si uno bloquea a GitHub
+    espejos = ["https://futbollibre.ec", "https://librefutboltv.com", "https://futbollibretv.me"]
     
-    try:
-        # 1. Buscamos los partidos activos
-        r = requests.get(URL_BASE, headers=headers, timeout=15).text
-        bloques = re.findall(r'href="(/embed/[^"]+)"', r)
-        
-        for path in set(bloques):
-            # 2. Entramos a cada canal para sacar el link del video (m3u8)
-            r_canal = requests.get(URL_BASE + path, headers=headers, timeout=10).text
-            # Buscamos el archivo de video que se carga tras el clic
-            match = re.search(r'source:\s*"([^"]+\.m3u8[^"]*)"', r_canal)
-            if not match:
-                match = re.search(r'file:\s*"([^"]+\.m3u8[^"]*)"', r_canal)
-            
-            if match:
-                link = match.group(1)
-                nombre = path.replace("/embed/", "").replace("-", " ").upper()
-                # Agregamos el Referer para que no se bloquee en tu app de IPTV
-                enlaces.append(f"#EXTINF:-1, [FUTBOL] {nombre}\n{link}|Referer={URL_BASE}/&User-Agent=Mozilla/5.0")
-    except Exception as e:
-        print(f"Error: {e}")
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Linux; Android 11; Pixel 5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.91 Mobile Safari/537.36',
+        'Accept-Language': 'es-MX,es;q=0.9',
+        'Referer': 'https://google.com'
+    }
+
+    with requests.Session() as s:
+        for url in espejos:
+            try:
+                print(f"Intentando infiltracion en: {url}")
+                r = s.get(url, headers=headers, timeout=15).text
+                
+                # Buscamos los contenedores de los reproductores
+                # Estos suelen ser links que terminan en .html o tienen /embed/
+                canales_raw = re.findall(r'href="([^"]*embed[^"]*)"', r)
+                
+                if canales_raw:
+                    for path in set(canales_raw):
+                        url_final = path if "http" in path else url + path
+                        # Extraemos el nombre del canal del link
+                        nombre = path.split('/')[-1].replace('.html', '').replace('-', ' ').upper()
+                        
+                        # Guardamos el link del reproductor directamente
+                        # Muchas apps de IPTV pueden abrir estos links si tienen reproductor web
+                        enlaces.append(f"#EXTINF:-1, [EN VIVO] {nombre}\n{url_final}")
+                    
+                    print(f"¡Exito! Se encontraron {len(enlaces)} canales en {url}")
+                    break # Si funcionó este espejo, no probamos los demás
+            except:
+                continue
     return enlaces
 
-# Paso final: Unir con tus noticias de 'fijos.m3u'
-try:
-    with open(ARCHIVO_FIJOS, "r", encoding="utf-8") as f:
-        base = f.read().strip()
-except:
-    base = "#EXTM3U"
+def crear_lista():
+    try:
+        with open(ARCHIVO_FIJOS, "r", encoding="utf-8") as f:
+            base = f.read().strip()
+    except:
+        base = "#EXTM3U"
 
-nuevos = cazar_canales()
+    nuevos_links = infiltrar_futbol()
 
-with open(ARCHIVO_FINAL, "w", encoding="utf-8") as f:
-    f.write(base + "\n\n")
-    f.write("# --- CANALES DINÁMICOS DETECTADOS ---\n")
-    if nuevos:
-        f.write("\n".join(nuevos))
-        print(f"¡Exito! Se encontraron {len(nuevos)} canales.")
-    else:
-        f.write("# No se hallaron links en este ciclo. Reintenta en 15 min.\n")
+    with open(ARCHIVO_FINAL, "w", encoding="utf-8") as f:
+        f.write(base + "\n\n")
+        f.write("# --- CANALES DETECTADOS (PLAN DE EMERGENCIA) ---\n")
+        if nuevos_links:
+            f.write("\n".join(nuevos_links))
+        else:
+            f.write("# El bloqueo persiste. El sitio detecta el servidor de GitHub.\n")
+
+if __name__ == "__main__":
+    crear_lista()
