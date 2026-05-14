@@ -5,59 +5,52 @@ import time
 ARCHIVO_FIJOS = "fijos.m3u"
 ARCHIVO_FINAL = "lista_danju80.m3u"
 
-def infiltrar_futbol():
+def extraer_tv_plus():
+    print("--- Escaneando TVPlusGratis2 ---")
     enlaces = []
-    # Usamos una lista de dominios espejo por si uno bloquea a GitHub
-    espejos = ["https://futbollibre.ec", "https://librefutboltv.com", "https://futbollibretv.me"]
+    url_tvplus = "https://www.tvplusgratis2.com/"
+    headers = {'User-Agent': 'Mozilla/5.0 (Linux; Android 11)'}
     
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Linux; Android 11; Pixel 5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.91 Mobile Safari/537.36',
-        'Accept-Language': 'es-MX,es;q=0.9',
-        'Referer': 'https://google.com'
-    }
-
-    with requests.Session() as s:
-        for url in espejos:
-            try:
-                print(f"Intentando infiltracion en: {url}")
-                r = s.get(url, headers=headers, timeout=15).text
-                
-                # Buscamos los contenedores de los reproductores
-                # Estos suelen ser links que terminan en .html o tienen /embed/
-                canales_raw = re.findall(r'href="([^"]*embed[^"]*)"', r)
-                
-                if canales_raw:
-                    for path in set(canales_raw):
-                        url_final = path if "http" in path else url + path
-                        # Extraemos el nombre del canal del link
-                        nombre = path.split('/')[-1].replace('.html', '').replace('-', ' ').upper()
-                        
-                        # Guardamos el link del reproductor directamente
-                        # Muchas apps de IPTV pueden abrir estos links si tienen reproductor web
-                        enlaces.append(f"#EXTINF:-1, [EN VIVO] {nombre}\n{url_final}")
-                    
-                    print(f"¡Exito! Se encontraron {len(enlaces)} canales en {url}")
-                    break # Si funcionó este espejo, no probamos los demás
-            except:
-                continue
+    try:
+        r = requests.get(url_tvplus, headers=headers, timeout=15).text
+        # Buscamos los cuadros de canales en la pagina principal
+        canales = re.findall(r'href="(https://www.tvplusgratis2.com/[^"]+)"[^>]*>.*?<h2[^>]*>(.*?)</h2>', r, re.DOTALL)
+        
+        for link_canal, nombre in canales:
+            nombre = nombre.strip().upper()
+            # Filtramos para no traer cosas que no sean canales
+            if "DMCA" in nombre or "CONTACTO" in nombre: continue
+            
+            print(f"Procesando: {nombre}...")
+            time.sleep(2) # Pausa para no ser bloqueado por UserLand
+            
+            # Entramos al canal para buscar el reproductor
+            r_int = requests.get(link_canal, headers=headers, timeout=10).text
+            # Buscamos el m3u8 o el iframe del video
+            m3u8 = re.search(r'source:\s*"([^"]+\.m3u8[^"]*)"', r_int)
+            if m3u8:
+                link_final = m3u8.group(1)
+                enlaces.append(f"#EXTINF:-1, [TV+] {nombre}\n{link_final}|Referer={url_tvplus}")
+    except Exception as e:
+        print(f"Error en TVPlus: {e}")
     return enlaces
 
-def crear_lista():
+def principal():
+    # 1. Cargar canales fijos
     try:
         with open(ARCHIVO_FIJOS, "r", encoding="utf-8") as f:
             base = f.read().strip()
     except:
         base = "#EXTM3U"
 
-    nuevos_links = infiltrar_futbol()
+    # 2. Rastreo de Fútbol Libre (el que ya tenías)
+    # Aqui va tu funcion anterior de futbol libre o puedes usar esta simplificada
+    
+    # 3. Rastreo de la nueva pagina
+    nuevos_tvplus = extraer_tv_plus()
 
+    # 4. Guardar todo
     with open(ARCHIVO_FINAL, "w", encoding="utf-8") as f:
         f.write(base + "\n\n")
-        f.write("# --- CANALES DETECTADOS (PLAN DE EMERGENCIA) ---\n")
-        if nuevos_links:
-            f.write("\n".join(nuevos_links))
-        else:
-            f.write("# El bloqueo persiste. El sitio detecta el servidor de GitHub.\n")
-
-if __name__ == "__main__":
-    crear_lista()
+        f.write("# --- CANALES DE TV PLUS GRATIS ---\n")
+        f.write("\n".join
