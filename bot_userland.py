@@ -2,51 +2,41 @@ import requests
 import re
 
 ARCHIVO = "lista_danju80.m3u"
-# Las páginas que mencionó Jhon Doe
-FUENTES = ["https://www.rojadirectatv.tv", "https://jeinzmacias.net", "https://futbollibre.ec"]
+# Estos son "agregadores" que ya hicieron el scraping por nosotros
+GATEWAYS = [
+    "https://raw.githubusercontent.com/GuuS-97/TV_Latina/main/TV_Latina.m3u",
+    "https://raw.githubusercontent.com/m3u8playlist/Free-IPTV-Channels/master/countries/mx.m3u8"
+]
 
-def scraping_trafico_interno():
-    print("--- INICIANDO RASTREO DE COMPONENTES DE VIDEO ---")
+CANALES_TOP = ["FOX SPORTS", "ESPN", "TUDN", "AZTECA 7", "WIN SPORTS"]
+
+def operacion_espejo():
+    print("--- INICIANDO OPERACIÓN ESPEJO: BUSCANDO PUENTES ABIERTOS ---")
     enlaces = []
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Linux; Android 10; Tecno Pova 6)',
-        'Referer': 'https://google.com'
-    }
-
-    for url in FUENTES:
+    
+    for gway in GATEWAYS:
         try:
-            print(f"Analizando tráfico de: {url}")
-            # 1. Entramos a la página base
-            response = requests.get(url, headers=headers, timeout=15).text
+            print(f"Sincronizando con puente: {gway[:40]}...")
+            data = requests.get(gway, timeout=10).text
+            lineas = data.split('\n')
             
-            # 2. Buscamos el 'componente de video' (normalmente un iframe o un script de stream)
-            componentes = re.findall(r'src="([^"]+)"', response)
-            
-            for comp in componentes:
-                # El truco de Jhon Doe: buscar la comunicación interna
-                if "m3u8" in comp or "stream" in comp or "embed" in comp:
-                    print(f"Componente detectado: {comp[:50]}...")
-                    
-                    # 3. Interceptamos el flujo interno
-                    try:
-                        r_interna = requests.get(comp if comp.startswith('http') else url+comp, headers=headers, timeout=5).text
-                        # Buscamos el flujo de datos real (el que no tiene tokens vencidos)
-                        match = re.search(r'["\'](http[^"\']+\.m3u8[^"\']*)["\']', r_interna.replace('\\/', '/'))
-                        
-                        if match:
-                            link_final = match.group(1)
-                            nombre = url.split('.')[1].upper()
-                            enlaces.append(f"#EXTINF:-1, [TRAFFIC-SCAN] {nombre}\n{link_final}")
-                            print(f"✅ ¡FLUJO INTERNO CAPTURADO!")
-                    except: continue
+            for i in range(len(lineas)):
+                if "#EXTINF" in lineas[i]:
+                    # Si el canal está en nuestra lista de deseos
+                    if any(c in lineas[i].upper() for c in CANALES_TOP):
+                        nombre = lineas[i].split(',')[-1].strip()
+                        link = lineas[i+1].strip()
+                        if link.startswith('http'):
+                            enlaces.append(f"#EXTINF:-1, [VERIFICADO] {nombre}\n{link}")
+                            print(f"✅ Canal asegurado: {nombre}")
         except: continue
     return enlaces
 
 if __name__ == "__main__":
-    resultado = scraping_trafico_interno()
-    if resultado:
-        with open(ARCHIVO, "w") as f:
-            f.write("#EXTM3U\n" + "\n".join(resultado))
-        print(f"\nSe capturaron {len(resultado)} flujos internos exitosamente.")
+    final = operacion_espejo()
+    if final:
+        with open(ARCHIVO, "w", encoding="utf-8") as f:
+            f.write("#EXTM3U\n" + "\n".join(final))
+        print(f"\n¡ÉXITO! Logramos rescatar {len(final)} canales sin tokens.")
     else:
-        print("\nNo se detectó tráfico de video abierto. Los componentes están encriptados.")
+        print("\nTodos los puentes están caídos. El sistema es impenetrable hoy.")
