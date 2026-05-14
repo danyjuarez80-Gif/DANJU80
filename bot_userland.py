@@ -1,61 +1,113 @@
 import requests
 import re
+import os
+import time
+from concurrent.futures import ThreadPoolExecutor
+from urllib.parse import urljoin
 
 ARCHIVO = "lista_danju80.m3u"
-URL_BASE = "https://futbollibre.ec"
+USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
 
-def extraccion_medula():
-    print("--- INICIANDO EXTRACCIÓN DE MÉDULA (CANAL POR CANAL) ---")
-    enlaces = []
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Linux; Android 10; Tecno Pova 6)',
-        'Referer': URL_BASE
+# Configuración de fuentes y sus patrones de extracción
+FUENTES = [
+    {
+        "nombre": "FutbolLibre TV", 
+        "url": "https://futbolslibre-tv.co/", 
+        "regex_canales": r'href="(https?://futbolslibre-tv\.co/(?:tyc-sports|directv-sports|tnt-sports|tv-publica|fox-sports|espn-premium|deportv|tudn|golperu)/)"',
+        "regex_reproductores": r'href="(https?://[^"]+/(?:vivo/canales|global1|canal|tycsports-sd|canales)\.php\?[^"]+)"'
+    },
+    {
+        "nombre": "Pirlo TV",
+        "url": "https://www.pirlotv3.sale/",
+        "regex_canales": r'href="(/canal\.php\?id=[^"]+)"',
+        "regex_reproductores": None # En Pirlo el canal.php ya es el reproductor
     }
+]
 
+def obtener_html(url, referer=None):
+    headers = {'User-Agent': USER_AGENT}
+    if referer:
+        headers['Referer'] = referer
     try:
-        # 1. Buscamos el script que contiene la base de datos de canales
-        print(f"Escaneando estructura de {URL_BASE}...")
-        r = requests.get(URL_BASE, headers=headers, timeout=15).text
-        
-        # Esta regex busca patrones de enlaces internos de partidos/canales
-        canales = re.findall(r'href="(https://futbollibre\.ec/embed/[^"]+)"', r)
-        
-        if not canales:
-            # Intento alternativo con rutas relativas
-            canales = [URL_BASE + c for c in re.findall(r'href="(/embed/[^"]+)"', r)]
-
-        print(f"Se detectaron {len(canales)} canales potenciales.")
-
-        for url_canal in list(set(canales)):
-            nombre = url_canal.split('/')[-1].replace('-', ' ').upper()
-            print(f"[*] Analizando tráfico interno de: {nombre}...")
-            
-            try:
-                # Entramos a la página del canal para buscar el flujo real
-                r_canal = requests.get(url_canal, headers={'Referer': URL_BASE}, timeout=10).text
-                # El truco de Jhon Doe: buscar el m3u8 dentro de los parámetros de carga
-                match = re.search(r'source:\s*"([^"]+)"', r_canal.replace('\\/', '/'))
-                
-                if match:
-                    link = match.group(1)
-                    enlaces.append(f"#EXTINF:-1, [FULL-SCAN] {nombre}\n{link}|Referer={URL_BASE}/")
-                    print(f"    ✅ Canal capturado con éxito.")
-                else:
-                    print(f"    ❌ El canal {nombre} está protegido por token dinámico.")
-            except:
-                continue
-
+        r = requests.get(url, headers=headers, timeout=10)
+        r.raise_for_status()
+        return r.text
     except Exception as e:
-        print(f"Falla en la matriz: {e}")
+        # print(f"  [!] Error en {url}: {e}")
+        return None
+
+def extraer_m3u8(url_embed, referer):
+    html = obtener_html(url_embed, referer)
+    if not html:
+        return None
+    
+    # Patrones comunes de enlaces m3u8
+    patrones = [
+        r'var playbackURL\s*=\s*"([^"]+)"',
+        r'source:\s*"([^"]+)"',
+        r'file:\s*"([^"]+)"',
+        r'hls:\s*"([^"]+)"',
+        r'["\'](https?://[^"\']+\.m3u8[^"\']*)["\']'
+    ]
+    
+    for patron in patrones:
+        match = re.search(patron, html)
+        if match:
+            link = match.group(1).replace('\\/', '/')
+            if '.m3u8' in link:
+                return link
+    return None
+
+def procesar_fuente_futbollibre(url_canal, fuente):
+    nombre = url_canal.strip('/').split('/')[-1].replace('-', ' ').upper()
+    html_canal = obtener_html(url_canal, fuente['url'])
+    if not html_canal: return None
+    
+    reproductores = re.findall(fuente['regex_reproductores'], html_canal)
+    for url_rep in reproductores:
+        m3u8 = extraer_m3u8(url_rep, url_canal)
+        if m3u8:
+            return f"#EXTINF:-1, [FULL-SCAN] {nombre}\n{m3u8}|Referer={url_rep}"
+    return None
+
+def procesar_fuente_pirlo(url_relativa, fuente):
+    url_canal = urljoin(fuente['url'], url_relativa)
+    nombre = url_relativa.split('=')[-1].upper()
+    m3u8 = extraer_m3u8(url_canal, fuente['url'])
+    if m3u8:
+        return f"#EXTINF:-1, [PIRLO] {nombre}\n{m3u8}|Referer={fuente['url']}"
+    return None
+
+def ejecutar():
+    print("--- INICIANDO EXTRACCIÓN MULTI-FUENTE ---")
+    enlaces_totales = []
+    
+    for fuente in FUENTES:
+        print(f"[*] Escaneando: {fuente['nombre']}...")
+        html_inicio = obtener_html(fuente['url'])
+        if not html_inicio: continue
         
-    return enlaces
+        items = list(set(re.findall(fuente['regex_canales'], html_inicio)))
+        print(f"    Encontrados {len(items)} posibles canales.")
+        
+        with ThreadPoolExecutor(max_workers=5) as executor:
+            if fuente['nombre'] == "FutbolLibre TV":
+                resultados = list(executor.map(lambda x: procesar_fuente_futbollibre(x, fuente), items))
+            else:
+                resultados = list(executor.map(lambda x: procesar_fuente_pirlo(x, fuente), items))
+                
+        validos = [r for r in resultados if r]
+        print(f"    ✅ Capturados con éxito: {len(validos)}")
+        enlaces_totales.extend(validos)
+
+    if enlaces_totales:
+        modo = "a" if os.path.exists(ARCHIVO) else "w"
+        with open(ARCHIVO, modo, encoding="utf-8") as f:
+            if modo == "w": f.write("#EXTM3U\n")
+            f.write("\n" + "\n".join(enlaces_totales) + "\n")
+        print(f"\n[FIN] Se guardaron {len(enlaces_totales)} canales en {ARCHIVO}.")
+    else:
+        print("\n[!] No se encontró contenido nuevo.")
 
 if __name__ == "__main__":
-    lista = extraccion_medula()
-    if lista:
-        # Mantenemos los de IPTV-org y sumamos los nuevos
-        with open(ARCHIVO, "a", encoding="utf-8") as f:
-            f.write("\n" + "\n".join(lista))
-        print(f"\nSe añadieron {len(lista)} canales nuevos a la lista.")
-    else:
-        print("\nNo se pudo extraer contenido nuevo de las páginas deportivas.")
+    ejecutar()
