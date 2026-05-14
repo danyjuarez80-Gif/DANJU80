@@ -5,68 +5,61 @@ ARCHIVO_FIJOS = "fijos.m3u"
 ARCHIVO_FINAL = "lista_danju80.m3u"
 URL_BASE = "https://futbollibre.ec"
 
-def extraer_links():
+def bot_extractor():
     headers = {
         'User-Agent': 'Mozilla/5.0 (Linux; Android 10; SM-G960U) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36',
         'Referer': URL_BASE
     }
-    lista_links = []
+    enlaces_encontrados = []
     
-    try:
-        # 1. Entrar a la principal para ver todos los "Ver Canal"
-        session = requests.Session()
-        res = session.get(URL_BASE, headers=headers, timeout=15)
-        
-        # Buscamos las páginas de cada canal (ej: /embed/espn-premium/)
-        canales = re.findall(r'href="(/embed/[^"]+)"', res.text)
-        
-        for path in canales:
-            url_canal = URL_BASE + path
-            try:
-                # 2. "Hacemos clic" en Ver Canal
-                res_canal = session.get(url_canal, headers=headers, timeout=10)
+    with requests.Session() as s:
+        try:
+            # 1. Obtener la home para sacar los IDs de los canales
+            r_home = s.get(URL_BASE, headers=headers, timeout=15)
+            # Buscamos patrones como /embed/?r=... o similares que usa la web
+            ids_canales = re.findall(r'href="(/embed/[^"]+)"', r_home.text)
+            
+            for path in set(ids_canales):
+                url_canal = URL_BASE + path
+                # 2. Entrar a la subpágina del canal
+                r_canal = s.get(url_canal, headers=headers, timeout=10)
                 
-                # 3. Buscamos el IFRAME o el script que tiene el .m3u8 (lo que sale tras el play)
-                # Buscamos el patrón source: "..." que es muy común en estos reproductores
-                m3u8 = re.search(r'source:\s*"([^"]+\.m3u8[^"]*)"', res_canal.text)
-                if not m3u8:
-                    m3u8 = re.search(r'file:\s*"([^"]+\.m3u8[^"]*)"', res_canal.text)
+                # 3. EL CLAVO: Buscamos el iframe o el script que carga el m3u8
+                # Buscamos dentro de variables JS como 'window.atob' o 'source: "..."'
+                # Muchos de estos sitios encriptan el link en Base64 o lo sirven vía AJAX
+                match = re.search(r'(https?://[\w\.\-/]+\.m3u8[^"]*)', r_canal.text)
                 
-                if m3u8:
-                    link_final = m3u8.group(1)
-                    # Extraemos el nombre del canal del URL para que se vea bien
-                    nombre_canal = path.replace("/embed/", "").replace("-", " ").upper()
-                    lista_links.append({"nombre": nombre_canal, "url": link_final})
-            except:
-                continue
-                
-        return lista_links
-    except Exception as e:
-        print(f"Error general: {e}")
-        return []
+                if match:
+                    link_m3u8 = match.group(1)
+                    nombre = path.split('/')[-1].replace('-', ' ').upper()
+                    enlaces_encontrados.append({"n": nombre, "u": link_m3u8})
+                    
+        except Exception as e:
+            print(f"Error: {e}")
+            
+    return enlaces_encontrados
 
-def generar_lista():
-    # Mantener tus canales del archivo fijos.m3u
+def actualizar_lista():
+    # Leer tus fijos (el PASO 1 que hicimos)
     try:
         with open(ARCHIVO_FIJOS, "r", encoding="utf-8") as f:
-            contenido_fijo = f.read().strip()
+            base = f.read().strip()
     except:
-        contenido_fijo = "#EXTM3U"
+        base = "#EXTM3U"
 
-    canales_nuevos = extraer_links()
+    canales = bot_extractor()
 
+    # Generar el archivo final combinando todo
     with open(ARCHIVO_FINAL, "w", encoding="utf-8") as f:
-        f.write(contenido_fijo + "\n\n")
-        f.write("# --- CANALES DE FUTBOL LIBRE DETECTADOS ---\n")
-        
-        if canales_nuevos:
-            for c in canales_nuevos:
-                f.write(f"#EXTINF:-1, [BOT] {c['nombre']}\n")
-                # Importante: Pasar el User-Agent para que el reproductor no de error
-                f.write(f"{c['url']}|User-Agent=Mozilla/5.0&Referer={URL_BASE}/\n")
-            print(f"Se encontraron {len(canales_nuevos)} canales activos.")
+        f.write(base + "\n\n")
+        f.write("# --- CANALES DINÁMICOS DETECTADOS ---\n")
+        if canales:
+            for c in canales:
+                f.write(f"#EXTINF:-1, [FUTBOL] {c['n']}\n")
+                # El Referer es OBLIGATORIO en el link para que no de 403 Forbidden
+                f.write(f"{c['u']}|Referer={URL_BASE}/\n")
         else:
-            f.write("# No se detectaron transmisiones activas en este momento.\n")
+            f.write("# No se hallaron links en este ciclo. Reintenta en 15 min.\n")
 
 if __name__ == "__main__":
-    generar_lista()
+    actualizar_lista()
