@@ -2,59 +2,56 @@ import requests
 import re
 
 ARCHIVO = "lista_danju80.m3u"
-# Atacamos las fuentes que viste en la plática de Facebook
-FUENTES = [
-    "https://futbollibre.ec", 
-    "https://www.rojadirectatv.tv", 
-    "https://jeinzmacias.net"
-]
+FUENTES = ["https://futbollibre.ec", "https://jeinzmacias.net", "https://www.rojadirectatv.tv"]
 
-def operacion_extrema():
-    print("--- INICIANDO EXTRACCIÓN NIVEL: JHON DOE ---")
+def operacion_infiltrado_total():
+    print("--- INICIANDO EXTRACCIÓN DE FLUJO INTERNO ---")
     enlaces = []
+    # Usamos una sesión para que las cookies se guarden entre peticiones
+    sesion = requests.Session()
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Linux; Android 10; Tecno Pova 6)',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
         'Accept': '*/*',
-        'Connection': 'keep-alive'
+        'Accept-Language': 'es-MX,es;q=0.9',
     }
 
     for url in FUENTES:
         try:
-            print(f"Buscando grietas en: {url}")
-            # Paso 1: Obtener la página base
-            r = requests.get(url, headers=headers, timeout=10).text
-            # Paso 2: Buscar scripts de servidores de video (Vagu, Stream, etc.)
-            links_internos = re.findall(r'src="([^"]+)"', r)
+            print(f"Infiltrando en: {url}")
+            # 1. Contacto inicial para capturar cookies
+            r_home = sesion.get(url, headers=headers, timeout=12).text
+            # 2. Buscamos los contenedores de video (iframes)
+            bloques = re.findall(r'src="([^"]+)"', r_home)
             
-            for src in links_internos:
-                if any(x in src for x in ["embed", "stream", "player", "vagu"]):
-                    print(f"Vulnerando componente: {src[:30]}...")
-                    # Paso 3: Entrar al reproductor con el Referer de la web original
-                    # Esto es lo que "rompe" la seguridad
-                    try:
-                        target = src if src.startswith('http') else url + src
-                        r_video = requests.get(target, headers={'Referer': url}, timeout=5).text
-                        
-                        # Buscamos el m3u8 limpiando las barras escapadas
-                        match = re.search(r'["\'](http[^"\']+\.m3u8[^"\']*)["\']', r_video.replace('\\/', '/'))
-                        
-                        if match:
-                            link_final = match.group(1).split('"')[0]
-                            # Construimos el link con el 'toque' de Jhon Doe
-                            # Agregamos el Referer al final para que tu app de IPTV pueda abrirlo
-                            formato = f"#EXTINF:-1, [HACK] {url.split('//')[1].split('.')[0].upper()}\n{link_final}|Referer={url}/"
-                            if formato not in enlaces:
-                                enlaces.append(formato)
-                                print("✅ ¡LOGRADO! Sistema vulnerado.")
-                    except: continue
+            for src in bloques:
+                # Buscamos patrones de servidores de video (vagu, stream, embed)
+                if any(x in src for x in ["embed", "stream", "player", "vagu", "cvattv"]):
+                    target = src if src.startswith('http') else url + src
+                    print(f"Vulnerando componente: {target[:40]}...")
+                    
+                    # 3. Entramos al componente simulando que venimos de la web oficial
+                    r_video = sesion.get(target, headers={'Referer': url}, timeout=7).text
+                    
+                    # 4. Buscamos el m3u8 limpiando las barras de seguridad (\/)
+                    # Usamos una regex más flexible para capturar links con tokens
+                    match = re.search(r'["\'](http[^"\']+\.m3u8[^"\']*)["\']', r_video.replace('\\/', '/'))
+                    
+                    if match:
+                        link_final = match.group(1).split('"')[0].split("'")[0]
+                        nombre = url.split('//')[1].split('.')[0].upper()
+                        # Formato con Referer para que no muera en la app de IPTV
+                        formato = f"#EXTINF:-1, [HACKED] {nombre}\n{link_final}|Referer={url}/"
+                        if formato not in enlaces:
+                            enlaces.append(formato)
+                            print(f"✅ ¡SISTEMA VULNERADO! Link de {nombre} capturado.")
         except: continue
     return enlaces
 
 if __name__ == "__main__":
-    final = operacion_extrema()
+    final = operacion_infiltrado_total()
     if final:
         with open(ARCHIVO, "w", encoding="utf-8") as f:
             f.write("#EXTM3U\n" + "\n".join(final))
-        print(f"\nSe capturaron {len(final)} canales. ¡Victoria!")
+        print(f"\nOperación exitosa: {len(final)} flujos interceptados.")
     else:
-        print("\nEl muro sigue en pie. El token es dinámico de corta duración.")
+        print("\nEl muro de encriptación sigue firme. El token es dinámico.")
