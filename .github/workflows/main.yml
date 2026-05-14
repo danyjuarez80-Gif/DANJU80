@@ -1,36 +1,26 @@
 name: Actualizador de Canales
-
 on:
   schedule:
     - cron: '*/15 * * * *'
   workflow_dispatch:
-
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-
     steps:
-      - name: Checkout del repositorio
-        uses: actions/checkout@v3
-
-      - name: Configurar Python
-        uses: actions/setup-python@v4
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
         with:
           python-version: '3.9'
-
       - name: Instalar dependencias
         run: pip install requests
-
       - name: Ejecutar el bot
-        # MUY IMPORTANTE: Asegurate que el nombre del archivo sea igual al que tienes en GitHub
         run: python bot_userland.py
-
       - name: Guardar cambios
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add .
-          git commit -m "Actualización automática de canales" || exit 0
+          git commit -m "Canales actualizados" || exit 0
           git push
