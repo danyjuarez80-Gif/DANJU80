@@ -3,49 +3,48 @@ import re
 import os
 
 ARCHIVO = "lista_danju80.m3u"
-URL_OBJETIVO = "https://futbollibre.ec"
+URL_BASE = "https://futbollibre.ec"
 
-# Canales que vamos a intentar "hackear"
-OBJETIVOS = ["espn", "fox", "tudn", "directv", "caliente", "telemundo", "univision"]
+# Canales que vamos a "atacar"
+PRIORIDAD = ["espn", "fox", "tudn", "directv", "caliente", "telemundo", "univision", "azteca"]
 
-def hackear_futbol_libre():
-    print("--- Iniciando Operación: Romper Seguridad ---")
+def operacion_infiltrado():
+    print("--- INICIANDO EXTRACCIÓN DINÁMICA ---")
     enlaces = []
     
-    # Cabeceras de alto nivel para parecer un humano en México
+    # Headers para engañar al servidor (suplantamos tu Tecno Pova 6 en México)
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Linux; Android 10; Tecno Pova 6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36',
-        'Accept-Language': 'es-MX,es;q=0.9',
-        'Referer': URL_OBJETIVO,
-        'Origin': URL_OBJETIVO,
+        'User-Agent': 'Mozilla/5.0 (Linux; Android 10; Tecno Pova 6) AppleWebKit/537.36',
+        'Referer': URL_BASE,
+        'Accept-Language': 'es-MX,es;q=0.9'
     }
 
     try:
-        # 1. Entramos a la boca del lobo
-        r_home = requests.get(URL_OBJETIVO, headers=headers, timeout=10).text
-        # Buscamos las rutas de los reproductores
-        canales_web = re.findall(r'href="(/embed/[^"]+)"', r_home)
+        # 1. Escaneamos la portada para buscar los IDs de los canales
+        r_home = requests.get(URL_BASE, headers=headers, timeout=10).text
+        canales_encontrados = re.findall(r'href="(/embed/[^"]+)"', r_home)
         
-        for path in canales_web:
-            nombre = path.split('/')[-1].replace('-', ' ').lower()
+        for path in list(set(canales_encontrados)):
+            nombre_canal = path.split("/")[-1].replace("-", " ").lower()
             
-            if any(p in nombre for p in OBJETIVOS):
-                print(f"Intentando vulnerar: {nombre.upper()}...")
+            if any(p in nombre_canal for p in PRIORIDAD):
+                print(f"Vulnerando seguridad de: {nombre_canal.upper()}...")
                 
-                # 2. SEGUNDO SALTO: Entramos al iframe donde esconden el m3u8
-                r_embed = requests.get(URL_OBJETIVO + path, headers=headers, timeout=10).text
+                # 2. SEGUNDO SALTO: Entramos al reproductor profundo
+                # Aquí es donde ocurre la magia: buscamos el m3u8 oculto
+                r_embed = requests.get(URL_BASE + path, headers=headers, timeout=10).text
                 
-                # 3. EXTRACCIÓN: Buscamos el link m3u8 incluso si está "escapado" (https:\/\/...)
-                # Usamos una regex que limpia las barras automáticamente
-                link_sucio = re.search(r'source:\s*"([^"]+\.m3u8[^"]*)"', r_embed)
+                # Buscamos enlaces m3u8 que estén "escapados" o escondidos en variables JS
+                # Esta regex limpia las barras inclinadas que usan para engañar bots
+                match = re.search(r'(https?://[^\s"\'<>]+?\.m3u8[^\s"\'<>]*)', r_embed.replace('\\/', '/'))
                 
-                if link_sucio:
-                    # Limpiamos el link de las barras invertidas que ponen para engañar
-                    link_real = link_sucio.group(1).replace('\\/', '/')
-                    enlaces.append(f"#EXTINF:-1, [HACKED] {nombre.upper()}\n{link_real}|Referer={URL_OBJETIVO}/")
-                    print(f"¡SISTEMA VULNERADO!: {nombre.upper()}")
+                if match:
+                    link_real = match.group(1).split('"')[0].split("'")[0]
+                    # Agregamos el Referer para que el link no muera al usarlo
+                    enlaces.append(f"#EXTINF:-1, [HACKED] {nombre_canal.upper()}\n{link_real}|Referer={URL_BASE}/")
+                    print(f"¡SISTEMA VULNERADO! Link extraído.")
                 else:
-                    print(f"Fallo en {nombre}: El token es dinámico.")
+                    print(f"Escudo detectado en {nombre_canal}. Requiere bypass de JS.")
                     
     except Exception as e:
         print(f"Error en la operación: {e}")
@@ -53,10 +52,10 @@ def hackear_futbol_libre():
     return enlaces
 
 if __name__ == "__main__":
-    lista_hacked = hackear_futbol_libre()
-    if lista_hacked:
+    lista_final = operacion_infiltrado()
+    if lista_final:
         with open(ARCHIVO, "w", encoding="utf-8") as f:
-            f.write("#EXTM3U\n" + "\n".join(lista_hacked))
-        print(f"\nOperación exitosa. Se extrajeron {len(lista_hacked)} enlaces protegidos.")
+            f.write("#EXTM3U\n" + "\n".join(lista_final))
+        print(f"\nOperación exitosa: {len(lista_final)} canales extraídos.")
     else:
-        print("\nLa seguridad de la página bloqueó el rastreo automático.")
+        print("\nNo se pudieron romper las defensas de la página en esta pasada.")
