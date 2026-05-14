@@ -5,64 +5,74 @@ ARCHIVO_FIJOS = "fijos.m3u"
 ARCHIVO_FINAL = "lista_danju80.m3u"
 URL_BASE = "https://futbollibre.ec"
 
-def rastrear_network_falsa():
-    # Simulamos lo que vimos en la pestaña Network
-    enlaces = []
+def motor_de_busqueda():
+    canales = []
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Referer': URL_BASE,
-        'Accept': '*/*'
+        'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36',
+        'Referer': 'https://futbollibre.ec/'
     }
-
-    try:
-        s = requests.Session()
-        # 1. Obtenemos la lista de canales del home
-        home = s.get(URL_BASE, headers=headers).text
-        # Buscamos los IDs que usa la web (ejemplo: 'stream-1', 'espn-2')
-        ids = re.findall(r'href="/embed/([^/"]+)/"', home)
-
-        for id_canal in set(ids):
-            # 2. Simulamos la petición que hace el reproductor al servidor de video
-            # Muchas veces la URL es algo predecible como esto:
-            url_api = f"{URL_BASE}/embed/{id_canal}/"
-            r_api = s.get(url_api, headers=headers)
+    
+    with requests.Session() as s:
+        try:
+            # 1. Obtenemos la lista de los botones "Ver Canal"
+            home = s.get(URL_BASE, headers=headers, timeout=10).text
+            # Buscamos el patrón exacto de los botones en el HTML
+            bloques = re.findall(r'href="(/embed/[^"]+)"', home)
             
-            # Buscamos el link que el reproductor "pesca" en el Network
-            # Buscamos m3u8 o incluso links que vienen dentro de scripts JS
-            match = re.search(r'[\'"](https?://[^\'"]+\.m3u8[^\'"]*)[\'"]', r_api.text)
-            
-            if match:
-                link = match.group(1)
-                # Si el link es relativo (ej: /live/stream.m3u8), le pegamos el dominio
-                if link.startswith('/'):
-                    link = "https://tu-servidor-de-video.com" + link
+            for path in set(bloques):
+                url_canal = URL_BASE + path
+                # 2. Entramos a la página del reproductor
+                r_canal = s.get(url_canal, headers=headers, timeout=10).text
                 
-                enlaces.append({"nombre": id_canal.upper(), "url": link})
+                # 3. RASTREO PROFUNDO:
+                # Buscamos m3u8 escondidos en: source: "...", window.atob("..."), o variables JS
+                # Este regex captura links directos y links con tokens
+                encontrados = re.findall(r'(https?://[^\s\'"]+\.m3u8[^\s\'"]*)', r_canal)
                 
-        return enlaces
-    except:
-        return []
+                # Si no hay m3u8, buscamos el "id" del reproductor para forzar el link
+                if not encontrados:
+                    # A veces el link está en un iframe de otro dominio
+                    iframes = re.findall(r'src="(https?://[^"]+)"', r_canal)
+                    for ifr in iframes:
+                        if "player" in ifr or "m3u8" in ifr:
+                            r_ifr = s.get(ifr, headers={'Referer': url_canal}, timeout=5).text
+                            encontrados += re.findall(r'(https?://[^\s\'"]+\.m3u8[^\s\'"]*)', r_ifr)
 
-def generar_m3u():
-    # Cargar tus canales de la imagen (fijos.m3u)
+                for link in set(encontrados):
+                    # Filtramos basura (links de imágenes o trackers que terminen en m3u8 por error)
+                    if "http" in link and len(link) > 20:
+                        nombre = path.replace("/embed/", "").replace("-", " ").upper()
+                        canales.append({"n": nombre, "u": link})
+                        
+        except Exception as e:
+            print(f"Error en rastreo: {e}")
+            
+    return canales
+
+def actualizar():
+    # Paso 1: Leer tus fijos (la lista que ya tienes)
     try:
         with open(ARCHIVO_FIJOS, "r", encoding="utf-8") as f:
-            contenido = f.read().strip()
+            base = f.read().strip()
     except:
-        contenido = "#EXTM3U"
+        base = "#EXTM3U"
 
-    canales = rastrear_network_falsa()
+    # Paso 2: El bot busca canales
+    encontrados = motor_de_busqueda()
 
+    # Paso 3: Guardar todo sin borrar lo anterior
     with open(ARCHIVO_FINAL, "w", encoding="utf-8") as f:
-        f.write(contenido + "\n\n")
-        f.write("# --- CANALES RASTREADOS DESDE NETWORK ---\n")
-        if canales:
-            for c in canales:
-                f.write(f"#EXTINF:-1, [BOT] {c['nombre']}\n")
-                # Agregamos los headers que vimos en Network para que no den error 403
-                f.write(f"{c['url']}|Referer={URL_BASE}/&Origin={URL_BASE}\n")
+        f.write(base + "\n\n")
+        f.write("# --- CANALES DETECTADOS POR EL BOT ---\n")
+        
+        if encontrados:
+            for c in encontrados:
+                # Agregamos la metadata para que el reproductor Android lo abra
+                f.write(f"#EXTINF:-1, [BOT] {c['n']}\n")
+                f.write(f"{c['u']}|User-Agent=Mozilla/5.0&Referer={URL_BASE}/\n")
+            print(f"¡Éxito! Se guardaron {len(encontrados)} canales.")
         else:
-            f.write("# No se detectaron peticiones m3u8 activas.\n")
+            f.write("# No se detectaron links. La web podría estar usando protección anti-bot fuerte.\n")
 
 if __name__ == "__main__":
-    generar_m3u()
+    actualizar()
