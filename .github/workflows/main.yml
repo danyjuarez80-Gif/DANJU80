@@ -2,13 +2,15 @@ name: Actualizador de Canales
 
 on:
   schedule:
-    # Se ejecuta cada 15 minutos según tu configuración preferida
     - cron: '*/15 * * * *'
-  workflow_dispatch: # Permite ejecución manual desde la pestaña Actions
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    # ESTA ES LA PARTE QUE FALTA: Dar permiso para escribir en el repositorio
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout de repositorio
@@ -31,7 +33,14 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          # Agregamos los archivos m3u y el archivo de memoria progreso.txt
-          git add lista_danju80.m3u progreso.txt
-          # Solo hacemos commit si realmente hubo cambios para evitar errores
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Actualización automática: bloque de 10 canales" && git push)
+          
+          # Añadimos los archivos. Usamos -f por si acaso alguno está en .gitignore
+          git add lista_danju80.m3u progreso.txt || true
+          
+          # Solo hacemos commit si hay cambios reales
+          if [ -n "$(git status --porcelain)" ]; then
+            git commit -m "Actualización automática: canales actualizados"
+            git push
+          else
+            echo "No hay cambios para subir."
+          fi
