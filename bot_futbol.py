@@ -6,69 +6,65 @@ ARCHIVO_FIJOS = "fijos.m3u"
 ARCHIVO_FINAL = "lista_danju80.m3u"
 URL_BASE = "https://futbollibre.ec"
 
-def extraer_profundo():
+def motor_profundo():
+    canales = []
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Linux; Android 10; SM-G960U) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36',
+        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1',
         'Referer': URL_BASE + '/'
     }
-    resultados = []
     
     with requests.Session() as s:
         try:
-            # 1. Entramos a la home
-            inicio = s.get(URL_BASE, headers=headers, timeout=15).text
-            # Buscamos todos los botones "Ver Canal"
-            links_canales = re.findall(r'href="(/embed/[^"]+)"', inicio)
+            # 1. Home
+            res = s.get(URL_BASE, headers=headers, timeout=20)
+            items = re.findall(r'href="(/embed/[^"]+)"', res.text)
             
-            print(f"Se encontraron {len(links_canales)} botones de canales. Empezando rastreo uno por uno...")
+            for path in set(items):
+                url = URL_BASE + path
+                time.sleep(2) # Pausa para no ser detectado como bot veloz
+                
+                # 2. Entrar al canal
+                r_canal = s.get(url, headers=headers, timeout=15)
+                
+                # 3. Buscar m3u8 en todas sus formas posibles
+                # Buscamos links directos, en variables JS o dentro de IFRAMES
+                found = re.findall(r'(https?://[^\s\'"]+\.m3u8[^\s\'"]*)', r_canal.text)
+                
+                if not found:
+                    # Intento extra: buscar si el link está dentro de un iframe src
+                    iframes = re.findall(r'src="(https?://[^"]+)"', r_canal.text)
+                    for ifr in iframes:
+                        if "m3u8" in ifr or "embed" in ifr:
+                            r_ifr = s.get(ifr, headers={'Referer': url}, timeout=10)
+                            found += re.findall(r'(https?://[^\s\'"]+\.m3u8[^\s\'"]*)', r_ifr.text)
 
-            for path in set(links_canales):
-                url_interna = URL_BASE + path
-                try:
-                    # SIMULAMOS EL CLIC: Entramos a la página del canal
-                    # Agregamos un pequeño delay para que no nos bloqueen por ir rápido
-                    time.sleep(1) 
-                    r_canal = s.get(url_interna, headers=headers, timeout=10).text
-                    
-                    # Buscamos el m3u8 dentro del código del reproductor
-                    # Esta es la parte que "salta" los comerciales
-                    m3u8 = re.search(r'source:\s*"([^"]+\.m3u8[^"]*)"', r_canal)
-                    if not m3u8:
-                        m3u8 = re.search(r'file:\s*"([^"]+\.m3u8[^"]*)"', r_canal)
-                    
-                    if m3u8:
-                        link_directo = m3u8.group(1)
+                for link in set(found):
+                    if "http" in link and len(link) > 40:
                         nombre = path.replace("/embed/", "").replace("-", " ").upper()
-                        resultados.append({"n": nombre, "u": link_directo})
-                        print(f"¡Éxito! Encontrado: {nombre}")
-                except:
-                    continue
-                    
+                        canales.append({"n": nombre, "u": link})
         except Exception as e:
-            print(f"Error en la conexión principal: {e}")
-            
-    return resultados
+            print(f"Error: {e}")
+    return canales
 
-def generar():
+def app():
     try:
         with open(ARCHIVO_FIJOS, "r", encoding="utf-8") as f:
             base = f.read().strip()
     except:
         base = "#EXTM3U"
 
-    canales = extraer_profundo()
+    lista_viva = motor_profundo()
 
     with open(ARCHIVO_FINAL, "w", encoding="utf-8") as f:
         f.write(base + "\n\n")
-        f.write("# --- CANALES DETECTADOS POR RASTREO PROFUNDO ---\n")
-        
-        if canales:
-            for c in canales:
+        f.write("# --- CANALES DE FUTBOL LIBRE ---\n")
+        if lista_viva:
+            for c in lista_viva:
                 f.write(f"#EXTINF:-1, [FUTBOL] {c['n']}\n")
+                # El Referer es clave para que tu app de Android no de error 403
                 f.write(f"{c['u']}|Referer={URL_BASE}/&User-Agent=Mozilla/5.0\n")
         else:
-            f.write("# No se hallaron links. Es posible que los canales no hayan iniciado aún.\n")
-            print("No se encontró nada en este ciclo.")
+            f.write("# El bot fue bloqueado o no hay partidos vivos.\n")
 
 if __name__ == "__main__":
-    generar()
+    app()
