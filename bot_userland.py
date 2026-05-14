@@ -7,9 +7,9 @@ import os
 ARCHIVO_FIJOS = "fijos.m3u"
 ARCHIVO_FINAL = "lista_danju80.m3u"
 ARCHIVO_PROGRESO = "progreso.txt"
-# Lista de webs para rastrear
+# Múltiples fuentes para mayor éxito
 URLS = ["https://futbollibre.ec", "https://librefutboltv.com", "https://futbollibretv.me"]
-# Palabras clave de canales que SÍ quieres
+# Canales prioritarios que pediste
 PRIORIDAD = ["espn", "fox", "tudn", "directv", "caliente", "telemundo", "univision"]
 
 def leer_progreso():
@@ -25,28 +25,28 @@ def guardar_progreso(n):
         f.write(str(n))
 
 def cazar_canales():
-    print("--- Iniciando rastreo inteligente ---")
+    print("--- Iniciando rastreo prioritario (Multi-fuente) ---")
     enlaces = []
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
     
     for url_base in URLS:
         try:
+            print(f"Buscando en: {url_base}")
             r = requests.get(url_base, headers=headers, timeout=10).text
             bloques = list(set(re.findall(r'href="(/embed/[^"]+)"', r)))
             
-            # Buscamos en bloques de 30 para no saturar
             for path in bloques:
                 nombre_raw = path.replace("/embed/", "").replace("-", " ").lower()
                 
-                # FILTRO: Solo procesamos si es un canal de nuestra lista de prioridad
+                # FILTRO DE PRIORIDAD
                 if any(p in nombre_raw for p in PRIORIDAD):
                     try:
+                        time.sleep(0.5)
                         r_canal = requests.get(url_base + path, headers=headers, timeout=8).text
                         match = re.search(r'source:\s*"([^"]+\.m3u8[^"]*)"', r_canal)
                         if match:
                             link = match.group(1)
                             nombre_final = nombre_raw.upper()
-                            # Evitar duplicados en el momento
                             formato = f"#EXTINF:-1, [IPTV] {nombre_final}\n{link}|Referer={url_base}/"
                             if formato not in enlaces:
                                 enlaces.append(formato)
@@ -56,13 +56,11 @@ def cazar_canales():
     return enlaces
 
 def principal():
-    # Leer encabezado fijo
     try:
         with open(ARCHIVO_FIJOS, "r", encoding="utf-8") as f:
             base = f.read().strip()
     except: base = "#EXTM3U"
 
-    # Cargar contenido previo para evitar duplicados
     try:
         with open(ARCHIVO_FINAL, "r", encoding="utf-8") as f:
             contenido_actual = f.read()
@@ -71,20 +69,18 @@ def principal():
     nuevos = cazar_canales()
     lista_final_nuevos = []
     
-    # Filtrar contra lo que ya tenemos en la lista final
     for item in nuevos:
         url_nueva = item.split("\n")[1].split("|")[0]
         if url_nueva not in contenido_actual:
             lista_final_nuevos.append(item)
 
-    # Escribir el archivo
     with open(ARCHIVO_FINAL, "w", encoding="utf-8") as f:
         f.write(base + "\n\n" + contenido_actual.split(base)[-1].strip() + "\n")
         if lista_final_nuevos:
             f.write("\n" + "\n".join(lista_final_nuevos) + "\n")
-            print(f"Éxito: Se añadieron {len(lista_final_nuevos)} canales prioritarios.")
+            print(f"Éxito: Se añadieron {len(lista_final_nuevos)} canales.")
         else:
-            print("No se encontraron canales nuevos en esta pasada.")
+            print("No se encontraron canales nuevos que no estuvieran ya en la lista.")
 
 if __name__ == "__main__":
     principal()
