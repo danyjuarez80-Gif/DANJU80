@@ -3,11 +3,12 @@ import re
 import time
 import os
 
-# Configuración de archivos (Basado en imagen 83517.jpg)
+# 1. CONSTANTES
 ARCHIVO_FIJOS = "fijos.m3u"
 ARCHIVO_FINAL = "lista_danju80.m3u"
-ARCHIVO_PROGRESO = "progreso.txt" # Para recordar dónde nos quedamos
+ARCHIVO_PROGRESO = "progreso.txt"
 
+# 2. FUNCIONES DE APOYO PARA LA MEMORIA
 def leer_progreso():
     if os.path.exists(ARCHIVO_PROGRESO):
         try:
@@ -20,6 +21,7 @@ def guardar_progreso(n):
     with open(ARCHIVO_PROGRESO, "w") as f:
         f.write(str(n))
 
+# 3. RASTREADOR
 def cazar_futbol_libre():
     print("--- Escaneando Fútbol Libre ---")
     enlaces = []
@@ -31,12 +33,11 @@ def cazar_futbol_libre():
         bloques = sorted(list(set(re.findall(r'href="(/embed/[^"]+)"', r))))
         
         inicio = leer_progreso()
-        fin = inicio + 10
+        fin = inicio + 10  # Bloque de 10 en 10
         seleccionados = bloques[inicio:fin]
 
-        # Si ya terminamos la lista, reiniciamos desde el principio
         if not seleccionados:
-            print("Lista completada, reiniciando al canal 1...")
+            print("Lista completada, reiniciando...")
             inicio = 0
             fin = 10
             seleccionados = bloques[inicio:fin]
@@ -51,50 +52,46 @@ def cazar_futbol_libre():
                     nombre = path.replace("/embed/", "").replace("-", " ").upper()
                     enlaces.append(f"#EXTINF:-1, [FUTBOL] {nombre}\n{link}|Referer={url_base}/")
                     print(f"Cazado: {nombre}")
-            except Exception as e:
-                print(f"Error en {path}: {e}")
+            except: continue
 
-        # Guardar el siguiente punto de inicio
         guardar_progreso(fin if fin < len(bloques) else 0)
-        
-    except Exception as e:
-        print(f"Error general: {e}")
+    except: pass
     return enlaces
 
+# 4. LOGICA PRINCIPAL (LA QUE ACABAMOS DE EDITAR)
 def principal():
-    # 1. Leer canales actuales para no duplicar
-    existentes = ""
-    try:
-        with open(ARCHIVO_FINAL, "r", encoding="utf-8") as f:
-            existentes = f.read()
-    except: pass
-
-    # 2. Cargar base de fijos
     try:
         with open(ARCHIVO_FIJOS, "r", encoding="utf-8") as f:
             base = f.read().strip()
-    except: base = "#EXTM3U"
+    except:
+        base = "#EXTM3U"
 
-    # 3. Cazar nuevos
+    try:
+        with open(ARCHIVO_FINAL, "r", encoding="utf-8") as f:
+            contenido_actual = f.read()
+    except:
+        contenido_actual = ""
+
     nuevos = cazar_futbol_libre()
-    
-    # 4. Filtrar: solo agregar si el link no está ya en el archivo
-    lista_para_escribir = []
+    lista_final_nuevos = []
     for item in nuevos:
-        link_solo = item.split("\n")[1]
-        if link_solo not in existentes:
-            lista_para_escribir.append(item)
+        lineas = item.split("\n")
+        if len(lineas) > 1:
+            url_nueva = lineas[1].split("|")[0]
+            if url_nueva not in contenido_actual:
+                lista_final_nuevos.append(item)
 
-    # 5. Guardar (Modo 'a' para agregar al final o 'w' para refrescar)
-    # Aquí lo puse para que refresque la sección dinámica pero mantenga los fijos
     with open(ARCHIVO_FINAL, "w", encoding="utf-8") as f:
-        f.write(base + "\n\n")
-        f.write("# --- CANALES ACTUALIZADOS ---\n")
-        f.write(existentes.split("# --- CANALES ACTUALIZADOS ---")[-1] if "# --- CANALES ACTUALIZADOS ---" in existentes else "")
-        if lista_para_escribir:
-            f.write("\n".join(lista_para_escribir) + "\n")
-    
-    print(f"Se agregaron {len(lista_para_escribir)} canales nuevos.")
+        if not contenido_actual.startswith("#EXTM3U"):
+            f.write(base + "\n")
+        else:
+            f.write(contenido_actual.strip() + "\n")
+        
+        if lista_final_nuevos:
+            f.write("\n" + "\n".join(lista_final_nuevos) + "\n")
+            print(f"Éxito: Se añadieron {len(lista_final_nuevos)} canales.")
+        else:
+            print("No se encontraron links nuevos en este bloque.")
 
 if __name__ == "__main__":
     principal()
