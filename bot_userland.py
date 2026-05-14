@@ -2,41 +2,53 @@ import requests
 import re
 
 ARCHIVO = "lista_danju80.m3u"
-# Estos son "agregadores" que ya hicieron el scraping por nosotros
-GATEWAYS = [
-    "https://raw.githubusercontent.com/GuuS-97/TV_Latina/main/TV_Latina.m3u",
-    "https://raw.githubusercontent.com/m3u8playlist/Free-IPTV-Channels/master/countries/mx.m3u8"
+# Las fuentes maestras que mencionó el usuario de la foto
+FUENTES = [
+    "https://futbollibre.ec", 
+    "https://www.rojadirectatv.tv", 
+    "https://jeinzmacias.net"
 ]
 
-CANALES_TOP = ["FOX SPORTS", "ESPN", "TUDN", "AZTECA 7", "WIN SPORTS"]
-
-def operacion_espejo():
-    print("--- INICIANDO OPERACIÓN ESPEJO: BUSCANDO PUENTES ABIERTOS ---")
+def operacion_sniffer():
+    print("--- INICIANDO RASTREO DE TRÁFICO INTERNO ---")
     enlaces = []
-    
-    for gway in GATEWAYS:
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Linux; Android 10; Tecno Pova 6)',
+        'Referer': 'https://google.com'
+    }
+
+    for url in FUENTES:
         try:
-            print(f"Sincronizando con puente: {gway[:40]}...")
-            data = requests.get(gway, timeout=10).text
-            lineas = data.split('\n')
+            print(f"Analizando componentes de: {url}")
+            r = requests.get(url, headers=headers, timeout=10).text
             
-            for i in range(len(lineas)):
-                if "#EXTINF" in lineas[i]:
-                    # Si el canal está en nuestra lista de deseos
-                    if any(c in lineas[i].upper() for c in CANALES_TOP):
-                        nombre = lineas[i].split(',')[-1].strip()
-                        link = lineas[i+1].strip()
-                        if link.startswith('http'):
-                            enlaces.append(f"#EXTINF:-1, [VERIFICADO] {nombre}\n{link}")
-                            print(f"✅ Canal asegurado: {nombre}")
+            # Buscamos todos los iframes (donde realmente vive el video)
+            iframes = re.findall(r'src="([^"]+)"', r)
+            
+            for src in iframes:
+                # Buscamos patrones de servidores de video conocidos
+                if any(x in src for x in ["embed", "stream", "player", "vagu", "cvattv"]):
+                    print(f"¡Componente sospechoso detectado!: {src[:40]}")
+                    
+                    # Entramos al componente para ver su tráfico interno
+                    try:
+                        inner = requests.get(src if src.startswith('http') else url+src, headers=headers, timeout=5).text
+                        # Buscamos el link m3u8 real, limpiando las barras de seguridad (\/)
+                        m3u8 = re.search(r'["\'](http[^"\']+\.m3u8[^"\']*)["\']', inner.replace('\\/', '/'))
+                        
+                        if m3u8:
+                            link = m3u8.group(1)
+                            enlaces.append(f"#EXTINF:-1, [HACKED] {url.split('//')[1].split('.')[0].upper()}\n{link}")
+                            print("✅ ¡SISTEMA VULNERADO! Link de video capturado.")
+                    except: continue
         except: continue
     return enlaces
 
 if __name__ == "__main__":
-    final = operacion_espejo()
-    if final:
-        with open(ARCHIVO, "w", encoding="utf-8") as f:
-            f.write("#EXTM3U\n" + "\n".join(final))
-        print(f"\n¡ÉXITO! Logramos rescatar {len(final)} canales sin tokens.")
+    lista = operacion_sniffer()
+    if lista:
+        with open(ARCHIVO, "w") as f:
+            f.write("#EXTM3U\n" + "\n".join(lista))
+        print(f"\nSe capturaron {len(lista)} flujos de video internos.")
     else:
-        print("\nTodos los puentes están caídos. El sistema es impenetrable hoy.")
+        print("\nLa encriptación es fuerte. Necesitamos un bypass de cookies.")
