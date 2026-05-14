@@ -4,62 +4,62 @@ import re
 # Configuración
 ARCHIVO_FIJOS = "fijos.m3u"
 ARCHIVO_FINAL = "lista_danju80.m3u"
-# Probamos con la URL que pasaste
-URL_FUENTE = "https://futbollibre.ec/"
+URL_BASE = "https://futbollibre.ec/"
 
-def extraer_links_reales():
-    enlaces = []
+def extraer_con_iframes():
+    enlaces_finales = []
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Referer': 'https://google.com'
+        'User-Agent': 'Mozilla/5.0 (Linux; Android 10; SM-G960U) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36',
+        'Referer': URL_BASE
     }
-    
+
     try:
-        # 1. Entrar a la página principal
-        r = requests.get(URL_FUENTE, headers=headers, timeout=15)
+        # 1. Obtener la página principal
+        sesion = requests.Session()
+        r = sesion.get(URL_BASE, headers=headers, timeout=15)
         
-        # 2. Buscar enlaces de transmisiones (m3u8, ts, o reproductores embed)
-        # Buscamos patrones de video y de las páginas internas de partidos
-        patrones = [
-            r'https?://[\w\.\-/]+\.m3u8',
-            r'https?://[\w\.\-/]+\.ts',
-            r'href="(https?://futbollibre.ec/embed/[^"]+)"',
-            r'src="(https?://[\w\.\-/]+embed[^"]+)"'
-        ]
+        # 2. Buscar las URLs de los "Embeds" (donde están los clics)
+        embeds = re.findall(r'href="(https?://futbollibre.ec/embed/[^"]+)"', r.text)
         
-        for p in patrones:
-            encontrados = re.findall(p, r.text)
-            for link in encontrados:
-                if link not in enlaces:
-                    enlaces.append(link)
-        
-        return enlaces
+        for url_embed in embeds:
+            # El bot "entra" al reproductor simulando el primer clic
+            r_embed = sesion.get(url_embed, headers=headers, timeout=10)
+            
+            # 3. Buscar dentro del reproductor el archivo .m3u8 real
+            # Aquí es donde se oculta el link tras los "3 clics"
+            match = re.search(r'source:\s*"([^"]+\.m3u8[^"]*)"', r_embed.text)
+            if not match:
+                match = re.search(r'file:\s*"([^"]+\.m3u8[^"]*)"', r_embed.text)
+                
+            if match:
+                link_directo = match.group(1)
+                enlaces_finales.append(link_directo)
+
+        return list(set(enlaces_finales))
     except Exception as e:
-        print(f"Error de conexión: {e}")
+        print(f"Error: {e}")
         return []
 
 def generar_lista():
-    # Cargar tus canales fijos (los que DANJU80 ya tiene)
+    # Mantener tus avances y archivos fijos (DANJU80)
     try:
         with open(ARCHIVO_FIJOS, "r", encoding="utf-8") as f:
             contenido_fijo = f.read().strip()
     except FileNotFoundError:
         contenido_fijo = "#EXTM3U"
 
-    links_encontrados = extraer_links_reales()
+    links = extraer_con_iframes()
 
     with open(ARCHIVO_FINAL, "w", encoding="utf-8") as f:
         f.write(contenido_fijo + "\n\n")
-        f.write("# --- CANALES DE FUTBOL LIBRE ---\n")
+        f.write("# --- CANALES DETECTADOS TRAS SIMULAR CLICS ---\n")
         
-        if not links_encontrados:
-            f.write("# El bot no encontró links activos en este momento.\n")
+        if links:
+            for i, l in enumerate(links):
+                f.write(f"#EXTINF:-1, [BOT] Canal Activo {i+1}\n")
+                f.write(f"{l}|User-Agent={headers['User-Agent']}&Referer={URL_BASE}\n")
         else:
-            for i, link in enumerate(links_encontrados):
-                f.write(f"#EXTINF:-1, [BOT] Canal {i+1}\n")
-                f.write(f"{link}|Referer={URL_FUENTE}\n")
-                
-    print(f"Lista actualizada con {len(links_encontrados)} enlaces.")
+            f.write("# No hubo eventos en vivo detectados.\n")
 
 if __name__ == "__main__":
     generar_lista()
