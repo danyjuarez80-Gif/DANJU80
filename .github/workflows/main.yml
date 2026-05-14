@@ -4,11 +4,15 @@ on:
   schedule:
     # Se ejecuta cada 15 minutos
     - cron: '*/15 * * * *'
-  workflow_dispatch: # Permite ejecutarlo manualmente
+  workflow_dispatch: # Esto permite que lo actives tú manualmente
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Añadimos permisos para que el bot pueda escribir en tu repositorio
+    permissions:
+      contents: write
+
     steps:
       - name: Checkout del repositorio
         uses: actions/checkout@v3
@@ -17,17 +21,3 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
-
-      - name: Instalar dependencias
-        run: pip install requests
-
-      - name: Ejecutar el bot
-        run: python bot_futbol.py
-
-      - name: Guardar cambios
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git add .
-          git commit -m "Actualización automática de canales" || exit 0
-          git push
