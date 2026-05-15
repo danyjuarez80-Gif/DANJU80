@@ -1,7 +1,6 @@
 #EXTM3U
 #EXTINF:-1 tvg-name="ESPN HD MX" tvg-logo="..." group-title="DEPORTES MEXICO",ESPN HD MX
-https://da8.danyjuarez80.workers.dev/PtaPta567/user8790/11991?type=ts
-
+https://danju80.onrender.com/canal/11991
 
 
 
@@ -11,43 +10,43 @@ https://da8.danyjuarez80.workers.dev/PtaPta567/user8790/11991
 
 #EXTINF:-1 tvg-name="ESPN 2 MX HD" tvg-logo="http://ik.imagekit.io/ulangotv/image/upload/70997_logo_espn_2.png" group-title="DEPORTES MEXICO",ESPN 2 MX HD
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://da8.danyjuarez80.workers.dev/PtaPta567/user8790/11989
+https://danju80.onrender.com/canal/11989
 
 #EXTINF:-1 tvg-name="ESPN 3 MX HD" tvg-logo="http://www.supercable.com/supercable/wp-content/uploads/2018/03/espn-3-logo-01.png" group-title="DEPORTES MEXICO",ESPN 3 MX HD
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://da8.danyjuarez80.workers.dev/PtaPta567/user8790/11990
+https://danju80.onrender.com/canal/11990
 
 #EXTINF:-1 tvg-name="ESPN PLUS MX HD" tvg-logo="https://alruckershow.com/wp-content/uploads/2018/04/espn-plus-logo.png" group-title="DEPORTES MEXICO",ESPN PLUS MX HD
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://da8.danyjuarez80.workers.dev/PtaPta567/user8790/11992
+https://danju80.onrender.com/canal/11992
 
 #EXTINF:-1 tvg-name="ESPN 4 MX HD" tvg-logo="https://forounivers.com/uploads/monthly_2021_12/large.ESPN4_logo.png.6cabec4272e924e3273d3c6219ad67fb.png" group-title="DEPORTES MEXICO",ESPN 4 MX HD
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://da8.danyjuarez80.workers.dev/PtaPta567/user8790/64415
+https://danju80.onrender.com/canal/64415
 
 #EXTINF:-1 tvg-name="TUDN HD" tvg-logo="https://www.roc21.com/blog/wp-content/uploads/2019/05/logo-tudn.jpg" group-title="DEPORTES MEXICO",TUDN HD
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://da8.danyjuarez80.workers.dev/PtaPta567/user8790/50497
+https://danju80.onrender.com/canal/50497
 
 #EXTINF:-1 tvg-name="Canal 5 HD MEX" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Canal_5_Mexico_logo_2014.svg/1200px-Canal_5_Mexico_logo_2014.svg.png" group-title="DEPORTES MEXICO",Canal 5 HD MEX
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://da8.danyjuarez80.workers.dev/PtaPta567/user8790/22398
+https://danju80.onrender.com/canal/22398
 
 #EXTINF:-1 tvg-name="CANAL 5 HD MEX 2" tvg-logo="https://upload.wikimedia.org/wikipedia/en/9/9f/Canal52016.png" group-title="DEPORTES MEXICO",CANAL 5 HD MEX 2
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://da8.danyjuarez80.workers.dev/PtaPta567/user8790/22399
+https://danju80.onrender.com/canal/22399
 
 #EXTINF:-1 tvg-name="VIX Premium La Liga" tvg-logo="https://cdn2.mediotiempo.com/uploads/media/2022/07/16/vix-juegos-exclusivos-futbol-mexicano-1.jpg" group-title="DEPORTES MEXICO",VIX Premium La Liga
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://da8.danyjuarez80.workers.dev/PtaPta567/user8790/132850
+https://danju80.onrender.com/canal/132850
 
 #EXTINF:-1 tvg-name="FOX SPORT HD MEX" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/FOX_Sports_logo.svg/800px-FOX_Sports_logo.svg.png" group-title="DEPORTES MEXICO",FOX SPORT HD MEX
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://da8.danyjuarez80.workers.dev/PtaPta567/user8790/12008
+https://danju80.onrender.com/canal/12008
 
 #EXTINF:-1 tvg-name="FOX SPORT 2 HD MEX" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/2015_Fox_sports_logo.svg/1200px-2015_Fox_sports_logo.svg.png" group-title="DEPORTES MEXICO",FOX SPORT 2 HD MEX
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://da8.danyjuarez80.workers.dev/PtaPta567/user8790/12009
+https://da8.danyjuarez80.workers.dev/PtaPta567/user870/12009
 
 #EXTINF:-1 tvg-name="FOX SPORT 3 HD MEX" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Fox_sports_3_logo.svg/1280px-Fox_sports_3_logo.svg.png" group-title="DEPORTES MEXICO",FOX SPORT 3 HD MEX
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
