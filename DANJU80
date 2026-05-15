@@ -1,45 +1,45 @@
 #EXTM3U
-#EXTINF:-1 group-title="TV",noticias 0
-http://planettvweb.com:8091/live/PtaPta567/user8790/13247.ts
-#EXTINF:-1 group-title="TV",noticias 0
-http://planettvweb.com:8091/live/PtaPta567/user8790/13248.ts
-#EXTINF:-1 group-title="TV",noticias 0
-http://planettvweb.com:8091/live/PtaPta567/user8790/13175.ts
-#EXTINF:-1 group-title="TV",noticias 0
-http://planettvweb.com:8091/live/PtaPta567/user8790/13176.ts
-#EXTINF:-1 group-title="TV",noticias 0
-http://planettvweb.com:8091/live/PtaPta567/user8790/13177.ts
-#EXTINF:-1 group-title="TV",noticias 0
-http://planettvweb.com:8091/live/PtaPta567/user8790/13178.ts
-#EXTINF:-1 group-title="TV",noticias 0
-http://planettvweb.com:8091/live/PtaPta567/user8790/13179.ts
-#EXTINF:-1 group-title="TV",noticias 0
-http://planettvweb.com:8091/live/PtaPta567/user8790/13180.ts
-#EXTINF:-1 group-title="TV",noticias 0
-http://planettvweb.com:8091/live/PtaPta567/user8790/13181.ts
-#EXTINF:-1 group-title="TV",noticias 0
-http://planettvweb.com:8091/live/PtaPta567/user8790/13182.ts
-#EXTINF:-1 group-title="TV",noticias 0
-http://planettvweb.com:8091/live/PtaPta567/user8790/13172.ts
-#EXTINF:-1 group-title="TV",noticias 0
-http://planettvweb.com:8091/live/PtaPta567/user8790/13173.ts
-#EXTINF:-1 group-title="TV",noticias 0
-http://planettvweb.com:8091/live/PtaPta567/user8790/13174.ts
-#EXTINF:-1 group-title="TV",noticias 0
-http://planettvweb.com:8091/live/PtaPta567/user8790/13190.ts
-#EXTINF:-1 group-title="TV",noticias 0
-http://planettvweb.com:8091/live/PtaPta567/user8790/13183.ts
-#EXTINF:-1 group-title="TV",noticias 0
-http://planettvweb.com:8091/live/PtaPta567/user8790/13189.ts
-#EXTINF:-1 group-title="TV",noticias 0
-http://planettvweb.com:8091/live/PtaPta567/user8790/13169.ts
 
-
-
-
-
-
-
+#EXTM3U
+#EXTINF:-1,FOX SPORTS 1 MEX HD
+http://planettvweb.com:8091/live/PtaPta567/user8790/13444.ts
+#EXTINF:-1,FOX SPORTS 2 MEX HD
+http://planettvweb.com:8091/live/PtaPta567/user8790/13445.ts
+#EXTINF:-1,FOX SPORTS 3 MEX HD
+http://planettvweb.com:8091/live/PtaPta567/user8790/13446.ts
+#EXTINF:-1,FOX SPORTS PREMIUM MEX HD
+http://planettvweb.com:8091/live/PtaPta567/user8790/13447.ts
+#EXTINF:-1,ESPN MEX HD
+http://planettvweb.com:8091/live/PtaPta567/user8790/13437.ts
+#EXTINF:-1,ESPN 2 MEX HD
+http://planettvweb.com:8091/live/PtaPta567/user8790/13438.ts
+#EXTINF:-1,ESPN 3 MEX HD
+http://planettvweb.com:8091/live/PtaPta567/user8790/13439.ts
+#EXTINF:-1,TUDN MEX HD
+http://planettvweb.com:8091/live/PtaPta567/user8790/13451.ts
+#EXTINF:-1 tvg-logo="" group-title="DEPORTES MEXICO", CANAL 5 MEX HD
+http://planettvweb.com:8091/live/PtaPta567/user8790/13414.ts
+#EXTINF:-1 tvg-logo="" group-title="DEPORTES MEXICO", AZTECA 7 MEX HD
+http://planettvweb.com:8091/live/PtaPta567/user8790/13410.ts
+#EXTINF:-1 tvg-logo="" group-title="DEPORTES MEXICO", TUDN MEX HD
+http://planettvweb.com:8091/live/PtaPta567/user8790/13451.ts
+#EXTINF:-1 tvg-logo="" group-title="DEPORTES MEXICO", AFIZZIONADOS HD
+http://planettvweb.com:8091/live/PtaPta567/user8790/13433.ts
+#EXTINF:-1 tvg-logo="" group-title="DEPORTES MEXICO", FOX SPORTS 1 MEX HD
+http://planettvweb.com:8091/live/PtaPta567/user8790/13444.ts
+#EXTINF:-1 tvg-logo="" group-title="DEPORTES MEXICO", FOX SPORTS 2 MEX HD
+http://planettvweb.com:8091/live/PtaPta567/user8790/13445.ts
+#EXTINF:-1 tvg-logo="" group-title="DEPORTES MEXICO", FOX SPORTS 3 MEX HD
+http://planettvweb.com:8091/live/PtaPta567/user8790/13446.ts
+#EXTINF:-1 tvg-logo="" group-title="DEPORTES MEXICO", FOX SPORTS PREMIUM MEX HD
+http://planettvweb.com:8091/live/PtaPta567/user8790/13447.ts
+#EXTINF:-1 tvg-logo="" group-title="DEPORTES MEXICO", ESPN MEX HD
+http://planettvweb.com:8091/live/PtaPta567/user8790/13437.ts
+#EXTINF:-1 tvg-logo="" group-title="DEPORTES MEXICO", ESPN 2 MEX HD
+http://planettvweb.com:8091/live/PtaPta567/user8790/13438.ts
+#EXTINF:-1 tvg-logo="" group-title="DEPORTES MEXICO", ESPN 3 MEX HD
+http://planettvweb.com:8091/live/PtaPta567/user8790/13439.ts
+#EXTINF:-1 tvg-logo="" group-title="DEPORTES MEXICO", ESPN 4 MEX HD
 
 
 
