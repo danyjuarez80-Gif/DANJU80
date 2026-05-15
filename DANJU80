@@ -1,5 +1,38 @@
 #EXTM3U
-
+#EXTINF:-1 group-title="TV",noticias 0
+http://planettvweb.com:8091/live/PtaPta567/user8790/13247.ts
+#EXTINF:-1 group-title="TV",noticias 0
+http://planettvweb.com:8091/live/PtaPta567/user8790/13248.ts
+#EXTINF:-1 group-title="TV",noticias 0
+http://planettvweb.com:8091/live/PtaPta567/user8790/13175.ts
+#EXTINF:-1 group-title="TV",noticias 0
+http://planettvweb.com:8091/live/PtaPta567/user8790/13176.ts
+#EXTINF:-1 group-title="TV",noticias 0
+http://planettvweb.com:8091/live/PtaPta567/user8790/13177.ts
+#EXTINF:-1 group-title="TV",noticias 0
+http://planettvweb.com:8091/live/PtaPta567/user8790/13178.ts
+#EXTINF:-1 group-title="TV",noticias 0
+http://planettvweb.com:8091/live/PtaPta567/user8790/13179.ts
+#EXTINF:-1 group-title="TV",noticias 0
+http://planettvweb.com:8091/live/PtaPta567/user8790/13180.ts
+#EXTINF:-1 group-title="TV",noticias 0
+http://planettvweb.com:8091/live/PtaPta567/user8790/13181.ts
+#EXTINF:-1 group-title="TV",noticias 0
+http://planettvweb.com:8091/live/PtaPta567/user8790/13182.ts
+#EXTINF:-1 group-title="TV",noticias 0
+http://planettvweb.com:8091/live/PtaPta567/user8790/13172.ts
+#EXTINF:-1 group-title="TV",noticias 0
+http://planettvweb.com:8091/live/PtaPta567/user8790/13173.ts
+#EXTINF:-1 group-title="TV",noticias 0
+http://planettvweb.com:8091/live/PtaPta567/user8790/13174.ts
+#EXTINF:-1 group-title="TV",noticias 0
+http://planettvweb.com:8091/live/PtaPta567/user8790/13190.ts
+#EXTINF:-1 group-title="TV",noticias 0
+http://planettvweb.com:8091/live/PtaPta567/user8790/13183.ts
+#EXTINF:-1 group-title="TV",noticias 0
+http://planettvweb.com:8091/live/PtaPta567/user8790/13189.ts
+#EXTINF:-1 group-title="TV",noticias 0
+http://planettvweb.com:8091/live/PtaPta567/user8790/13169.ts
 
 
 
