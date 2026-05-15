@@ -1,29 +1,170 @@
 #EXTM3U
 
-#EXTINF:-1,CANAL 5 MEX HD
-http://planettvweb.com:8091/play/live.php?user=PtaPta567&pass=user8790&id=13414&extension=ts
-#EXTINF:-1,AZTECA 7 MEX HD
-http://planettvweb.com:8091/play/live.php?user=PtaPta567&pass=user8790&id=13410&extension=ts
-#EXTINF:-1,TUDN MEX HD
-http://planettvweb.com:8091/play/live.php?user=PtaPta567&pass=user8790&id=13451&extension=ts
-#EXTINF:-1,AFIZZIONADOS HD
-http://planettvweb.com:8091/play/live.php?user=PtaPta567&pass=user8790&id=13433&extension=ts
-#EXTINF:-1,FOX SPORTS 1 MEX HD
-http://planettvweb.com:8091/play/live.php?user=PtaPta567&pass=user8790&id=13444&extension=ts
-#EXTINF:-1,FOX SPORTS 2 MEX HD
-http://planettvweb.com:8091/play/live.php?user=PtaPta567&pass=user8790&id=13445&extension=ts
-#EXTINF:-1,FOX SPORTS 3 MEX HD
-http://planettvweb.com:8091/play/live.php?user=PtaPta567&pass=user8790&id=13446.ts
-#EXTINF:-1,FOX SPORTS PREMIUM MEX HD
-http://planettvweb.com:8091/play/live.php?user=PtaPta567&pass=user8790&id=13447&extension=ts
-#EXTINF:-1,ESPN MEX HD
-http://planettvweb.com:8091/play/live.php?user=PtaPta567&pass=user8790&id=13437&extension=ts
-#EXTINF:-1,ESPN 2 MEX HD
-http://planettvweb.com:8091/play/live.php?user=PtaPta567&pass=user8790&id=13438&extension=ts
-#EXTINF:-1,ESPN 3 MEX HD
-http://planettvweb.com:8091/play/live.php?user=PtaPta567&pass=user8790&id=13439&extension=ts
-#EXTINF:-1,ESPN 4 MEX HD
-http://planettvweb.com:8091/play/live.php?user=PtaPta567&pass=user8790&id=13440&extension=ts
+#EXTINF:-1 tvg-id="" tvg-name="------DEPORTES MEXICO-------" tvg-logo="" group-title="DEPORTES MEXICO",------DEPORTES MEXICO-------
+http://planettvweb.com:8091/PtaPta567/user8790/12837
+#EXTINF:-1 tvg-id="" tvg-name="VIX Premium La Liga" tvg-logo="https://cdn2.mediotiempo.com/uploads/media/2022/07/16/vix-juegos-exclusivos-futbol-mexicano-1.jpg" group-title="DEPORTES MEXICO",VIX Premium La Liga
+http://planettvweb.com:8091/PtaPta567/user8790/132850
+#EXTINF:-1 tvg-id="" tvg-name="FOX SPORT HD MEX" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/FOX_Sports_logo.svg/800px-FOX_Sports_logo.svg.png" group-title="DEPORTES MEXICO",FOX SPORT HD MEX
+http://planettvweb.com:8091/PtaPta567/user8790/12008
+#EXTINF:-1 tvg-id="" tvg-name="FOX SPORT 2 HD MEX" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/2015_Fox_sports_logo.svg/1200px-2015_Fox_sports_logo.svg.png" group-title="DEPORTES MEXICO",FOX SPORT 2 HD MEX
+http://planettvweb.com:8091/PtaPta567/user8790/12009
+#EXTINF:-1 tvg-id="" tvg-name="FOX SPORT 3 HD MEX" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Fox_sports_3_logo.svg/1280px-Fox_sports_3_logo.svg.png" group-title="DEPORTES MEXICO",FOX SPORT 3 HD MEX
+http://planettvweb.com:8091/PtaPta567/user8790/12010
+#EXTINF:-1 tvg-id="" tvg-name="ESPN HD MX" tvg-logo="https://www.ecured.cu/images/thumb/2/2f/Espn_logo.jpg/260px-Espn_logo.jpg" group-title="DEPORTES MEXICO",ESPN HD MX
+http://planettvweb.com:8091/PtaPta567/user8790/11991
+#EXTINF:-1 tvg-id="" tvg-name="ESPN 2 MX HD" tvg-logo="http://ik.imagekit.io/ulangotv/image/upload/70997_logo_espn_2.png" group-title="DEPORTES MEXICO",ESPN 2 MX HD
+http://planettvweb.com:8091/PtaPta567/user8790/11989
+#EXTINF:-1 tvg-id="" tvg-name="ESPN 3 MX HD" tvg-logo="http://www.supercable.com/supercable/wp-content/uploads/2018/03/espn-3-logo-01.png" group-title="DEPORTES MEXICO",ESPN 3 MX HD
+http://planettvweb.com:8091/PtaPta567/user8790/11990
+#EXTINF:-1 tvg-id="" tvg-name="ESPN PLUS MX HD" tvg-logo="https://alruckershow.com/wp-content/uploads/2018/04/espn-plus-logo.png" group-title="DEPORTES MEXICO",ESPN PLUS MX HD
+http://planettvweb.com:8091/PtaPta567/user8790/11992
+#EXTINF:-1 tvg-id="" tvg-name="Canal 5 HD MEX" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Canal_5_Mexico_logo_2014.svg/1200px-Canal_5_Mexico_logo_2014.svg.png" group-title="DEPORTES MEXICO",Canal 5 HD MEX
+http://planettvweb.com:8091/PtaPta567/user8790/22398
+#EXTINF:-1 tvg-id="" tvg-name="CANAL 5 HD MEX" tvg-logo="https://upload.wikimedia.org/wikipedia/en/9/9f/Canal52016.png" group-title="DEPORTES MEXICO",CANAL 5 HD MEX
+http://planettvweb.com:8091/PtaPta567/user8790/22399
+EXTINF:-1 tvg-id="" tvg-name="FOX Sports Premium" tvg-logo="https://sport-tv-guide.live/images/stations/a192.png" group-title="DEPORTES MEXICO",FOX Sports Premium
+http://planettvweb.com:8091/PtaPta567/user8790/38384
+#EXTINF:-1 tvg-id="" tvg-name="TUDN HD" tvg-logo="https://www.roc21.com/blog/wp-content/uploads/2019/05/logo-tudn.jpg" group-title="DEPORTES MEXICO",TUDN HD
+http://planettvweb.com:8091/PtaPta567/user8790/50497
+#EXTINF:-1 tvg-id="" tvg-name="ESPN 4 MX HD" tvg-logo="https://forounivers.com/uploads/monthly_2021_12/large.ESPN4_logo.png.6cabec4272e924e3273d3c6219ad67fb.png" group-title="DEPORTES MEXICO",ESPN 4 MX HD
+http://planettvweb.com:8091/PtaPta567/user8790/64415
+#EXTINF:-1 tvg-id="" tvg-name="--------DEPORTES-------" tvg-logo="https://www.iptvmexico.com.mx/wp-content/uploads/2017/10/iptv-player-latino.jpg?x80798" group-title="DEPORTES",--------DEPORTES-------
+http://planettvweb.com:8091/PtaPta567/user8790/12813
+#EXTINF:-1 tvg-id="" tvg-name="Directv Sports 1 HD" tvg-logo="https://album.mediaset.es/eimg/2023/02/06/flamengo-al-hilal-cuando-y-donde-ver-en-tv-y-online-el-mundial-de-clubes-2023_92bc.jpg?w=480" group-title="DEPORTES",Directv Sports 1 HD
+http://planettvweb.com:8091/PtaPta567/user8790/12739
+#EXTINF:-1 tvg-id="" tvg-name="Directv Sport 2 HD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/1/10/DIRECTV_Sports_2_Latin_America_%282018%29.svg" group-title="DEPORTES",Directv Sport 2 HD
+http://planettvweb.com:8091/PtaPta567/user8790/12042
+#EXTINF:-1 tvg-id="" tvg-name="Directv Sport +" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/e/e0/DirecTV_Sports_Latin_America_-_2018_logo_v2.svg" group-title="DEPORTES",Directv Sport +
+http://planettvweb.com:8091/PtaPta567/user8790/12738
+#EXTINF:-1 tvg-id="" tvg-name="Directv Sports 1 SD" tvg-logo="http://static-cdn2.ustream.tv/i/channel/picture/1/9/7/4/19743025/19743025,640x360,b:2.jpg" group-title="DEPORTES",Directv Sports 1 SD
+http://planettvweb.com:8091/PtaPta567/user8790/12019
+#EXTINF:-1 tvg-id="" tvg-name="TV Max" tvg-logo="https://w1.pngwing.com/pngs/235/101/png-transparent-green-grass-tvmax-television-logo-television-channel-television-show-tvn-claro-tv-thumbnail.png" group-title="DEPORTES",TV Max
+http://planettvweb.com:8091/PtaPta567/user8790/20320
+#EXTINF:-1 tvg-id="" tvg-name="FOX SPORTS PREMIUM SUR" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/f/f2/Fox_Sports_Premium_%28Argentina%29_-_2018_logo.png" group-title="DEPORTES",FOX SPORTS PREMIUM SUR
+http://planettvweb.com:8091/PtaPta567/user8790/20321
+#EXTINF:-1 tvg-id="" tvg-name="TYC SPORTS SD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Torneos.png/220px-Torneos.png" group-title="DEPORTES",TYC SPORTS SD
+http://planettvweb.com:8091/PtaPta567/user8790/20322
+#EXTINF:-1 tvg-id="" tvg-name="Fox Deportes HD" tvg-logo="http://vtr.com/contenidos/logo-fox-sports-premium.jpg" group-title="DEPORTES",Fox Deportes HD
+http://planettvweb.com:8091/PtaPta567/user8790/12041
+#EXTINF:-1 tvg-id="" tvg-name="TNT SPORTS SD" tvg-logo="https://tntsports.com/__export/1565373169000/sites/tntsports/arte/apps/facebook.jpg" group-title="DEPORTES",TNT SPORTS SD
+http://planettvweb.com:8091/PtaPta567/user8790/12004
+#EXTINF:-1 tvg-id="" tvg-name="ESPN SD " tvg-logo="https://cdn.mitvstatic.com/channels/pe_espn_m.png" group-title="DEPORTES",ESPN SD 
+http://planettvweb.com:8091/PtaPta567/user8790/11851
+#EXTINF:-1 tvg-id="" tvg-name="ESPN 2 SD " tvg-logo="https://cdn.mitvstatic.com/channels/ar_espn-2_m.png" group-title="DEPORTES",ESPN 2 SD 
+http://planettvweb.com:8091/PtaPta567/user8790/11850
+#EXTINF:-1 tvg-id="" tvg-name="ESPN 3  SD" tvg-logo="https://cdn.mitvstatic.com/channels/ar_espn-3_m.png" group-title="DEPORTES",ESPN 3  SD
+http://planettvweb.com:8091/PtaPta567/user8790/11849
+#EXTINF:-1 tvg-id="" tvg-name="Espn 4 SD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/6/66/ESPN4_logo.png" group-title="DEPORTES",Espn 4 SD
+http://planettvweb.com:8091/PtaPta567/user8790/21456
+#EXTINF:-1 tvg-id="" tvg-name="ESPN 5 SUR" tvg-logo="https://img.utdstc.com/icons/tigo-sports-android.png:l" group-title="DEPORTES",ESPN 5 SUR
+http://planettvweb.com:8091/PtaPta567/user8790/17719
+#EXTINF:-1 tvg-id="" tvg-name="ESPN 6" tvg-logo="" group-title="DEPORTES",ESPN 6
+http://planettvweb.com:8091/PtaPta567/user8790/92313
+#EXTINF:-1 tvg-id="" tvg-name="ESPN 7 SUR" tvg-logo="https://img.utdstc.com/icons/tigo-sports-android.png:l" group-title="DEPORTES",ESPN 7 SUR
+http://planettvweb.com:8091/PtaPta567/user8790/17720
+#EXTINF:-1 tvg-id="" tvg-name="ESPN Colombia HD" tvg-logo="https://cdn.mitvstatic.com/channels/pe_espn_m.png" group-title="DEPORTES",ESPN Colombia HD
+http://planettvweb.com:8091/PtaPta567/user8790/20323
+#EXTINF:-1 tvg-id="" tvg-name="ESPN 2 HD Colombia" tvg-logo="https://cdn.mitvstatic.com/channels/ar_espn-2_m.png" group-title="DEPORTES",ESPN 2 HD Colombia
+http://planettvweb.com:8091/PtaPta567/user8790/11905
+#EXTINF:-1 tvg-id="" tvg-name="ESPN 2 CHILE" tvg-logo="https://cdn.mitvstatic.com/channels/ar_espn-3_m.png" group-title="DEPORTES",ESPN 2 CHILE
+http://planettvweb.com:8091/PtaPta567/user8790/11966
+#EXTINF:-1 tvg-id="" tvg-name="ESPN 3 CHILE" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/b/bc/ESPN%2B_logo.jpg" group-title="DEPORTES",ESPN 3 CHILE
+http://planettvweb.com:8091/PtaPta567/user8790/11917
+#EXTINF:-1 tvg-id="" tvg-name="ESPN 5 HD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/ESPN_5_logo.svg/2560px-ESPN_5_logo.svg.png" group-title="DEPORTES",ESPN 5 HD
+http://planettvweb.com:8091/PtaPta567/user8790/12030
+#EXTINF:-1 tvg-id="" tvg-name="ESPN Deportes HD" tvg-logo="https://library.kissclipart.com/20180924/bwq/kissclipart-espn-deportes-logo-clipart-espn-deportes-sports-93892b78a6709a4f.png" group-title="DEPORTES",ESPN Deportes HD
+http://planettvweb.com:8091/PtaPta567/user8790/11913
+#EXTINF:-1 tvg-id="" tvg-name="FUTBOL DE ECUADOR" tvg-logo="https://image.roku.com/channels/images/74f6f40197334ad6b7fdb78439e35d5a-hd.jpg" group-title="DEPORTES",FUTBOL DE ECUADOR
+http://planettvweb.com:8091/PtaPta567/user8790/16963
+#EXTINF:-1 tvg-id="" tvg-name="DeporTV HD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/a/a2/Canal_DeporTV.jpg" group-title="DEPORTES",DeporTV HD
+http://planettvweb.com:8091/PtaPta567/user8790/11893
+#EXTINF:-1 tvg-id="" tvg-name="CLARO SPORT SD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/3/30/Claro_Sports_logo.svg" group-title="DEPORTES",CLARO SPORT SD
+http://planettvweb.com:8091/PtaPta567/user8790/11998
+#EXTINF:-1 tvg-id="" tvg-name="CLARO SPORT 2 HD" tvg-logo="http://cmll.com/wp-content/uploads/2015/08/claro_sport.jpg" group-title="DEPORTES",CLARO SPORT 2 HD
+http://planettvweb.com:8091/PtaPta567/user8790/11922
+#EXTINF:-1 tvg-id="" tvg-name="Ufc (Ufc Fight Pass)" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/3/38/PX_Sports_-_Logo.png" group-title="DEPORTES",Ufc (Ufc Fight Pass)
+http://planettvweb.com:8091/PtaPta567/user8790/12003
+#EXTINF:-1 tvg-id="" tvg-name="ESTADIO TNT SPORTS CHILE SD" tvg-logo="https://img.sport-tv-guide.live/images/tv-station-estadio-tnt-sports-2559.png" group-title="DEPORTES",ESTADIO TNT SPORTS CHILE SD
+http://planettvweb.com:8091/PtaPta567/user8790/12044
+#EXTINF:-1 tvg-id="" tvg-name="CDF PREMIUN SD" tvg-logo="http://3.bp.blogspot.com/-JFht_TGbcTI/UZbtz3tpUII/AAAAAAAAAog/9ufu15mKjcA/s1600/cdf+premium+nuevo.png" group-title="DEPORTES",CDF PREMIUN SD
+http://planettvweb.com:8091/PtaPta567/user8790/12001
+#EXTINF:-1 tvg-id="" tvg-name="CDF PREMIUN HD" tvg-logo="http://3.bp.blogspot.com/-G2-4yYvvcEE/UhECiUQcGMI/AAAAAAAAOmo/a6UhoJrISyg/s1600/cdf+premium+NUEVO.png" group-title="DEPORTES",CDF PREMIUN HD
+http://planettvweb.com:8091/PtaPta567/user8790/12045
+#EXTINF:-1 tvg-id="192TVCE.ec" tvg-name="ESTADIO TNT SPORTS CHILE HD" tvg-logo="https://logodownload.org/wp-content/uploads/2021/01/tnt-sports-logo-3.png" group-title="DEPORTES",ESTADIO TNT SPORTS CHILE HD
+http://planettvweb.com:8091/PtaPta567/user8790/21813
+#EXTINF:-1 tvg-id="" tvg-name="GOL PERU" tvg-logo="https://vignette.wikia.nocookie.net/logopedia/images/8/8d/Golperu.png/revision/latest?cb=20160429193028" group-title="DEPORTES",GOL PERU
+http://planettvweb.com:8091/PtaPta567/user8790/12741
+#EXTINF:-1 tvg-id="" tvg-name="Red Bull (Red Bull Sports)" tvg-logo="https://e7.pngegg.com/pngimages/498/290/png-clipart-red-bull-tv-television-channel-logo-red-bull-television-carnivoran.png" group-title="DEPORTES",Red Bull (Red Bull Sports)
+http://planettvweb.com:8091/PtaPta567/user8790/14841
+#EXTINF:-1 tvg-id="" tvg-name="MOTO GP RACING" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Sky_Sport_-_Logo_2020.svg/1280px-Sky_Sport_-_Logo_2020.svg.png" group-title="DEPORTES",MOTO GP RACING
+http://planettvweb.com:8091/PtaPta567/user8790/14787
+#EXTINF:-1 tvg-id="" tvg-name="TUDN" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Sky_Sport_-_Logo_2020.svg/1280px-Sky_Sport_-_Logo_2020.svg.png" group-title="DEPORTES",TUDN
+http://planettvweb.com:8091/PtaPta567/user8790/20318
+#EXTINF:-1 tvg-id="" tvg-name="SKY SPORTS F1" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Sky_Sport_-_Logo_2020.svg/1280px-Sky_Sport_-_Logo_2020.svg.png" group-title="DEPORTES",SKY SPORTS F1
+http://planettvweb.com:8091/PtaPta567/user8790/40365
+#EXTINF:-1 tvg-id="" tvg-name="Sky Sport " tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Sky_Sport_-_Logo_2020.svg/1280px-Sky_Sport_-_Logo_2020.svg.png" group-title="DEPORTES",Sky Sport 
+http://planettvweb.com:8091/PtaPta567/user8790/23240
+#EXTINF:-1 tvg-id="" tvg-name="TENNIS CHANNEL" tvg-logo="" group-title="DEPORTES",TENNIS CHANNEL
+http://planettvweb.com:8091/PtaPta567/user8790/11845
+#EXTINF:-1 tvg-id="" tvg-name=" Wwb (Wwb Beisbol Latino)" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/MLS_crest_logo_RGB_gradient.svg/969px-MLS_crest_logo_RGB_gradient.svg.png" group-title="DEPORTES", Wwb (Wwb Beisbol Latino)
+http://planettvweb.com:8091/PtaPta567/user8790/21462
+#EXTINF:-1 tvg-id="" tvg-name="MLS 01:" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/MLS_crest_logo_RGB_gradient.svg/969px-MLS_crest_logo_RGB_gradient.svg.png" group-title="DEPORTES",MLS 01:
+http://planettvweb.com:8091/PtaPta567/user8790/16535
+#EXTINF:-1 tvg-id="" tvg-name="MLS 02:" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/MLS_crest_logo_RGB_gradient.svg/969px-MLS_crest_logo_RGB_gradient.svg.png" group-title="DEPORTES",MLS 02:
+http://planettvweb.com:8091/PtaPta567/user8790/16536
+#EXTINF:-1 tvg-id="" tvg-name="MLS 03:" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/MLS_crest_logo_RGB_gradient.svg/969px-MLS_crest_logo_RGB_gradient.svg.png" group-title="DEPORTES",MLS 03:
+http://planettvweb.com:8091/PtaPta567/user8790/12020
+#EXTINF:-1 tvg-id="" tvg-name="MLS 04:" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/MLS_crest_logo_RGB_gradient.svg/969px-MLS_crest_logo_RGB_gradient.svg.png" group-title="DEPORTES",MLS 04:
+http://planettvweb.com:8091/PtaPta567/user8790/11977
+#EXTINF:-1 tvg-id="" tvg-name="MLS 05:" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/MLS_crest_logo_RGB_gradient.svg/969px-MLS_crest_logo_RGB_gradient.svg.png" group-title="DEPORTES",MLS 05:
+http://planettvweb.com:8091/PtaPta567/user8790/21458
+#EXTINF:-1 tvg-id="" tvg-name="MLS 06:" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/MLS_crest_logo_RGB_gradient.svg/969px-MLS_crest_logo_RGB_gradient.svg.png" group-title="DEPORTES",MLS 06:
+http://planettvweb.com:8091/PtaPta567/user8790/16965
+#EXTINF:-1 tvg-id="" tvg-name="MLS 07: Onesoccer" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/MLS_crest_logo_RGB_gradient.svg/969px-MLS_crest_logo_RGB_gradient.svg.png" group-title="DEPORTES",MLS 07: Onesoccer
+http://planettvweb.com:8091/PtaPta567/user8790/14403
+#EXTINF:-1 tvg-id="" tvg-name="GOL TV ECUADOR HD" tvg-logo="https://cdn.mitvstatic.com/channels/b39ba6be-fb3e-4ce7-a302-d9eb6461bf9e_m.jpg" group-title="DEPORTES",GOL TV ECUADOR HD
+http://planettvweb.com:8091/PtaPta567/user8790/11971
+#EXTINF:-1 tvg-id="" tvg-name="GOL TV HD" tvg-logo="https://www.estadio.ec/sites/default/files/fotos/2017/07/28/goltv-conmebol-28-07-2017-2.png" group-title="DEPORTES",GOL TV HD
+http://planettvweb.com:8091/PtaPta567/user8790/11965
+#EXTINF:-1 tvg-id="" tvg-name="Bein Sports N HD" tvg-logo="https://yt3.ggpht.com/a/AGF-l79ZqwcyV8siuRPbAqV2SOp32PqEfMB_2--low=s900-mo-c-c0xffffffff-rj-k-no" group-title="DEPORTES",Bein Sports N HD
+http://planettvweb.com:8091/PtaPta567/user8790/11970
+#EXTINF:-1 tvg-id="" tvg-name="FIFA+" tvg-logo="https://www.digitaltveurope.com/files/2023/03/Screenshot-2023-03-08-at-12.33.41.png" group-title="DEPORTES",FIFA+
+http://planettvweb.com:8091/PtaPta567/user8790/20319
+#EXTINF:-1 tvg-id="" tvg-name="DAZN 1 ALEMAN" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Sky_Sport_F1_-_Logo_2018.svg/1280px-Sky_Sport_F1_-_Logo_2018.svg.png" group-title="DEPORTES",DAZN 1 ALEMAN
+http://planettvweb.com:8091/PtaPta567/user8790/11976
+#EXTINF:-1 tvg-id="" tvg-name="DAZN F1" tvg-logo="https://images-na.ssl-images-amazon.com/images/I/71njwkZLLfL.png" group-title="DEPORTES",DAZN F1
+http://planettvweb.com:8091/PtaPta567/user8790/16967
+#EXTINF:-1 tvg-id="" tvg-name="GOLF CHANNEL HD" tvg-logo="http://www.africanamericangolfersdigest.com/wp-content/uploads/2015/01/TGC_logo_300x2001.jpg" group-title="DEPORTES",GOLF CHANNEL HD
+http://planettvweb.com:8091/PtaPta567/user8790/11889
+#EXTINF:-1 tvg-id="" tvg-name="CDO 2 SD CHILE" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/4/48/CDO_Premium.png" group-title="DEPORTES",CDO 2 SD CHILE
+http://planettvweb.com:8091/PtaPta567/user8790/12011
+#EXTINF:-1 tvg-id="" tvg-name="DAZN 1 FHD" tvg-logo="https://images-na.ssl-images-amazon.com/images/I/71njwkZLLfL.png" group-title="DEPORTES",DAZN 1 FHD
+http://planettvweb.com:8091/PtaPta567/user8790/12043
+#EXTINF:-1 tvg-id="" tvg-name="DAZN 2 FHD" tvg-logo="https://images-na.ssl-images-amazon.com/images/I/71njwkZLLfL.png" group-title="DEPORTES",DAZN 2 FHD
+http://planettvweb.com:8091/PtaPta567/user8790/11975
+#EXTINF:-1 tvg-id="" tvg-name="Bellator MMA" tvg-logo="https://upload.wikimedia.org/wikipedia/en/a/a9/Bellator_MMA_Logo.png" group-title="DEPORTES",Bellator MMA
+http://planettvweb.com:8091/PtaPta567/user8790/41757
+#EXTINF:-1 tvg-id="" tvg-name="Combate Global" tvg-logo="https://pbs.twimg.com/profile_images/1374024780249239556/UieJZSab_400x400.jpg" group-title="DEPORTES",Combate Global
+http://planettvweb.com:8091/PtaPta567/user8790/41756
+#EXTINF:-1 tvg-id="" tvg-name="GLORY KICKBOXING" tvg-logo="https://ih1.redbubble.net/image.2247655092.2658/poster,504x498,f8f8f8-pad,600x600,f8f8f8.jpg" group-title="DEPORTES",GLORY KICKBOXING
+http://planettvweb.com:8091/PtaPta567/user8790/16964
+#EXTINF:-1 tvg-id="" tvg-name="Tigo Sport HD" tvg-logo="https://ayuda.tigo.co.cr/hc/article_attachments/360037602474/tigo_sports.png" group-title="DEPORTES",Tigo Sport HD
+http://planettvweb.com:8091/PtaPta567/user8790/16537
+#EXTINF:-1 tvg-id="" tvg-name="Win Sports Plus SD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Win_Sports%2B_logo.svg/1200px-Win_Sports%2B_logo.svg.png" group-title="DEPORTES",Win Sports Plus SD
+http://planettvweb.com:8091/PtaPta567/user8790/38586
+#EXTINF:-1 tvg-id="" tvg-name="Win Sports Plus HD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Win_Sports%2B_logo.svg/1200px-Win_Sports%2B_logo.svg.png" group-title="DEPORTES",Win Sports Plus HD
+http://planettvweb.com:8091/PtaPta567/user8790/38587
+#EXTINF:-1 tvg-id="" tvg-name="WIN SPORT HD_" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/0/03/WinSports2017.png" group-title="DEPORTES",WIN SPORT HD_
+http://planettvweb.com:8091/PtaPta567/user8790/12445
+#EXTINF:-1 tvg-id="" tvg-name="TSN 1 HD" tvg-logo="https://cdn.tvpassport.com/image/station/240x135/tsn1-2018.png" group-title="CANADA",TSN 1 HD
+http://planettvweb.com:8091/PtaPta567/user8790/21459
+#EXTINF:-1 tvg-id="" tvg-name="TSN 2 HD" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/TSN2_New_Logo.svg/1280px-TSN2_New_Logo.svg.png" group-title="CANADA",TSN 2 HD
+http://planettvweb.com:8091/PtaPta567/user8790/21460
+#EXTINF:-1 tvg-id="" tvg-name="TSN 3" tvg-logo="https://cdn.tvpassport.com/image/station/240x135/tsn3-2018.png" group-title="CANADA",TSN 3
+http://planettvweb.com:8091/PtaPta567/user8790/21461
+#EXTINF:-1 tvg-id="" tvg-name="TSN 4" tvg-logo="https://www.thesportsdb.com/images/media/tvlogo/yrrvpq1433380019.png" group-title="CANADA",TSN 4
+http://planettvweb.com:8091/PtaPta567/user8790/16955
+
 
 
 
