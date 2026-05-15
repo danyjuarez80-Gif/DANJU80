@@ -1,5 +1,21 @@
 #EXTM3U
 
+#EXTM3U
+#EXTINF:-1,ESPN HD MX
+http://planettvweb.com:8091/PtaPta567/user8790/11991
+#EXTINF:-1,ESPN 2 MX HD
+http://planettvweb.com:8091/PtaPta567/user8790/11989
+#EXTINF:-1,TUDN HD
+http://planettvweb.com:8091/PtaPta567/user8790/50497
+#EXTINF:-1,Canal 5 HD MEX
+http://planettvweb.com:8091/PtaPta567/user8790/22398
+#EXTINF:-1,Directv Sports 1 HD
+http://planettvweb.com:8091/PtaPta567/user8790/12739
+
+
+
+
+
 #EXTINF:-1 tvg-id="" tvg-name="------DEPORTES MEXICO-------" tvg-logo="" group-title="DEPORTES MEXICO",------DEPORTES MEXICO-------
 http://planettvweb.com:8091/PtaPta567/user8790/12837
 #EXTINF:-1 tvg-id="" tvg-name="VIX Premium La Liga" tvg-logo="https://cdn2.mediotiempo.com/uploads/media/2022/07/16/vix-juegos-exclusivos-futbol-mexicano-1.jpg" group-title="DEPORTES MEXICO",VIX Premium La Liga
