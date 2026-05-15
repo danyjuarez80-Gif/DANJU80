@@ -1,26 +1,26 @@
 #EXTM3U
-#EXTINF:-1 tvg-name="ESPN HD MX555" tvg-logo="..." group-title="DEPORTES MEXICO",ESPN HD MX
+#EXTINF:-1 tvg-name="ESPN HD MX555" tvg-logo="..." group-title="DEPORTES MEXICO",ESPN HD MX66
 https://danju80.onrender.com/canal/11991
 
 
 
-#EXTINF:-1 tvg-name="ESPN HD MX55" tvg-logo="https://www.ecured.cu/images/thumb/2/2f/Espn_logo.jpg/260px-Espn_logo.jpg" group-title="DEPORTES MEXICO",ESPN HD MX
+#EXTINF:-1 tvg-name="ESPN HD MX55" tvg-logo="https://www.ecured.cu/images/thumb/2/2f/Espn_logo.jpg/260px-Espn_logo.jpg" group-title="DEPORTES MEXICO",ESPN HD MX677
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://da8.danyjuarez80.workers.dev/PtaPta567/user8790/11991
 
-#EXTINF:-1 tvg-name="ESPN 2 MX HD666" tvg-logo="http://ik.imagekit.io/ulangotv/image/upload/70997_logo_espn_2.png" group-title="DEPORTES MEXICO",ESPN 2 MX HD
+#EXTINF:-1 tvg-name="ESPN 2 MX HD666" tvg-logo="http://ik.imagekit.io/ulangotv/image/upload/70997_logo_espn_2.png" group-title="DEPORTES MEXICO",ESPN 2 MX HD77
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://danju80.onrender.com/canal/11989
 
-#EXTINF:-1 tvg-name="ESPN 3 MX HD777" tvg-logo="http://www.supercable.com/supercable/wp-content/uploads/2018/03/espn-3-logo-01.png" group-title="DEPORTES MEXICO",ESPN 3 MX HD
+#EXTINF:-1 tvg-name="ESPN 3 MX HD777" tvg-logo="http://www.supercable.com/supercable/wp-content/uploads/2018/03/espn-3-logo-01.png" group-title="DEPORTES MEXICO",ESPN 3 MX HD77
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://danju80.onrender.com/canal/11990
 
-#EXTINF:-1 tvg-name="ESPN PLUS MX HD7888" tvg-logo="https://alruckershow.com/wp-content/uploads/2018/04/espn-plus-logo.png" group-title="DEPORTES MEXICO",ESPN PLUS MX HD
+#EXTINF:-1 tvg-name="ESPN PLUS MX HD7888" tvg-logo="https://alruckershow.com/wp-content/uploads/2018/04/espn-plus-logo.png" group-title="DEPORTES MEXICO",ESPN PLUS MX HD77
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://danju80.onrender.com/canal/11992
 
-#EXTINF:-1 tvg-name="ESPN 4 MX HD" tvg-logo="https://forounivers.com/uploads/monthly_2021_12/large.ESPN4_logo.png.6cabec4272e924e3273d3c6219ad67fb.png" group-title="DEPORTES MEXICO",ESPN 4 MX HD
+#EXTINF:-1 tvg-name="ESPN 4 MX HD" tvg-logo="https://forounivers.com/uploads/monthly_2021_12/large.ESPN4_logo.png.6cabec4272e924e3273d3c6219ad67fb.png" group-title="DEPORTES MEXICO",ESPN 4 MX HD77
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://danju80.onrender.com/canal/64415
 
