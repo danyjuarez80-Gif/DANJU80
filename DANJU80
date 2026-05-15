@@ -1,28 +1,30 @@
 #EXTM3U
-#EXTINF:-1 tvg-logo="" group-title="DEPORTES MEXICO", CANAL 5 MEX HD
+#EXTINF:-1 tvg-id="Canal5.mx" group-title="DEPORTES MX", CANAL 5 MEX HD
 http://planettvweb.com:8091/live/PtaPta567/user8790/13414.ts
-#EXTINF:-1 tvg-logo="" group-title="DEPORTES MEXICO", AZTECA 7 MEX HD
+#EXTINF:-1 tvg-id="Azteca7.mx" group-title="DEPORTES MX", AZTECA 7 MEX HD
 http://planettvweb.com:8091/live/PtaPta567/user8790/13410.ts
-#EXTINF:-1 tvg-logo="" group-title="DEPORTES MEXICO", TUDN MEX HD
+#EXTINF:-1 tvg-id="TUDN.mx" group-title="DEPORTES MX", TUDN MEX HD
 http://planettvweb.com:8091/live/PtaPta567/user8790/13451.ts
-#EXTINF:-1 tvg-logo="" group-title="DEPORTES MEXICO", AFIZZIONADOS HD
+#EXTINF:-1 tvg-id="Afizzionados.mx" group-title="DEPORTES MX", AFIZZIONADOS HD
 http://planettvweb.com:8091/live/PtaPta567/user8790/13433.ts
-#EXTINF:-1 tvg-logo="" group-title="DEPORTES MEXICO", FOX SPORTS 1 MEX HD
+#EXTINF:-1 tvg-id="FoxSports1.mx" group-title="DEPORTES MX", FOX SPORTS 1 MEX HD
 http://planettvweb.com:8091/live/PtaPta567/user8790/13444.ts
-#EXTINF:-1 tvg-logo="" group-title="DEPORTES MEXICO", FOX SPORTS 2 MEX HD
+#EXTINF:-1 tvg-id="FoxSports2.mx" group-title="DEPORTES MX", FOX SPORTS 2 MEX HD
 http://planettvweb.com:8091/live/PtaPta567/user8790/13445.ts
-#EXTINF:-1 tvg-logo="" group-title="DEPORTES MEXICO", FOX SPORTS 3 MEX HD
+#EXTINF:-1 tvg-id="FoxSports3.mx" group-title="DEPORTES MX", FOX SPORTS 3 MEX HD
 http://planettvweb.com:8091/live/PtaPta567/user8790/13446.ts
-#EXTINF:-1 tvg-logo="" group-title="DEPORTES MEXICO", FOX SPORTS PREMIUM MEX HD
+#EXTINF:-1 tvg-id="FoxSportsPremium.mx" group-title="DEPORTES MX", FOX SPORTS PREMIUM MEX HD
 http://planettvweb.com:8091/live/PtaPta567/user8790/13447.ts
-#EXTINF:-1 tvg-logo="" group-title="DEPORTES MEXICO", ESPN MEX HD
+#EXTINF:-1 tvg-id="ESPN.mx" group-title="DEPORTES MX", ESPN MEX HD
 http://planettvweb.com:8091/live/PtaPta567/user8790/13437.ts
-#EXTINF:-1 tvg-logo="" group-title="DEPORTES MEXICO", ESPN 2 MEX HD
+#EXTINF:-1 tvg-id="ESPN2.mx" group-title="DEPORTES MX", ESPN 2 MEX HD
 http://planettvweb.com:8091/live/PtaPta567/user8790/13438.ts
-#EXTINF:-1 tvg-logo="" group-title="DEPORTES MEXICO", ESPN 3 MEX HD
+#EXTINF:-1 tvg-id="ESPN3.mx" group-title="DEPORTES MX", ESPN 3 MEX HD
 http://planettvweb.com:8091/live/PtaPta567/user8790/13439.ts
-#EXTINF:-1 tvg-logo="" group-title="DEPORTES MEXICO", ESPN 4 MEX HD
+#EXTINF:-1 tvg-id="ESPN4.mx" group-title="DEPORTES MX", ESPN 4 MEX HD
 http://planettvweb.com:8091/live/PtaPta567/user8790/13440.ts
+#EXTINF:-1 tvg-id="SkySports.mx" group-title="DEPORTES MX", SKY SPORTS MEX HD
+http://planettvweb.com:8091/live/PtaPta567/user8790/13450.ts
 
 
 
