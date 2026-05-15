@@ -1,4 +1,9 @@
 #EXTM3U
+#EXTINF:-1 tvg-name="ESPN HD MX" tvg-logo="..." group-title="DEPORTES MEXICO",ESPN HD MX
+https://da8.danyjuarez80.workers.dev/PtaPta567/user8790/11991?type=ts
+
+
+
 
 #EXTINF:-1 tvg-name="ESPN HD MX" tvg-logo="https://www.ecured.cu/images/thumb/2/2f/Espn_logo.jpg/260px-Espn_logo.jpg" group-title="DEPORTES MEXICO",ESPN HD MX
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
