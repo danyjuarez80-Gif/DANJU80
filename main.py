@@ -4,32 +4,31 @@ import httpx
 
 app = FastAPI()
 
-# El "disfraz" para que PlanetTV no te bloquee
 HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
     "Accept": "*/*",
+    "Accept-Language": "es-MX,es;q=0.9",
     "Connection": "keep-alive"
 }
 
 @app.get("/canal/{channel_id}")
 async def stream_channel(channel_id: str):
-    # Armamos la URL original que la Roku no quiere leer directo
     target_url = f"http://planettvweb.com:8091/PtaPta567/user8790/{channel_id}"
     
-    client = httpx.AsyncClient(timeout=None)
+    # CLAVE: Le añadimos 'follow_redirects=True' para que persiga el bendito error 302
+    client = httpx.AsyncClient(timeout=None, follow_redirects=True)
     
     try:
-        # Tu script en la nube se conecta al puerto 8091 de PlanetTV
         request = client.build_request("GET", target_url, headers=HEADERS)
         response = await client.send(request, stream=True)
         
+        # Si aun así nos da error, que nos diga exactamente qué código da el IPTV
         if response.status_code != 200:
             await response.aclose()
-            raise HTTPException(status_code=response.status_code, detail="Error en el servidor de IPTV")
+            raise HTTPException(status_code=response.status_code, detail=f"IPTV respondio con codigo: {response.status_code}")
             
-        # Le enviamos el video limpio a la Roku simulando que viene de Render
         return StreamingResponse(
-            response.aiter_bytes(chunk_size=32768),
+            response.aiter_bytes(chunk_size=65536), # Duplicamos el tamaño para que no raspe el stream
             media_type="video/mp2t",
             background=response.aclose
         )
