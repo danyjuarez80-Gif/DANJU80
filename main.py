@@ -15,21 +15,28 @@ HEADERS = {
 async def stream_channel(channel_id: str):
     target_url = f"http://planettvweb.com:8091/PtaPta567/user8790/{channel_id}"
     
-    # CLAVE: Le añadimos 'follow_redirects=True' para que persiga el bendito error 302
+    # timeout=None para que Render no cuelgue la llamada si el canal tarda en responder
     client = httpx.AsyncClient(timeout=None, follow_redirects=True)
     
     try:
         request = client.build_request("GET", target_url, headers=HEADERS)
         response = await client.send(request, stream=True)
         
-        # Si aun así nos da error, que nos diga exactamente qué código da el IPTV
         if response.status_code != 200:
             await response.aclose()
-            raise HTTPException(status_code=response.status_code, detail=f"IPTV respondio con codigo: {response.status_code}")
+            raise HTTPException(status_code=response.status_code, detail=f"IPTV Error: {response.status_code}")
             
+        # CLAVE PARA ROKU: Le metemos las cabeceras que las teles exigen para flujos de video directos
+        custom_headers = {
+            "Content-Type": "video/mp2t", # Le avisa a la Roku que es formato TS legítimo
+            "Connection": "keep-alive",
+            "Access-Control-Allow-Origin": "*" # Evita bloqueos de seguridad del reproductor
+        }
+
         return StreamingResponse(
-            response.aiter_bytes(chunk_size=65536), # Duplicamos el tamaño para que no raspe el stream
-            media_type="video/mp2t",
+            response.aiter_bytes(chunk_size=32768), # Ajustamos el buffer para que la tele llene rápido su barra de carga
+            status_code=200,
+            headers=custom_headers,
             background=response.aclose
         )
         
