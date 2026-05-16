@@ -1,13 +1,14 @@
 import os
+import re
 
-def procesar_lista_directa():
+def procesar_listas_final():
     archivo_origen = "dan88.m3u"
     
     if not os.path.exists(archivo_origen):
         print("ERROR: No se encontro dan88.m3u en la raiz.")
         return
 
-    print("Leyendo lista pura de Planet Web...")
+    print("Procesando lista: Render proxy para TV, enlaces originales para VOD...")
     with open(archivo_origen, "r", encoding="utf-8", errors="ignore") as f:
         lineas = f.read().splitlines()
 
@@ -29,28 +30,34 @@ def procesar_lista_directa():
             linea_inf_lower = linea_inf.lower()
             linea_url_lower = linea_url.lower()
 
-            # DETECCIÓN BASADA EN TU FORMATO REAL (Captura 86310)
-            # Si el enlace termina directo en número o tiene /live/ es TV en vivo
-            es_live = "/live" in linea_url_lower or (linea_url and linea_url[-1].isdigit() and not linea_url_lower.endswith((".mp4", ".mkv", ".avi")))
-
-            if es_live:
-                # Canales en vivo: Directos a DANJU80 con su IP de Planet Web
-                listado_tv.append(linea_inf)
-                if linea_url: listado_tv.append(linea_url)
-            elif "/series" in linea_url_lower or "group-title=\"series" in linea_inf_lower:
-                # Series originales
+            # 1. Filtro para Series (Se quedan con IP y enlace ORIGINAL)
+            if "/series" in linea_url_lower or 'group-title="series' in linea_inf_lower:
                 listado_series.append(linea_inf)
                 if linea_url: listado_series.append(linea_url)
-            else:
-                # Por descarte, si no es live ni serie, va a películas (VOD)
+                
+            # 2. Filtro para Películas (Se quedan con IP y enlace ORIGINAL)
+            elif "/movie" in linea_url_lower or ".mp4" in linea_url_lower or ".mkv" in linea_url_lower or "movie" in linea_inf_lower or "pelic" in linea_inf_lower:
                 listado_movies.append(linea_inf)
                 if linea_url: listado_movies.append(linea_url)
+                
+            # 3. EN VIVO (DANJU80): Aquí SÍ aplicamos la máscara de tu Render
+            else:
+                if linea_url:
+                    # Extraemos el número final del canal (ej. 12816)
+                    match = re.search(r'/([^/]+)$', linea_url)
+                    if match:
+                        id_canal = match.group(1)
+                        # Reemplazamos el enlace por tu Render proxy
+                        linea_url = f"https://danju80.onrender.com/{id_canal}"
+                
+                listado_tv.append(linea_inf)
+                if linea_url: listado_tv.append(linea_url)
             
             i += 2
         else:
             i += 1
 
-    # Guardar cambios a la brava en los archivos físicos
+    # Guardamos los archivos actualizados en tu GitHub
     with open("DANJU80", "w", encoding="utf-8") as f:
         f.write("\n".join(listado_tv))
     
@@ -60,10 +67,11 @@ def procesar_lista_directa():
     with open("DANJU_SERIES", "w", encoding="utf-8") as f:
         f.write("\n".join(listado_series))
 
+    # Dejamos listo el puente de Render
     with open("lista_canales_render.txt", "w", encoding="utf-8") as f:
         f.write("https://raw.githubusercontent.com/danyjuarez80-Gif/DANJU80/main/DANJU80")
         
-    print("¡Sincronización terminada de forma exitosa!")
+    print("¡Proceso terminado con las reglas solicitadas!")
 
 if __name__ == "__main__":
-    procesar_lista_automatica = procesar_lista_directa()
+    procesar_listas_final()
