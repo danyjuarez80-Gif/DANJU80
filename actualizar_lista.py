@@ -4,7 +4,6 @@ import re
 
 def obtener_ip_publica():
     try:
-        # Detectamos tu IP pública actual
         with urllib.request.urlopen("https://api.ipify.org?format=text", timeout=10) as respuesta:
             ip = respuesta.read().decode("utf-8").strip()
             print(f"IP Pública detectada con éxito: {ip}")
@@ -44,23 +43,34 @@ def segmentar_y_procesar_listas():
             linea_inf_lower = linea_inf.lower()
             linea_url_lower = linea_url.lower()
 
-            # Identificamos si es Película o Serie
-            es_pelicula = "/movie/" in linea_url_lower or 'group-title="películas"' in linea_inf_lower or ".mp4" in linea_url_lower or ".mkv" in linea_url_lower
-            es_serie = "/series/" in linea_url_lower or 'group-title="series"' in linea_inf_lower
+            # BÚSQUEDA MEJORADA Y ULTRA FLEXIBLE:
+            # Detecta "movie", "movies", "pelicula", "películas", ".mp4", ".mkv"
+            es_pelicula = (
+                "/movie" in linea_url_lower or 
+                "movie" in linea_inf_lower or 
+                "pelic" in linea_inf_lower or 
+                ".mp4" in linea_url_lower or 
+                ".mkv" in linea_url_lower
+            )
+            
+            # Detectes "series", "serie", "tvshows"
+            es_serie = (
+                "/series" in linea_url_lower or 
+                "serie" in linea_inf_lower or 
+                "tvshow" in linea_inf_lower
+            )
 
             if es_pelicula:
-                # PELÍCULAS: Enlace original de fábrica sin tocar la IP
+                # PELÍCULAS: Enlace puro original (sin tocarle la IP)
                 listado_movies.append(linea_inf)
                 if linea_url: listado_movies.append(linea_url)
             elif es_serie:
-                # SERIES: Enlace original de fábrica sin tocar la IP
+                # SERIES: Enlace puro original (sin tocarle la IP)
                 listado_series.append(linea_inf)
                 if linea_url: listado_series.append(linea_url)
             else:
-                # LIVE TV: Aquí sí forzamos tu IP pública en la URL del canal
+                # LIVE TV: Forzamos el reemplazo de tu IP pública en la URL del canal en vivo
                 if mi_ip and linea_url:
-                    # Buscamos cualquier IP o dominio con puerto (ej: http://123.45.67.89:8080 o http://dominio.com:80)
-                    # y le inyectamos tu IP actual manteniendo el resto del enlace.
                     linea_url = re.sub(r'(https?://)[^/:]+(:\d+)?', f'\\1{mi_ip}\\2', linea_url)
                 
                 listado_tv.append(linea_inf)
@@ -72,15 +82,15 @@ def segmentar_y_procesar_listas():
     # Guardamos los 3 archivos sueltos en la raíz
     with open("DANJU80", "w", encoding="utf-8") as f:
         f.write("\n".join(listado_tv))
-    print("¡DANJU80 (En vivo con tu IP) actualizado!")
+    print("¡DANJU80 (En vivo) guardado!")
 
     with open("DANJU_MOVIES", "w", encoding="utf-8") as f:
         f.write("\n".join(listado_movies))
-    print("¡DANJU_MOVIES (Películas originales) actualizado!")
+    print("¡DANJU_MOVIES (Películas) guardado!")
 
     with open("DANJU_SERIES", "w", encoding="utf-8") as f:
         f.write("\n".join(listado_series))
-    print("¡DANJU_SERIES (Series originales) actualizado!")
+    print("¡DANJU_SERIES (Series) guardado!")
 
     # Sincronización para Render
     with open("lista_canales_render.txt", "w", encoding="utf-8") as f:
