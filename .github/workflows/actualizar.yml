@@ -3,10 +3,10 @@ name: Actualizar Lista Danju80 Cada 15 Minutos
 on:
   schedule:
     - cron: '*/15 * * * *'
-  workflow_dispatch: # Esto te deja picarle al botón manual para probar al tiro
+  workflow_dispatch:
 
 permissions:
-  contents: write # Permiso obligatorio para que el robot guarde los archivos modificados
+  contents: write
 
 jobs:
   build:
@@ -24,23 +24,22 @@ jobs:
       - name: Instalar Dependencias
         run: pip install requests
 
-      - name: Crear y Ejecutar Extractor Completo
+      - name: Crear y Ejecutar Filtro en Caliente
         run: |
           cat << 'EOF' > extractor_automatico.py
           import requests
 
-          # 1. PEGA AQUÍ TU ENLACE M3U ORIGINAL (La lista pesada que te mandan)
+          # 1. PEGA AQUÍ TU ENLACE M3U ORIGINAL (El link largo y pesado que te da tu proveedor)
           url_m3u_gigante = "AQUÍ_PON_EL_LINK_DE_TU_LISTA_COMPLETA" 
           
           try:
-              print("Descargando lista original de canales...")
+              print("Descargando lista completa...")
               respuesta = requests.get(url_m3u_gigante, timeout=30)
               if respuesta.status_code == 200:
                   lineas = respuesta.text.splitlines()
                   lineas_filtradas = []
                   skip_next = False
                   
-                  # Respetamos la cabecera del formato M3U
                   if lineas and lineas[0].startswith("#EXTM3U"):
                       lineas_filtradas.append(lineas[0])
                   
@@ -59,7 +58,7 @@ jobs:
                           if i + 1 < len(lineas):
                               url_abajo = lineas[i + 1].lower()
                           
-                          # FILTRO: Eliminamos películas y series para que la tele no se sature
+                          # Filtro estricto para limpiar VOD (Películas y Series)
                           es_vod = (
                               "/movie/" in url_abajo or 
                               "/series/" in url_abajo or 
@@ -74,21 +73,20 @@ jobs:
                               lineas_filtradas.append(linea)
                               skip_next = True
                               
-                  # 2. GUARDAMOS LA LISTA LIMPIA PARA TU ROKU (Reemplaza danju80 si es tu nombre de archivo)
-                  with open("danju80", "w", encoding="utf-8") as f:
+                  # 2. SOBREESCRIBIR TU ARCHIVO REAL DE CANALES (DANJU80)
+                  with open("DANJU80", "w", encoding="utf-8") as f:
                       f.write("\n".join(lineas_filtradas))
-                  print("¡Archivo 'danju80' depurado con éxito!")
+                  print("¡Archivo DANJU80 actualizado y sin películas!")
                   
-                  # 3. ACTUALIZAMOS TU ARCHIVO RENDER TXT AUTOMÁTICAMENTE
-                  # Aquí puedes guardar una copia del link o el texto que necesites para tus servidores
-                  with open("render.txt", "w", encoding="utf-8") as f_render:
-                      f_render.write("https://raw.githubusercontent.com/damjuarez80-Gif/DANJU80/main/danju80")
-                  print("¡Archivo 'render.txt' actualizado con éxito!")
+                  # 3. SOBREESCRIBIR TU ARCHIVO REAL DE RENDER (lista_canales_render.txt)
+                  with open("lista_canales_render.txt", "w", encoding="utf-8") as f_render:
+                      f_render.write("https://raw.githubusercontent.com/damjuarez80-Gif/DANJU80/main/DANJU80")
+                  print("¡Archivo lista_canales_render.txt actualizado!")
 
               else:
-                  print(f"Error al bajar la lista: Status {respuesta.status_code}")
+                  print(f"Error al descargar la lista: Status {respuesta.status_code}")
           except Exception as e:
-              print(f"Ocurrió un fallo en el proceso: {e}")
+              print(f"Ocurrió un error en el proceso: {e}")
           EOF
           python extractor_automatico.py
 
@@ -97,12 +95,12 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
-          # Agrega de golpe todas las modificaciones (danju80 y render.txt)
-          git add -A
+          # Forzamos a git a rastrear los cambios exactos de tus dos archivos reales
+          git add DANJU80 lista_canales_render.txt || true
           
           if ! git diff --cached --quiet; then
-            git commit -m "Automatización completa: danju80 y render.txt actualizados sin películas"
+            git commit -m "Automatización: DANJU80 y lista_canales_render.txt actualizados"
             git push origin main
           else
-            echo "No se detectaron cambios nuevos en los archivos."
+            echo "No hay cambios pendientes."
           fi
