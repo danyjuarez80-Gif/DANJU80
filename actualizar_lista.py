@@ -21,37 +21,28 @@ def procesar_canales():
         if not bloque.strip():
             continue
             
-        lineas_bloque = bloque.strip().split("\n")
+        lineas_bloque = block_lines = bloque.strip().split("\n")
         if len(lineas_bloque) < 2:
             continue
             
         extinf_line = "#EXTINF:" + lineas_bloque[0]
         url_line = lineas_bloque[-1].strip()
         
-        # SI ES PELÍCULA O SERIE: Las dejamos pasar completitas sin borrar nada
-        if "/movie/" in url_line or "/series/" in url_line:
-            nueva_url = url_line
-            
-        # SI ES CANAL EN VIVO: Cambiamos la IP vieja al formato de Render /canal/ID
-        elif "planettvweb.com:8091" in url_line:
-            id_match = re.search(r'/(\d+)$', url_line)
-            if id_match and id_match.group(1) is not None:
-                id_canal = id_match.group(1)
-                nueva_url = f"{url_render}/canal/{id_canal}"
-            else:
-                id_limpio = url_line.split("/")[-1]
-                nueva_url = f"{url_render}/canal/{id_limpio}"
+        # REEMPLAZO DIRECTO Y UNIVERSAL:
+        # No importa si es canal, serie o película, si tiene la IP vieja, se redirige a tu Render
+        if "planettvweb.com:8091" in url_line:
+            nueva_url = url_line.replace("http://planettvweb.com:8091", url_render)
         else:
             nueva_url = url_line
             
-        # Guardamos todo en el mismo archivo manteniendo sus categorías
+        # Mantenemos la cabecera idéntica para que "PELICULAS" y "SERIES" salgan en su propia sección
         lineas_resultado.append(extinf_line + "\n")
         lineas_resultado.append(nueva_url + "\n\n")
 
     with open(archivo_salida, 'w', encoding='utf-8') as f_out:
         f_out.writelines(lineas_resultado)
         
-    print(f"¡Listo! Archivo {archivo_salida} generado con todo el contenido.")
+    print(f"¡Modificación completada! Todo redirigido a Render en {archivo_salida}")
 
 if __name__ == "__main__":
     procesar_canales()
