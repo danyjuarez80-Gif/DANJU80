@@ -1,13 +1,13 @@
 import os
 
-def segmentar_listas_puras():
+def procesar_lista_automatica():
     archivo_origen = "dan88.m3u"
     
     if not os.path.exists(archivo_origen):
-        print("ERROR: No se encontro dan88.m3u en la raiz del repositorio.")
+        print("ERROR: No existe dan88.m3u en el repositorio.")
         return
 
-    print("Leyendo archivo original con enlaces de Planet Web...")
+    print("Abriendo lista original...")
     with open(archivo_origen, "r", encoding="utf-8", errors="ignore") as f:
         lineas = f.read().splitlines()
 
@@ -29,55 +29,40 @@ def segmentar_listas_puras():
             linea_inf_lower = linea_inf.lower()
             linea_url_lower = linea_url.lower()
 
-            # Filtros ultra flexibles para separar Películas
-            es_pelicula = (
-                "/movie" in linea_url_lower or 
-                ".mp4" in linea_url_lower or 
-                ".mkv" in linea_url_lower or
-                "movie" in linea_inf_lower or
-                "pelic" in linea_inf_lower
-            )
-            
-            # Filtros ultra flexibles para separar Series
-            es_serie = (
-                "/series" in linea_url_lower or 
-                "serie" in linea_inf_lower or
-                "tvshow" in linea_inf_lower
-            )
-
-            if es_pelicula:
-                # Se guarda original de Planet Web
+            # Filtros básicos para separar Películas
+            if "/movie" in linea_url_lower or ".mp4" in linea_url_lower or ".mkv" in linea_url_lower or "movie" in linea_inf_lower or "pelic" in linea_inf_lower:
                 listado_movies.append(linea_inf)
                 if linea_url: listado_movies.append(linea_url)
-            elif es_serie:
-                # Se guarda original de Planet Web
+            
+            # Filtros básicos para separar Series
+            elif "/series" in linea_url_lower or "serie" in linea_inf_lower or "tvshow" in linea_inf_lower:
                 listado_series.append(linea_inf)
                 if linea_url: listado_series.append(linea_url)
+            
+            # Todo lo demás va directo a Live TV (Mantiene URLs originales de Planet Web)
             else:
-                # EN VIVO: Se queda intacto con su IP original de Planet Web
                 listado_tv.append(linea_inf)
                 if linea_url: listado_tv.append(linea_url)
+            
             i += 2
         else:
             i += 1
 
-    # Guardamos los 3 archivos limpios y originales en tu GitHub
+    # Escritura física y directa de los 3 archivos sueltos
     with open("DANJU80", "w", encoding="utf-8") as f:
         f.write("\n".join(listado_tv))
-    print("¡DANJU80 (En vivo - IP Planet Web original) actualizado!")
-
+    
     with open("DANJU_MOVIES", "w", encoding="utf-8") as f:
         f.write("\n".join(listado_movies))
-    print("¡DANJU_MOVIES (Películas - Original) actualizado!")
-
+        
     with open("DANJU_SERIES", "w", encoding="utf-8") as f:
         f.write("\n".join(listado_series))
-    print("¡DANJU_SERIES (Series - Original) actualizado!")
 
-    # Sincronizamos el puente para Render
+    # Guardamos el puente para Render
     with open("lista_canales_render.txt", "w", encoding="utf-8") as f:
         f.write("https://raw.githubusercontent.com/danyjuarez80-Gif/DANJU80/main/DANJU80")
-    print("¡lista_canales_render.txt actualizado para Render!")
+        
+    print("¡Proceso completado con éxito!")
 
 if __name__ == "__main__":
-    segmentar_listas_puras()
+    procesar_lista_automatica()
