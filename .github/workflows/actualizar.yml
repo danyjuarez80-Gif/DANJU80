@@ -15,92 +15,88 @@ jobs:
     steps:
       - name: Descargar el Repositorio
         uses: actions/checkout@v4
+        with:
+          persist-credentials: true
 
       - name: Configurar Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
-      - name: Crear y Ejecutar Filtro Local
+      - name: Filtrar Canales VOD y Modificar Archivos
         run: |
-          cat << 'EOF' > extractor_automatico.py
+          python -c '
           import os
 
-          # Archivo de origen que ya tienes en tu GitHub
-          archivo_origen = "dan88.m3u" 
-          
+          # 1. Leer la base que subiste ayer
+          archivo_origen = "dan88.m3u"
           if not os.path.exists(archivo_origen):
-              # Por si acaso tiene el nombre viejo en minúsculas o variaciones
-              if os.path.exists("dan28.m3u"):
-                  archivo_origen = "dan28.m3u"
-          
-          try:
-              print(f"Abriendo archivo local: {archivo_origen}")
-              with open(archivo_origen, "r", encoding="utf-8", errors="ignore") as f_origen:
-                  lineas = f_origen.splitlines()
-                  
-              lineas_filtradas = []
-              skip_next = False
-              
-              if lineas and lineas[0].startswith("#EXTM3U"):
-                  lineas_filtradas.append(lineas[0])
-              
-              for i in range(1, len(lineas)):
-                  linea = lineas[i].strip()
-                  
-                  if skip_next:
-                      if linea.startswith("http"):
-                          lineas_filtradas.append(linea)
-                      skip_next = False
-                      continue
-                      
-                  if linea.startswith("#EXTINF"):
-                      linea_lower = linea.lower()
-                      url_abajo = ""
-                      if i + 1 < len(lineas):
-                          url_abajo = lineas[i + 1].lower()
-                      
-                      # Volamos todo el VOD pesado (Películas, Series y formatos multimedia)
-                      es_vod = (
-                          "/movie/" in url_abajo or 
-                          "/series/" in url_abajo or 
-                          ".mp4" in url_abajo or 
-                          ".mkv" in url_abajo or
-                          'group-title="películas"' in linea_lower or
-                          'group-title="series"' in linea_lower or
-                          'group-title="vod"' in linea_lower
-                      )
-                      
-                      if not es_vod:
-                          lineas_filtradas.append(linea)
-                          skip_next = True
-                          
-              # Guardamos el resultado en tu archivo destino final
-              with open("DANJU80", "w", encoding="utf-8") as f_destino:
-                  f_destino.write("\n".join(lineas_filtradas))
-              print("¡Archivo DANJU80 actualizado localmente desde la base m3u!")
-              
-              # Actualizamos el render txt apuntando a la lista limpia
-              with open("lista_canales_render.txt", "w", encoding="utf-8") as f_render:
-                  f_render.write("https://raw.githubusercontent.com/damjuarez80-Gif/DANJU80/main/DANJU80")
-              print("¡Archivo lista_canales_render.txt actualizado!")
-              
-          except Exception as e:
-              print(f"Error procesando el filtrado: {e}")
-          EOF
-          python extractor_automatico.py
+              print("ERROR: No se encontro dan88.m3u en la raiz.")
+              exit(1)
 
-      - name: Guardar Cambios en GitHub (Git Commit & Push)
+          with open(archivo_origen, "r", encoding="utf-8", errors="ignore") as f:
+              lineas = f.splitlines()
+
+          lineas_filtradas = []
+          skip_next = False
+
+          if lineas and lineas[0].startswith("#EXTM3U"):
+              lineas_filtradas.append(lineas[0])
+
+          for i in range(1, len(lineas)):
+              linea = lineas[i].strip()
+              if skip_next:
+                  if linea.startswith("http"):
+                      lineas_filtradas.append(linea)
+                  skip_next = False
+                  continue
+
+              if linea.startswith("#EXTINF"):
+                  linea_lower = linea.lower()
+                  url_abajo = ""
+                  if i + 1 < len(lineas):
+                      url_abajo = lineas[i + 1].lower()
+
+                  # Filtro radical anti-peliculas y anti-series
+                  es_vod = (
+                      "/movie/" in url_abajo or 
+                      "/series/" in url_abajo or 
+                      ".mp4" in url_abajo or 
+                      ".mkv" in url_abajo or
+                      "group-title=\"películas\"" in linea_lower or
+                      "group-title=\"series\"" in linea_lower or
+                      "group-title=\"vod\"" in linea_lower
+                  )
+
+                  if not es_vod:
+                      lineas_filtradas.append(linea)
+                      skip_next = True
+
+          # 2. Forzar la escritura en tu archivo final en mayusculas
+          with open("DANJU80", "w", encoding="utf-8") as f_out:
+              f_out.write("\n".join(lineas_filtradas))
+          print("¡DANJU80 sobreescrito exitosamente!")
+
+          # 3. Forzar la escritura en tu txt de render
+          with open("lista_canales_render.txt", "w", encoding="utf-8") as f_render:
+              f_render.write("https://raw.githubusercontent.com/damjuarez80-Gif/DANJU80/main/DANJU80")
+          print("¡lista_canales_render.txt sobreescrito exitosamente!")
+          '
+
+      - name: Sincronizar y Forzar Push a GitHub
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
-          # Le decimos a Git que guarde los cambios específicamente en tus archivos reales
-          git add DANJU80 lista_canales_render.txt || true
+          # Hacemos un pull previo para evitar cualquier conflicto de sincronizacion
+          git pull origin main --rebase
+          
+          # Forzamos el rastreo exacto de tus dos archivos reales
+          git add DANJU80 lista_canales_render.txt
           
           if ! git diff --cached --quiet; then
-            git commit -m "Automatización: DANJU80 y render actualizados desde dan88"
+            git commit -m "Filtro Automatico: Canales en vivo listos"
             git push origin main
           else
-            echo "No hay variaciones detectadas en los canales."
+            echo "Sin cambios detectados en la lista de canales."
           fi
