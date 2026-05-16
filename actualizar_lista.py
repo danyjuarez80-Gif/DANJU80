@@ -1,17 +1,20 @@
 import os
 import re
 
-def procesar_listas_final():
+def procesar_listas_alwaysdata():
+    # Nombre del archivo original que descarga tu extractor
     archivo_origen = "dan88.m3u"
     
     if not os.path.exists(archivo_origen):
-        print("ERROR: No se encontro dan88.m3u en la raiz.")
+        print("ERROR: No se encontró dan88.m3u en la raíz del repositorio.")
         return
 
-    print("Procesando lista: Render proxy para TV, enlaces originales para VOD...")
+    print("Procesando lista: Alwaysdata proxy para TV, enlaces originales para VOD...")
+    
     with open(archivo_origen, "r", encoding="utf-8", errors="ignore") as f:
         lineas = f.read().splitlines()
 
+    # Conservar la cabecera estándar M3U
     cabecera = lineas[0] if lineas and lineas[0].startswith("#EXTM3U") else "#EXTM3U"
 
     listado_tv = [cabecera]
@@ -30,34 +33,37 @@ def procesar_listas_final():
             linea_inf_lower = linea_inf.lower()
             linea_url_lower = linea_url.lower()
 
-            # 1. Filtro para Series (Se quedan con IP y enlace ORIGINAL)
+            # 1. FILTRO PARA SERIES: Mantienen su enlace original directo
             if "/series" in linea_url_lower or 'group-title="series' in linea_inf_lower:
                 listado_series.append(linea_inf)
-                if linea_url: listado_series.append(linea_url)
+                if linea_url: 
+                    listado_series.append(linea_url)
                 
-            # 2. Filtro para Películas (Se quedan con IP y enlace ORIGINAL)
+            # 2. FILTRO PARA PELÍCULAS (VOD): Mantienen su enlace original directo
             elif "/movie" in linea_url_lower or ".mp4" in linea_url_lower or ".mkv" in linea_url_lower or "movie" in linea_inf_lower or "pelic" in linea_inf_lower:
                 listado_movies.append(linea_inf)
-                if linea_url: listado_movies.append(linea_url)
+                if linea_url: 
+                    listado_movies.append(linea_url)
                 
-            # 3. EN VIVO (DANJU80): Aquí SÍ aplicamos la máscara de tu Render
+            # 3. EN VIVO (DANJU80): Aquí se aplica la magia para Alwaysdata
             else:
                 if linea_url:
-                    # Extraemos el número final del canal (ej. 12816)
+                    # Extrae el ID numérico al final de la URL de Planet Web
                     match = re.search(r'/([^/]+)$', linea_url)
                     if match:
                         id_canal = match.group(1)
-                        # Reemplazamos el enlace por tu Render proxy
-                        linea_url = f"https://danju80.onrender.com/{id_canal}"
+                        # Reemplaza por tu nuevo dominio del servidor PHP
+                        linea_url = f"http://tvtv.alwaysdata.net/{id_canal}"
                 
                 listado_tv.append(linea_inf)
-                if linea_url: listado_tv.append(linea_url)
+                if linea_url: 
+                    listado_tv.append(linea_url)
             
             i += 2
         else:
             i += 1
 
-    # Guardamos los archivos actualizados en tu GitHub
+    # Guardar los archivos finales actualizados en tu repositorio
     with open("DANJU80", "w", encoding="utf-8") as f:
         f.write("\n".join(listado_tv))
     
@@ -67,11 +73,7 @@ def procesar_listas_final():
     with open("DANJU_SERIES", "w", encoding="utf-8") as f:
         f.write("\n".join(listado_series))
 
-    # Dejamos listo el puente de Render
-    with open("lista_canales_render.txt", "w", encoding="utf-8") as f:
-        f.write("https://raw.githubusercontent.com/danyjuarez80-Gif/DANJU80/main/DANJU80")
-        
-    print("¡Proceso terminado con las reglas solicitadas!")
+    print("¡Listas generadas con éxito apuntando a tvtv.alwaysdata.net!")
 
 if __name__ == "__main__":
-    procesar_listas_final()
+    procesar_listas_alwaysdata()
