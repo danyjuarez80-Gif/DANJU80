@@ -21,72 +21,72 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Instalar Dependencias
-        run: pip install requests
-
-      - name: Crear y Ejecutar Filtro en Caliente
+      - name: Crear y Ejecutar Filtro Local
         run: |
           cat << 'EOF' > extractor_automatico.py
-          import requests
+          import os
 
-          # 1. PEGA AQUÍ TU ENLACE M3U ORIGINAL (El link largo y pesado que te da tu proveedor)
-          url_m3u_gigante = "AQUÍ_PON_EL_LINK_DE_TU_LISTA_COMPLETA" 
+          # Archivo de origen que ya tienes en tu GitHub
+          archivo_origen = "dan88.m3u" 
+          
+          if not os.path.exists(archivo_origen):
+              # Por si acaso tiene el nombre viejo en minúsculas o variaciones
+              if os.path.exists("dan28.m3u"):
+                  archivo_origen = "dan28.m3u"
           
           try:
-              print("Descargando lista completa...")
-              respuesta = requests.get(url_m3u_gigante, timeout=30)
-              if respuesta.status_code == 200:
-                  lineas = respuesta.text.splitlines()
-                  lineas_filtradas = []
-                  skip_next = False
+              print(f"Abriendo archivo local: {archivo_origen}")
+              with open(archivo_origen, "r", encoding="utf-8", errors="ignore") as f_origen:
+                  lineas = f_origen.splitlines()
                   
-                  if lineas and lineas[0].startswith("#EXTM3U"):
-                      lineas_filtradas.append(lineas[0])
+              lineas_filtradas = []
+              skip_next = False
+              
+              if lineas and lineas[0].startswith("#EXTM3U"):
+                  lineas_filtradas.append(lineas[0])
+              
+              for i in range(1, len(lineas)):
+                  linea = lineas[i].strip()
                   
-                  for i in range(1, len(lineas)):
-                      linea = lineas[i].strip()
+                  if skip_next:
+                      if linea.startswith("http"):
+                          lineas_filtradas.append(linea)
+                      skip_next = False
+                      continue
                       
-                      if skip_next:
-                          if linea.startswith("http"):
-                              lineas_filtradas.append(linea)
-                          skip_next = False
-                          continue
+                  if linea.startswith("#EXTINF"):
+                      linea_lower = linea.lower()
+                      url_abajo = ""
+                      if i + 1 < len(lineas):
+                          url_abajo = lineas[i + 1].lower()
+                      
+                      # Volamos todo el VOD pesado (Películas, Series y formatos multimedia)
+                      es_vod = (
+                          "/movie/" in url_abajo or 
+                          "/series/" in url_abajo or 
+                          ".mp4" in url_abajo or 
+                          ".mkv" in url_abajo or
+                          'group-title="películas"' in linea_lower or
+                          'group-title="series"' in linea_lower or
+                          'group-title="vod"' in linea_lower
+                      )
+                      
+                      if not es_vod:
+                          lineas_filtradas.append(linea)
+                          skip_next = True
                           
-                      if linea.startswith("#EXTINF"):
-                          linea_lower = linea.lower()
-                          url_abajo = ""
-                          if i + 1 < len(lineas):
-                              url_abajo = lineas[i + 1].lower()
-                          
-                          # Filtro estricto para limpiar VOD (Películas y Series)
-                          es_vod = (
-                              "/movie/" in url_abajo or 
-                              "/series/" in url_abajo or 
-                              ".mp4" in url_abajo or 
-                              ".mkv" in url_abajo or
-                              'group-title="películas"' in linea_lower or
-                              'group-title="series"' in linea_lower or
-                              'group-title="vod"' in linea_lower
-                          )
-                          
-                          if not es_vod:
-                              lineas_filtradas.append(linea)
-                              skip_next = True
-                              
-                  # 2. SOBREESCRIBIR TU ARCHIVO REAL DE CANALES (DANJU80)
-                  with open("DANJU80", "w", encoding="utf-8") as f:
-                      f.write("\n".join(lineas_filtradas))
-                  print("¡Archivo DANJU80 actualizado y sin películas!")
-                  
-                  # 3. SOBREESCRIBIR TU ARCHIVO REAL DE RENDER (lista_canales_render.txt)
-                  with open("lista_canales_render.txt", "w", encoding="utf-8") as f_render:
-                      f_render.write("https://raw.githubusercontent.com/damjuarez80-Gif/DANJU80/main/DANJU80")
-                  print("¡Archivo lista_canales_render.txt actualizado!")
-
-              else:
-                  print(f"Error al descargar la lista: Status {respuesta.status_code}")
+              # Guardamos el resultado en tu archivo destino final
+              with open("DANJU80", "w", encoding="utf-8") as f_destino:
+                  f_destino.write("\n".join(lineas_filtradas))
+              print("¡Archivo DANJU80 actualizado localmente desde la base m3u!")
+              
+              # Actualizamos el render txt apuntando a la lista limpia
+              with open("lista_canales_render.txt", "w", encoding="utf-8") as f_render:
+                  f_render.write("https://raw.githubusercontent.com/damjuarez80-Gif/DANJU80/main/DANJU80")
+              print("¡Archivo lista_canales_render.txt actualizado!")
+              
           except Exception as e:
-              print(f"Ocurrió un error en el proceso: {e}")
+              print(f"Error procesando el filtrado: {e}")
           EOF
           python extractor_automatico.py
 
@@ -95,12 +95,12 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
-          # Forzamos a git a rastrear los cambios exactos de tus dos archivos reales
+          # Le decimos a Git que guarde los cambios específicamente en tus archivos reales
           git add DANJU80 lista_canales_render.txt || true
           
           if ! git diff --cached --quiet; then
-            git commit -m "Automatización: DANJU80 y lista_canales_render.txt actualizados"
+            git commit -m "Automatización: DANJU80 y render actualizados desde dan88"
             git push origin main
           else
-            echo "No hay cambios pendientes."
+            echo "No hay variaciones detectadas en los canales."
           fi
