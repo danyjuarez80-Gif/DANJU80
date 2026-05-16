@@ -29,17 +29,17 @@ def procesar_lista_automatica():
             linea_inf_lower = linea_inf.lower()
             linea_url_lower = linea_url.lower()
 
-            # Filtros básicos para separar Películas
+            # Separador de Películas
             if "/movie" in linea_url_lower or ".mp4" in linea_url_lower or ".mkv" in linea_url_lower or "movie" in linea_inf_lower or "pelic" in linea_inf_lower:
                 listado_movies.append(linea_inf)
                 if linea_url: listado_movies.append(linea_url)
             
-            # Filtros básicos para separar Series
+            # Separador de Series
             elif "/series" in linea_url_lower or "serie" in linea_inf_lower or "tvshow" in linea_inf_lower:
                 listado_series.append(linea_inf)
                 if linea_url: listado_series.append(linea_url)
             
-            # Todo lo demás va directo a Live TV (Mantiene URLs originales de Planet Web)
+            # Canales de TV en Vivo (Mantiene urls puros de Planet Web)
             else:
                 listado_tv.append(linea_inf)
                 if linea_url: listado_tv.append(linea_url)
@@ -48,7 +48,7 @@ def procesar_lista_automatica():
         else:
             i += 1
 
-    # Escritura física y directa de los 3 archivos sueltos
+    # Escritura en la raíz del repositorio
     with open("DANJU80", "w", encoding="utf-8") as f:
         f.write("\n".join(listado_tv))
     
@@ -58,11 +58,10 @@ def procesar_lista_automatica():
     with open("DANJU_SERIES", "w", encoding="utf-8") as f:
         f.write("\n".join(listado_series))
 
-    # Guardamos el puente para Render
     with open("lista_canales_render.txt", "w", encoding="utf-8") as f:
         f.write("https://raw.githubusercontent.com/danyjuarez80-Gif/DANJU80/main/DANJU80")
         
-    print("¡Proceso completado con éxito!")
+    print("¡Listas divididas con éxito!")
 
 if __name__ == "__main__":
     procesar_lista_automatica()
