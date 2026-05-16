@@ -23,79 +23,21 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Filtrar Canales VOD y Modificar Archivos
-        run: |
-          python -c '
-          import os
+      - name: Ejecutar Script de Segmentación
+        run: python actualizar_lista.py
 
-          archivo_origen = "dan88.m3u"
-          if not os.path.exists(archivo_origen):
-              print("ERROR: No se encontro dan88.m3u en la raiz.")
-              exit(1)
-
-          with open(archivo_origen, "r", encoding="utf-8", errors="ignore") as f:
-              lineas = f.read().splitlines()
-
-          lineas_filtradas = []
-          skip_next = False
-
-          if lineas and lineas[0].startswith("#EXTM3U"):
-              lineas_filtradas.append(lineas[0])
-
-          for i in range(1, len(lineas)):
-              linea = lineas[i].strip()
-              if skip_next:
-                  if linea.startswith("http"):
-                      lineas_filtradas.append(linea)
-                  skip_next = False
-                  continue
-
-              if linea.startswith("#EXTINF"):
-                  linea_lower = linea.lower()
-                  url_abajo = ""
-                  if i + 1 < len(lineas):
-                      url_abajo = lineas[i + 1].lower()
-
-                  es_vod = (
-                      "/movie/" in url_abajo or 
-                      "/series/" in url_abajo or 
-                      ".mp4" in url_abajo or 
-                      ".mkv" in url_abajo or
-                      "group-title=\"películas\"" in linea_lower or
-                      "group-title=\"series\"" in linea_lower or
-                      "group-title=\"vod\"" in linea_lower
-                  )
-
-                  if not es_vod:
-                      lineas_filtradas.append(linea)
-                      skip_next = True
-
-          with open("DANJU80", "w", encoding="utf-8") as f_out:
-              f_out.write("\n".join(lineas_filtradas))
-          print("¡DANJU80 sobreescrito exitosamente!")
-
-          with open("lista_canales_render.txt", "w", encoding="utf-8") as f_render:
-              f_render.write("https://raw.githubusercontent.com/damjuarez80-Gif/DANJU80/main/DANJU80")
-          print("¡lista_canales_render.txt sobreescrito exitosamente!")
-          '
-
-      - name: Sincronizar y Forzar Push a GitHub
+      - name: Enviar Cambios a GitHub
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
-          # 1. Agregamos los archivos al escenario de inmediato para evitar el error de unstaged
-          git add DANJU80 lista_canales_render.txt
+          # Le decimos a Git que suba los tres archivos generados
+          git add DANJU80 DANJU_MOVIES DANJU_SERIES lista_canales_render.txt
           
-          # 2. Hacemos el commit local con los cambios asegurados
           if ! git diff --cached --quiet; then
-            git commit -m "Filtro Automatico: DANJU80 y render actualizados sin VOD"
-            
-            # 3. Traemos cambios externos si los hay fusionando de forma segura
+            git commit -m "Automatización: Listas de 3 vías actualizadas"
             git pull origin main --rebase
-            
-            # 4. Mandamos todo a tu rama principal
             git push origin main
           else
-            echo "Sin cambios detectados en la lista. No se requiere push."
+            echo "Sin cambios detectados."
           fi
