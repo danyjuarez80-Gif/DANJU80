@@ -1,9 +1,10 @@
 import os
 import urllib.request
+import re
 
 def obtener_ip_publica():
     try:
-        # Usamos un servicio rápido para leer tu IP pública actual
+        # Detectamos tu IP pública actual
         with urllib.request.urlopen("https://api.ipify.org?format=text", timeout=10) as respuesta:
             ip = respuesta.read().decode("utf-8").strip()
             print(f"IP Pública detectada con éxito: {ip}")
@@ -16,13 +17,10 @@ def segmentar_y_procesar_listas():
     archivo_origen = "dan88.m3u"
     
     if not os.path.exists(archivo_origen):
-        print("ERROR: No se encontro dan88.m3u en la raiz.")
+        print("ERROR: No se encontro dan88.m3u en la raiz del repositorio.")
         return
 
-    # Obtenemos la IP para aplicarla SÓLO a los canales en vivo
     mi_ip = obtener_ip_publica()
-    if not mi_ip:
-        print("No se pudo obtener la IP. Se procesara el archivo sin modificar IPs.")
 
     print("Leyendo archivo base dan88.m3u...")
     with open(archivo_origen, "r", encoding="utf-8", errors="ignore") as f:
@@ -46,24 +44,24 @@ def segmentar_y_procesar_listas():
             linea_inf_lower = linea_inf.lower()
             linea_url_lower = linea_url.lower()
 
-            # Clasificación del tipo de contenido
+            # Identificamos si es Película o Serie
             es_pelicula = "/movie/" in linea_url_lower or 'group-title="películas"' in linea_inf_lower or ".mp4" in linea_url_lower or ".mkv" in linea_url_lower
             es_serie = "/series/" in linea_url_lower or 'group-title="series"' in linea_inf_lower
 
             if es_pelicula:
-                # PELÍCULAS: Se guardan intactas, con su enlace original (sin moverle a la IP)
+                # PELÍCULAS: Enlace original de fábrica sin tocar la IP
                 listado_movies.append(linea_inf)
                 if linea_url: listado_movies.append(linea_url)
             elif es_serie:
-                # SERIES: Se guardan intactas, con su enlace original (sin moverle a la IP)
+                # SERIES: Enlace original de fábrica sin tocar la IP
                 listado_series.append(linea_inf)
                 if linea_url: listado_series.append(linea_url)
             else:
-                # LIVE TV: Aquí sí aplicamos el reemplazo de IP si se detectó una válida
+                # LIVE TV: Aquí sí forzamos tu IP pública en la URL del canal
                 if mi_ip and linea_url:
-                    # Remplaza cualquier IP o dominio viejo que venga en el enlace por tu IP actual
-                    # Nota: Ajusta esta lógica si tu proveedor maneja un formato de IP específico (ej: mi_ip:puerto)
-                    pass 
+                    # Buscamos cualquier IP o dominio con puerto (ej: http://123.45.67.89:8080 o http://dominio.com:80)
+                    # y le inyectamos tu IP actual manteniendo el resto del enlace.
+                    linea_url = re.sub(r'(https?://)[^/:]+(:\d+)?', f'\\1{mi_ip}\\2', linea_url)
                 
                 listado_tv.append(linea_inf)
                 if linea_url: listado_tv.append(linea_url)
@@ -71,18 +69,18 @@ def segmentar_y_procesar_listas():
         else:
             i += 1
 
-    # Guardar los 3 archivos independientes en la raíz de tu GitHub
+    # Guardamos los 3 archivos sueltos en la raíz
     with open("DANJU80", "w", encoding="utf-8") as f:
         f.write("\n".join(listado_tv))
-    print(f"¡DANJU80 (En vivo) actualizado con IP fija!")
+    print("¡DANJU80 (En vivo con tu IP) actualizado!")
 
     with open("DANJU_MOVIES", "w", encoding="utf-8") as f:
         f.write("\n".join(listado_movies))
-    print("¡DANJU_MOVIES (Películas) guardado en crudo/original!")
+    print("¡DANJU_MOVIES (Películas originales) actualizado!")
 
     with open("DANJU_SERIES", "w", encoding="utf-8") as f:
         f.write("\n".join(listado_series))
-    print("¡DANJU_SERIES (Series) guardado en crudo/original!")
+    print("¡DANJU_SERIES (Series originales) actualizado!")
 
     # Sincronización para Render
     with open("lista_canales_render.txt", "w", encoding="utf-8") as f:
