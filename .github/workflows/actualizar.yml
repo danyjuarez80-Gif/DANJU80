@@ -1,7 +1,7 @@
 name: Filtrar y Actualizar Canales IPTV
 
 on:
-  workflow_dispatch: # Activa el botón gris para correrlo cuando tú quieras
+  workflow_dispatch: # Botón manual para correrlo cuando quieras
 
 jobs:
   build:
@@ -23,6 +23,9 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add lista_canales_render.txt || echo "No se genero el archivo"
-        git commit -m "Lista actualizada automaticamente" || echo "No hay cambios"
+        
+        # Le decimos a git que guarde ambos archivos creados/modificados
+        git add lista_canales_render.txt DANJU80 || echo "Error al agregar archivos"
+        
+        git commit -m "Actualizacion simultanea de DANJU80 y lista_canales_render.txt" || echo "No hay cambios"
         git push
