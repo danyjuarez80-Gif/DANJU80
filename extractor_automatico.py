@@ -1,0 +1,62 @@
+import requests
+
+# 1. PEGA AQUÍ TU ENLACE M3U ORIGINAL (La lista pesada que te mandan)
+url_m3u_gigante = "AQUÍ_PON_EL_LINK_DE_TU_LISTA_COMPLETA" 
+
+try:
+    print("Descargando lista original de canales...")
+    respuesta = requests.get(url_m3u_gigante, timeout=30)
+    if respuesta.status_code == 200:
+        lineas = respuesta.text.splitlines()
+        lineas_filtradas = []
+        skip_next = False
+        
+        # Respetamos la cabecera del formato M3U
+        if lineas and lineas[0].startswith("#EXTM3U"):
+            lineas_filtradas.append(lineas[0])
+        
+        for i in range(1, len(lineas)):
+            linea = lineas[i].strip()
+            
+            if skip_next:
+                if linea.startswith("http"):
+                    lineas_filtradas.append(linea)
+                skip_next = False
+                continue
+                
+            if linea.startswith("#EXTINF"):
+                linea_lower = linea.lower()
+                url_abajo = ""
+                if i + 1 < len(lineas):
+                    url_abajo = lineas[i + 1].lower()
+                
+                # FILTRO: Eliminamos películas y series para que la tele no se sature
+                es_vod = (
+                    "/movie/" in url_abajo or 
+                    "/series/" in url_abajo or 
+                    ".mp4" in url_abajo or 
+                    ".mkv" in url_abajo or
+                    'group-title="películas"' in linea_lower or
+                    'group-title="series"' in linea_lower or
+                    'group-title="vod"' in linea_lower
+                )
+                
+                if not es_vod:
+                    lineas_filtradas.append(linea)
+                    skip_next = True
+                    
+        # 2. GUARDAMOS LA LISTA LIMPIA PARA TU ROKU (Reemplaza danju80 si es tu nombre de archivo)
+        with open("danju80", "w", encoding="utf-8") as f:
+            f.write("\n".join(lineas_filtradas))
+        print("¡Archivo 'danju80' depurado con éxito!")
+        
+        # 3. ACTUALIZAMOS TU ARCHIVO RENDER TXT AUTOMÁTICAMENTE
+        # Aquí puedes guardar una copia del link o el texto que necesites para tus servidores
+        with open("render.txt", "w", encoding="utf-8") as f_render:
+            f_render.write("https://raw.githubusercontent.com/damjuarez80-Gif/DANJU80/main/danju80")
+        print("¡Archivo 'render.txt' actualizado con éxito!")
+
+    else:
+        print(f"Error al bajar la lista: Status {respuesta.status_code}")
+except Exception as e:
+    print(f"Ocurrió un fallo en el proceso: {e}")
