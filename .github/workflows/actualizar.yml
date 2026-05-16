@@ -33,7 +33,6 @@ jobs:
               print("ERROR: No se encontro dan88.m3u en la raiz.")
               exit(1)
 
-          # AQUÍ YA ESTÁ CORREGIDO: .read().splitlines()
           with open(archivo_origen, "r", encoding="utf-8", errors="ignore") as f:
               lineas = f.read().splitlines()
 
@@ -57,7 +56,6 @@ jobs:
                   if i + 1 < len(lineas):
                       url_abajo = lineas[i + 1].lower()
 
-                  # Filtro estricto para limpiar películas y series pesadas
                   es_vod = (
                       "/movie/" in url_abajo or 
                       "/series/" in url_abajo or 
@@ -72,12 +70,10 @@ jobs:
                       lineas_filtradas.append(linea)
                       skip_next = True
 
-          # Guardar el listado limpio en tu archivo final
           with open("DANJU80", "w", encoding="utf-8") as f_out:
               f_out.write("\n".join(lineas_filtradas))
           print("¡DANJU80 sobreescrito exitosamente!")
 
-          # Guardar la URL en tu txt para el hosting
           with open("lista_canales_render.txt", "w", encoding="utf-8") as f_render:
               f_render.write("https://raw.githubusercontent.com/damjuarez80-Gif/DANJU80/main/DANJU80")
           print("¡lista_canales_render.txt sobreescrito exitosamente!")
@@ -88,14 +84,18 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
-          git pull origin main --rebase
-          
-          # Rastrea los dos archivos reales para subirlos juntos
+          # 1. Agregamos los archivos al escenario de inmediato para evitar el error de unstaged
           git add DANJU80 lista_canales_render.txt
           
+          # 2. Hacemos el commit local con los cambios asegurados
           if ! git diff --cached --quiet; then
             git commit -m "Filtro Automatico: DANJU80 y render actualizados sin VOD"
+            
+            # 3. Traemos cambios externos si los hay fusionando de forma segura
+            git pull origin main --rebase
+            
+            # 4. Mandamos todo a tu rama principal
             git push origin main
           else
-            echo "Sin cambios detectados en la lista."
+            echo "Sin cambios detectados en la lista. No se requiere push."
           fi
