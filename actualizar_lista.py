@@ -19,6 +19,9 @@ def procesar_canales():
     bloques = contenido.split("#EXTINF:")
     print(f"Total de bloques detectados: {len(bloques) - 1}")
     
+    # Categoría por defecto por si el archivo empieza sin grupo
+    group_actual = "VARIOS"
+    
     for bloque in bloques:
         if not bloque.strip():
             continue
@@ -30,44 +33,46 @@ def procesar_canales():
         extinf_line = lineas_bloque[0]
         url_line = lineas_bloque[-1].strip()
         
-        # 1. IDENTIFICAR LA CATEGORÍA ORIGINAL (group-title)
-        match_group = re.search(r'group-title="([^"]+)"', extinf_line)
-        if match_group:
-            group_actual = match_group.group(1)
+        # Conseguir el nombre del canal o separador
+        partes_cabecera = extinf_line.split(",")
+        nombre_canal = partes_cabecera[-1].strip()
+        
+        # DETECTAR SI LA LÍNEA ES UN SEPARADOR VISUAL (Ej: ----DEPORTES----)
+        if "---" in nombre_canal:
+            nombre_limpio = nombre_canal.replace("-", "").replace("[", "").replace("]", "").strip()
+            if nombre_limpio:
+                group_actual = nombre_limpio
         else:
-            group_actual = "VARIOS"
+            # Si no es un separador, buscamos el group-title clásico
+            match_group = re.search(r'group-title="([^"]+)"', extinf_line)
+            if match_group:
+                group_actual = match_group.group(1)
 
-        # 2. FILTRADO INTELIGENTE:
-        # Si es Película o Serie, dejamos el enlace ORIGINAL intacto (no le tocamos nada)
+        # FILTRADO DE ENLACES: Pelis y series intactas, TV en vivo a tu Render
         if "/movie/" in url_line or "/series/" in url_line:
             nueva_url = url_line
-        
-        # Si es Canal en Vivo (TV en vivo) y tiene el dominio viejo, lo mandamos a tu Render
         elif "planettvweb.com" in url_line:
-            # Reemplaza el dominio viejo por tu ruta de Render
             nueva_url = url_line.replace("http://planettvweb.com", url_render)
         else:
             nueva_url = url_line
 
-        # 3. ARMAR CABECERA MANTENIENDO LAS CATEGORÍAS EN LA IZQUIERDA
+        # CONSTRUIR LA CABECERA EN BASE A LA CATEGORÍA DETECTADA
         cabecera_limpia = re.sub(r'group-title="[^"]*"', '', extinf_line)
-        partes_cabecera = cabecera_limpia.split(",")
-        meta_info = partes_cabecera[0].strip()
-        nombre_final = partes_cabecera[-1].strip()
+        meta_info = cabecera_limpia.split(",")[0].strip()
         
-        extinf_final = f'#EXTINF:{meta_info.replace("#EXTINF:", "")} group-title="{group_actual}",{nombre_final}'
+        extinf_final = f'#EXTINF:{meta_info.replace("#EXTINF:", "")} group-title="{group_actual}",{nombre_canal}'
         
         lineas_resultado.append(extinf_final + "\n")
         lineas_resultado.append(nueva_url + "\n\n")
 
-    # Guardar ambos archivos simultáneos en tu GitHub
+    # Guardar ambos archivos en la raíz del repositorio
     with open(archivo_salida_1, 'w', encoding='utf-8') as f_out1:
         f_out1.writelines(lineas_resultado)
         
     with open(archivo_salida_2, 'w', encoding='utf-8') as f_out2:
         f_out2.writelines(lineas_resultado)
         
-    print(f"¡Al centavo! TV en vivo va a Render; películas y series se quedaron originales.")
+    print("¡Lista organizada por grupos reales para el Roku exitosamente!")
 
 if __name__ == "__main__":
     procesar_canales()
