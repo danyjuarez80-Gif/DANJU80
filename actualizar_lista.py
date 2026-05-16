@@ -1,78 +1,54 @@
-import re
-
-def procesar_canales():
-    archivo_entrada = "dan88.m3u"
-    archivo_salida_1 = "lista_canales_render.txt"
-    archivo_salida_2 = "DANJU80"
+def limpiar_lista_m3u(lineas_m3u):
+    """
+    Recibe una lista de líneas del archivo M3U original
+    y regresa únicamente los canales en vivo, eliminando VOD (Películas/Series).
+    """
+    lineas_filtradas = []
+    skip_next = False
     
-    url_render = "https://danju80.onrender.com"
+    # Aseguramos la cabecera obligatoria
+    if lineas_m3u and lineas_m3u[0].startswith("#EXTM3U"):
+        lineas_filtradas.append(lineas_m3u[0])
     
-    lineas_resultado = ["#EXTM3U\n\n"]
-    
-    try:
-        with open(archivo_entrada, 'r', encoding='utf-8', errors='ignore') as f:
-            contenido = f.read()
-    except FileNotFoundError:
-        print(f"Error: No se encontro el archivo {archivo_entrada}")
-        return
-
-    bloques = contenido.split("#EXTINF:")
-    print(f"Total de bloques detectados: {len(bloques) - 1}")
-    
-    # Categoría por defecto por si el archivo empieza sin grupo
-    group_actual = "VARIOS"
-    
-    for bloque in bloques:
-        if not bloque.strip():
+    for i in range(1, len(lineas_m3u)):
+        linea = lineas_m3u[i].strip()
+        
+        # Si la línea anterior fue un canal válido, metemos su URL correspondiente
+        if skip_next:
+            if linea.startswith("http"):
+                lineas_filtradas.append(linea)
+            skip_next = False
             continue
             
-        lineas_bloque = bloque.strip().split("\n")
-        if len(lineas_bloque) < 2:
-            continue
+        if linea.startswith("#EXTINF"):
+            linea_lower = linea.lower()
             
-        extinf_line = lineas_bloque[0]
-        url_line = lineas_bloque[-1].strip()
-        
-        # Conseguir el nombre del canal o separador
-        partes_cabecera = extinf_line.split(",")
-        nombre_canal = partes_cabecera[-1].strip()
-        
-        # DETECTAR SI LA LÍNEA ES UN SEPARADOR VISUAL (Ej: ----DEPORTES----)
-        if "---" in nombre_canal:
-            nombre_limpio = nombre_canal.replace("-", "").replace("[", "").replace("]", "").strip()
-            if nombre_limpio:
-                group_actual = nombre_limpio
-        else:
-            # Si no es un separador, buscamos el group-title clásico
-            match_group = re.search(r'group-title="([^"]+)"', extinf_line)
-            if match_group:
-                group_actual = match_group.group(1)
+            # Revisamos la URL que viene justo abajo para detectar si es VOD
+            url_abajo = ""
+            if i + 1 < len(lineas_m3u):
+                url_abajo = lineas_m3u[i + 1].lower()
+            
+            # Criterios para detectar Películas o Series de Xtream Codes y archivos pesados
+            es_vod = (
+                "/movie/" in url_abajo or 
+                "/series/" in url_abajo or 
+                ".mp4" in url_abajo or 
+                ".mkv" in url_abajo or
+                'group-title="películas"' in linea_lower or
+                'group-title="series"' in linea_lower or
+                'group-title="vod"' in linea_lower
+            )
+            
+            # Si NO es película ni serie, dejamos pasar el tag y activamos bandera para meter la URL abajo
+            if not es_vod:
+                lineas_filtradas.append(linea)
+                skip_next = True
+                
+    return lineas_filtradas
 
-        # FILTRADO DE ENLACES: Pelis y series intactas, TV en vivo a tu Render
-        if "/movie/" in url_line or "/series/" in url_line:
-            nueva_url = url_line
-        elif "planettvweb.com" in url_line:
-            nueva_url = url_line.replace("http://planettvweb.com", url_render)
-        else:
-            nueva_url = url_line
-
-        # CONSTRUIR LA CABECERA EN BASE A LA CATEGORÍA DETECTADA
-        cabecera_limpia = re.sub(r'group-title="[^"]*"', '', extinf_line)
-        meta_info = cabecera_limpia.split(",")[0].strip()
-        
-        extinf_final = f'#EXTINF:{meta_info.replace("#EXTINF:", "")} group-title="{group_actual}",{nombre_canal}'
-        
-        lineas_resultado.append(extinf_final + "\n")
-        lineas_resultado.append(nueva_url + "\n\n")
-
-    # Guardar ambos archivos en la raíz del repositorio
-    with open(archivo_salida_1, 'w', encoding='utf-8') as f_out1:
-        f_out1.writelines(lineas_resultado)
-        
-    with open(archivo_salida_2, 'w', encoding='utf-8') as f_out2:
-        f_out2.writelines(lineas_resultado)
-        
-    print("¡Lista organizada por grupos reales para el Roku exitosamente!")
-
-if __name__ == "__main__":
-    procesar_canales()
+# --- EJEMPLO DE CÓMO INTEGRARLO EN TU FLUJO ---
+# mapeo_de_lineas = contenido_original_m3u.splitlines()
+# lineas_limpias = limpiar_lista_m3u(mapeo_de_lineas)
+# 
+# with open("lista_canales_en_vivo.m3u", "w", encoding="utf-8") as f:
+#     f.write("\n".join(lineas_limpias))
