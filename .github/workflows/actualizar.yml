@@ -24,16 +24,16 @@ jobs:
       - name: Instalar Dependencias
         run: pip install requests
 
-      - name: Crear y Ejecutar Filtro de Películas
+      - name: Crear y Ejecutar Filtro en Caliente
         run: |
           cat << 'EOF' > filtro_automatico.py
           import requests
 
-          # URL original de tu lista gigante (Cámbiala por tu link si es otra)
-          url_m3u_gigante = "https://raw.githubusercontent.com/damjuarez80-Gif/DANJU80/main/lista_canales_en_vivo.m3u" 
+          # Pon aquí ABAJO el link de tu lista M3U original (la que tiene películas)
+          url_m3u_gigante = "AQUÍ_VA_EL_LINK_DE_TU_LISTA_COMPLETA" 
           
           try:
-              print("Descargando lista...")
+              print("Descargando lista original...")
               respuesta = requests.get(url_m3u_gigante, timeout=30)
               if respuesta.status_code == 200:
                   lineas = respuesta.text.splitlines()
@@ -58,7 +58,7 @@ jobs:
                           if i + 1 < len(lineas):
                               url_abajo = lineas[i + 1].lower()
                           
-                          # Volamos películas, series y formatos pesados
+                          # Volamos de raíz películas, series y formatos pesados
                           es_vod = (
                               "/movie/" in url_abajo or 
                               "/series/" in url_abajo or 
@@ -77,9 +77,9 @@ jobs:
                       f.write("\n".join(lineas_filtradas))
                   print("¡Lista filtrada guardada con éxito!")
               else:
-                  print(f"Error: Status {respuesta.status_code}")
+                  print(f"Error en servidor: Status {respuesta.status_code}")
           except Exception as e:
-              print(f"Error en proceso: {e}")
+              print(f"Error procesando el M3U: {e}")
           EOF
           python filtro_automatico.py
 
@@ -91,8 +91,8 @@ jobs:
           git add lista_canales_en_vivo.m3u || true 
           
           if ! git diff --cached --quiet; then
-            git commit -m "Automatización: Limpieza radical sin películas ejecutada"
+            git commit -m "Automatización: Limpieza sin películas realizada con éxito"
             git push origin main
           else
-            echo "No hay cambios nuevos en los canales."
+            echo "La lista sigue igual, sin cambios pendientes."
           fi
