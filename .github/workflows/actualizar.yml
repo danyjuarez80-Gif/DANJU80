@@ -1,31 +1,47 @@
-name: Filtrar y Actualizar Canales IPTV
+name: Actualizar Lista Danju80 Cada 15 Minutos
 
 on:
-  workflow_dispatch: # Botón manual para correrlo cuando quieras
+  schedule:
+    # Corre exactamente cada 15 minutos (cron: minuto/quince, hora, dia, mes, dia_semana)
+    - cron: '*/15 * * * *'
+  workflow_dispatch: # Esto te deja picarle al botón de "Run workflow" manualmente si quieres probar al tiro
+
+permissions:
+  contents: write # CRUCIAL: Le da permiso a GitHub de guardar y actualizar el archivo M3U modificado
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Clonar el repositorio
-      uses: actions/checkout@v3
+      - name: Descargar el Repositorio
+        uses: actions/checkout@v4
 
-    - name: Configurar Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.x'
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
 
-    - name: Ejecutar script de filtrado
-      run: python actualizar_lista.py
+      - name: Instalar Dependencias
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-    - name: Guardar los cambios en el repositorio
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        
-        # Le decimos a git que guarde ambos archivos creados/modificados
-        git add lista_canales_render.txt DANJU80 || echo "Error al agregar archivos"
-        
-        git commit -m "Actualizacion simultanea de DANJU80 y lista_canales_render.txt" || echo "No hay cambios"
-        git push
+      - name: Ejecutar Extractor y Limpiador
+        run: python tu_script.py # <-- CAMBIA ESTO por el nombre real de tu archivo .py
+
+      - name: Guardar Cambios en GitHub (Git Commit & Push)
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          # Añade el archivo M3U que genera tu script (cambia el nombre si es necesario)
+          git add lista_canales_en_vivo.m3u || true 
+          
+          # Solo hace commit si de verdad cambiaron los enlaces de los canales
+          if ! git diff --cached --quiet; then
+            git commit -m "Automatización: Canales actualizados sin películas (Cada 15 min)"
+            git push origin main
+          else
+            echo "No hay cambios en los canales en vivo. Saltando commit."
+          fi
