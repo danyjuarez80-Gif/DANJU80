@@ -31,13 +31,13 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
-          # Le decimos a Git que suba los tres archivos generados
+          # Forzamos a Git a registrar absolutamente todas las listas
           git add DANJU80 DANJU_MOVIES DANJU_SERIES lista_canales_render.txt
           
           if ! git diff --cached --quiet; then
-            git commit -m "Automatización: Listas de 3 vías actualizadas"
+            git commit -m "Automatización: Listas puras actualizadas"
             git pull origin main --rebase
             git push origin main
           else
-            echo "Sin cambios detectados."
+            echo "Sin cambios detectados en las listas."
           fi
