@@ -19653,26 +19653,40 @@ http://planettvweb.com:8091/movie/PtaPta567/user8790/138084.mkv
 http://planettvweb.com:8091/movie/PtaPta567/user8790/138085.mkv
 #EXTINF:-1 tvg-id="" tvg-name="SESION RETRO 80' MEGAMIX VOL 2 - BY DVJ PATOMIX" tvg-logo="https://image.tmdb.org/t/p/w600_and_h900_bestv2/i1eQN3qOcsYAOFGVHr5ACSPB1L7.jpg" group-title="CONCIERTOS",SESION RETRO 80' MEGAMIX VOL 2 - BY DVJ PATOMIX
 http://planettvweb.com:8091/movie/PtaPta567/user8790/138086.mkv
-#EXTINF:-1 tvg-id="" tvg-name="Pluto TV Series" tvg-logo="" group-title="CANALES DE SERIE",Pluto TV Series
-http://stitcher-ipv4.pluto.tv/v1/stitch/embed/hls/channel/5dcde1317578340009b751d0/master.m3u8?deviceType=samsung-tvplus&deviceMake=samsung&deviceModel=samsung&deviceVersion=unknown&appVersion=unknown&deviceLat=0&deviceLon=0&deviceDNT=%7BTARGETOPT%7D&deviceId=%7BPSID%7D&advertisingId=%7BPSID%7D&us_privacy=1YNY&samsung_app_domain=%7BAPP_DOMAIN%7D&samsung_app_name=%7BAPP_NAME%7D&profileLimit=&profileFloor=&embedPartner=samsung-tvplus
-#EXTINF:-1 tvg-id="" tvg-name="BABY FIRST SD" tvg-logo="https://i.pinimg.com/originals/1e/54/75/1e5475e63e7183eb7391444402afd010.png" group-title="INFANTILES",BABY FIRST SD
-http://stitcher-ipv4.pluto.tv/v1/stitch/embed/hls/channel/5ebac49ce4dc8b00078b23bc/master.m3u8?deviceType=samsung-tvplus&deviceMake=samsung&deviceModel=samsung&deviceVersion=unknown&appVersion=unknown&deviceLat=0&deviceLon=0&deviceDNT=%7BTARGETOPT%7D&deviceId=%7BPSID%7D&advertisingId=%7BPSID%7D&us_privacy=1YNY&samsung_app_domain=%7BAPP_DOMAIN%7D&samsung_app_name=%7BAPP_NAME%7D&profileLimit=&profileFloor=&embedPartner=samsung-tvplus
-#EXTINF:-1 tvg-id="" tvg-name="El reino infantil" tvg-logo="http://www.thedailytelevision.com/sites/default/files/notas/imagenes/interior/semillitas_earth_day_vbig.jpg" group-title="INFANTILES",El reino infantil
-http://stitcher-ipv4.pluto.tv/v1/stitch/embed/hls/channel/5f4d3d06fb60d8000781fce8/master.m3u8?deviceType=samsung-tvplus&deviceMake=samsung&deviceModel=samsung&deviceVersion=unknown&appVersion=unknown&deviceLat=0&deviceLon=0&deviceDNT=%7BTARGETOPT%7D&deviceId=%7BPSID%7D&advertisingId=%7BPSID%7D&us_privacy=1YNY&samsung_app_domain=%7BAPP_DOMAIN%7D&samsung_app_name=%7BAPP_NAME%7D&profileLimit=&profileFloor=&embedPartner=samsung-tvplus
-#EXTINF:-1 tvg-id="" tvg-name=""Kids",Babar" tvg-logo="https://cdn.mitvstatic.com/channels/cl_nickelodeon-hd_m.png" group-title="INFANTILES","Kids",Babar
-http://stitcher-ipv4.pluto.tv/v1/stitch/embed/hls/channel/5e67e20c93312100076f3ffe/master.m3u8?deviceType=samsung-tvplus&deviceMake=samsung&deviceModel=samsung&deviceVersion=unknown&appVersion=unknown&deviceLat=0&deviceLon=0&deviceDNT=%7BTARGETOPT%7D&deviceId=%7BPSID%7D&advertisingId=%7BPSID%7D&us_privacy=1YNY&samsung_app_domain=%7BAPP_DOMAIN%7D&samsung_app_name=%7BAPP_NAME%7D&profileLimit=&profileFloor=&embedPartner=samsung-tvplus
-#EXTINF:-1 tvg-id="" tvg-name="Las Pistas de Blue" tvg-logo="https://ih1.redbubble.net/image.1976490102.0457/flat,750x,075,f-pad,750x1000,f8f8f8.jpg" group-title="INFANTILES",Las Pistas de Blue
-http://stitcher-ipv4.pluto.tv/v1/stitch/embed/hls/channel/5f9996533c9de3000759ccb5/master.m3u8?deviceType=samsung-tvplus&deviceMake=samsung&deviceModel=samsung&deviceVersion=unknown&appVersion=unknown&deviceLat=0&deviceLon=0&deviceDNT=%7BTARGETOPT%7D&deviceId=%7BPSID%7D&advertisingId=%7BPSID%7D&us_privacy=1YNY&samsung_app_domain=%7BAPP_DOMAIN%7D&samsung_app_name=%7BAPP_NAME%7D&profileLimit=&profileFloor=&embedPartner=samsung-tvplus
-#EXTINF:-1 tvg-id="" tvg-name="TV Junior" tvg-logo="http://assets.stickpng.com/thumbs/589a41e25aa6293a4aac48ab.png" group-title="INFANTILES",TV Junior
-http://stitcher-ipv4.pluto.tv/v1/stitch/embed/hls/channel/5ddd7cb2cbb9010009b4fe32/master.m3u8?deviceType=samsung-tvplus&deviceMake=samsung&deviceModel=samsung&deviceVersion=unknown&appVersion=unknown&deviceLat=0&deviceLon=0&deviceDNT=%7BTARGETOPT%7D&deviceId=%7BPSID%7D&advertisingId=%7BPSID%7D&us_privacy=1YNY&samsung_app_domain=%7BAPP_DOMAIN%7D&samsung_app_name=%7BAPP_NAME%7D&profileLimit=&profileFloor=&embedPartner=samsung-tvplus
-#EXTINF:-1 tvg-id="" tvg-name="Nick Teen TV" tvg-logo="https://3.bp.blogspot.com/-QGRzMIXRj-c/V26hkzOPhjI/AAAAAAAAAwE/-tcLDf4keys-8XLvSunDIuLzfHqvftq8gCLcB/s1600/boomerang.png" group-title="INFANTILES",Nick Teen TV
-http://stitcher-ipv4.pluto.tv/v1/stitch/embed/hls/channel/5fab09a8749b1a00077d35d2/master.m3u8?deviceType=samsung-tvplus&deviceMake=samsung&deviceModel=samsung&deviceVersion=unknown&appVersion=unknown&deviceLat=0&deviceLon=0&deviceDNT=%7BTARGETOPT%7D&deviceId=%7BPSID%7D&advertisingId=%7BPSID%7D&us_privacy=1YNY&samsung_app_domain=%7BAPP_DOMAIN%7D&samsung_app_name=%7BAPP_NAME%7D&profileLimit=&profileFloor=&embedPartner=samsung-tvplus
-#EXTINF:-1 tvg-id="" tvg-name="Películas",Pluto TV Sci-Fi" tvg-logo="https://www.thedailytelevision.com/sites/default/files/notas/imagenes/interior/cine-latino-grande.jpg" group-title="CINE",Películas",Pluto TV Sci-Fi
-http://stitcher-ipv4.pluto.tv/v1/stitch/embed/hls/channel/5f2817d3d7573a00080f9175/master.m3u8?deviceType=samsung-tvplus&deviceMake=samsung&deviceModel=samsung&deviceVersion=unknown&appVersion=unknown&deviceLat=0&deviceLon=0&deviceDNT=%7BTARGETOPT%7D&deviceId=%7BPSID%7D&advertisingId=%7BPSID%7D&us_privacy=1YNY&samsung_app_domain=%7BAPP_DOMAIN%7D&samsung_app_name=%7BAPP_NAME%7D&profileLimit=&profileFloor=&embedPartner=samsung-tvplus
-#EXTINF:-1 tvg-id="" tvg-name="Pluto TV Viajes" tvg-logo="https://thestreamable.com/media/pages/news/pluto-tv-enters-programmatic-partnership-with-spotx-in-latin-america/6790fd0815-1618516374/pluto-tv-logo.png" group-title="ENTRETENIMIENTOS",Pluto TV Viajes
-http://stitcher-ipv4.pluto.tv/v1/stitch/embed/hls/channel/5dcddfbdb7cf0e0009ae09ea/master.m3u8?deviceType=samsung-tvplus&deviceMake=samsung&deviceModel=samsung&deviceVersion=unknown&appVersion=unknown&deviceLat=0&deviceLon=0&deviceDNT=%7BTARGETOPT%7D&deviceId=%7BPSID%7D&advertisingId=%7BPSID%7D&us_privacy=1YNY&samsung_app_domain=%7BAPP_DOMAIN%7D&samsung_app_name=%7BAPP_NAME%7D&profileLimit=&profileFloor=&embedPartner=samsung-tvplus
-#EXTINF:-1 tvg-id="" tvg-name="Curiosidad, Pluto TV Animales" tvg-logo="https://media.canal10.com.uy/adjuntos/229/imagenes/001/999/0001999936.jpg" group-title="ENTRETENIMIENTOS",Curiosidad, Pluto TV Animales
-http://stitcher-ipv4.pluto.tv/v1/stitch/embed/hls/channel/5dd834c66fe2ca0009303b8d/master.m3u8?deviceType=samsung-tvplus&deviceMake=samsung&deviceModel=samsung&deviceVersion=unknown&appVersion=unknown&deviceLat=0&deviceLon=0&deviceDNT=%7BTARGETOPT%7D&deviceId=%7BPSID%7D&advertisingId=%7BPSID%7D&us_privacy=1YNY&samsung_app_domain=%7BAPP_DOMAIN%7D&samsung_app_name=%7BAPP_NAME%7D&profileLimit=&profileFloor=&embedPartner=samsung-tvplus
+#EXTINF:-1 tvg-id="" tvg-name=" Usa Series" tvg-logo="https://www.seekpng.com/png/full/359-3595142_original-television-series-movies-and-sports-programming-usa.png" group-title="CANALES DE SERIE", Usa Series
+http://planettvweb.com:8091/PtaPta567/user8790/141568
+#EXTINF:-1 tvg-id="" tvg-name="Fam Movies" tvg-logo="https://p1.hiclipart.com/preview/610/415/806/tv-channel-icons-pack-starz-movieplex-color-png-icon-thumbnail.jpg" group-title="CINE",Fam Movies
+http://planettvweb.com:8091/PtaPta567/user8790/88274
+#EXTINF:-1 tvg-id="" tvg-name="MovieMAX HD" tvg-logo="https://archive.org/download/CinemaxMoviemax/cinemax%20moviemax.png" group-title="CINE",MovieMAX HD
+http://planettvweb.com:8091/PtaPta567/user8790/88281
+#EXTINF:-1 tvg-id="" tvg-name="DE PELICULA Clasico SD" tvg-logo="https://seeklogo.com/images/D/de-pelicula-logo-F97A15125D-seeklogo.com.png" group-title="CINE",DE PELICULA Clasico SD
+http://planettvweb.com:8091/PtaPta567/user8790/12000
+#EXTINF:-1 tvg-id="" tvg-name="Sony Movies" tvg-logo="https://vignette.wikia.nocookie.net/logopedia/images/9/98/ISAT99.png/revision/latest/scale-to-width-down/397?cb=20190504184843" group-title="CINE",Sony Movies
+http://planettvweb.com:8091/PtaPta567/user8790/11829
+#EXTINF:-1 tvg-id="" tvg-name="MoviePlex" tvg-logo="https://sc.dish.com/shared/images/station-logos/mplex.png" group-title="CINE",MoviePlex
+http://planettvweb.com:8091/PtaPta567/user8790/11946
+#EXTINF:-1 tvg-id="" tvg-name="De Pelicula Plus" tvg-logo="https://sc.dish.com/shared/images/station-logos/SHOB.PNG" group-title="CINE",De Pelicula Plus
+http://planettvweb.com:8091/PtaPta567/user8790/11943
+#EXTINF:-1 tvg-id="" tvg-name="Peliculas Universo DC" tvg-logo="" group-title="24/7",Peliculas Universo DC
+http://planettvweb.com:8091/PtaPta567/user8790/74616
+#EXTINF:-1 tvg-id="" tvg-name="Peliculas Batman" tvg-logo="" group-title="24/7",Peliculas Batman
+http://planettvweb.com:8091/PtaPta567/user8790/74617
+#EXTINF:-1 tvg-id="" tvg-name="Peliculas Marvel Cronologia" tvg-logo="https://thumbs.dreamstime.com/b/horas-d%C3%ADas-la-semana-114225716.jpg" group-title="24/7",Peliculas Marvel Cronologia
+http://planettvweb.com:8091/PtaPta567/user8790/20343
+#EXTINF:-1 tvg-id="" tvg-name="Peliculas Marvel Orden Estreno" tvg-logo="https://thumbs.dreamstime.com/b/horas-d%C3%ADas-la-semana-114225716.jpg" group-title="24/7",Peliculas Marvel Orden Estreno
+http://planettvweb.com:8091/PtaPta567/user8790/20353
+#EXTINF:-1 tvg-id="" tvg-name="Moonbug (Moonbug - Kids)" tvg-logo="https://clarovideocdn8.clarovideo.net/CVPERU/PELICULAS/PLIMPLIM/EXPORTACION_WEB/SS/PLIMPLIM_t-290x163.png" group-title="INFANTILES",Moonbug (Moonbug - Kids)
+http://planettvweb.com:8091/PtaPta567/user8790/16438
+#EXTINF:-1 tvg-id="" tvg-name="Peliculas Scary Movie" tvg-logo="https://thumbs.dreamstime.com/b/horas-d%C3%ADas-la-semana-114225716.jpg" group-title="24/7",Peliculas Scary Movie
+http://planettvweb.com:8091/PtaPta567/user8790/17754
+#EXTINF:-1 tvg-id="" tvg-name="SONY MOVIE CHANNEL" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Sony_Movies_Logo.svg/1200px-Sony_Movies_Logo.svg.png" group-title="USA",SONY MOVIE CHANNEL
+http://planettvweb.com:8091/PtaPta567/user8790/66872
+#EXTINF:-1 tvg-id="" tvg-name="MOVIETIME" tvg-logo="https://upload.wikimedia.org/wikipedia/en/thumb/1/1b/Movietime.svg/1200px-Movietime.svg.png" group-title="CANADA",MOVIETIME
+http://planettvweb.com:8091/PtaPta567/user8790/90352
+#EXTINF:-1 tvg-id="" tvg-name="Peliculas Inframundo" tvg-logo="" group-title="24/7",Peliculas Inframundo
+http://planettvweb.com:8091/PtaPta567/user8790/101815
+#EXTINF:-1 tvg-id="" tvg-name="USA | Hallmark Movies HD" tvg-logo="http://149.104.87.114/eventos14/logo.png" group-title="USA",USA | Hallmark Movies HD
+http://planettvweb.com:8091/PtaPta567/user8790/145333
 #EXTINF:-1 tvg-id="" tvg-name="Tadeo Jones 3: La Tabla Esmeralda (2022)" tvg-logo="https://image.tmdb.org/t/p/w600_and_h900_bestv2/sK5e1HbxVbvzUuobpVWtaItRSSJ.jpg" group-title="PELICULAS INFANTILES",Tadeo Jones 3: La Tabla Esmeralda (2022)
 http://planettvweb.com:8091/movie/PtaPta567/user8790/68305.mkv
 #EXTINF:-1 tvg-id="" tvg-name="Calígula (1979)" tvg-logo="https://image.tmdb.org/t/p/w600_and_h900_bestv2/bLSRsi5xN0vuF3cqbkVqB82xFrM.jpg" group-title="PELICULAS EROTICAS",Calígula (1979)
