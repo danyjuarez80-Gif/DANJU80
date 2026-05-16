@@ -28,14 +28,14 @@ jobs:
           python -c '
           import os
 
-          # 1. Leer la base que subiste ayer
           archivo_origen = "dan88.m3u"
           if not os.path.exists(archivo_origen):
               print("ERROR: No se encontro dan88.m3u en la raiz.")
               exit(1)
 
+          # AQUÍ YA ESTÁ CORREGIDO: .read().splitlines()
           with open(archivo_origen, "r", encoding="utf-8", errors="ignore") as f:
-              lineas = f.splitlines()
+              lineas = f.read().splitlines()
 
           lineas_filtradas = []
           skip_next = False
@@ -57,7 +57,7 @@ jobs:
                   if i + 1 < len(lineas):
                       url_abajo = lineas[i + 1].lower()
 
-                  # Filtro radical anti-peliculas y anti-series
+                  # Filtro estricto para limpiar películas y series pesadas
                   es_vod = (
                       "/movie/" in url_abajo or 
                       "/series/" in url_abajo or 
@@ -72,12 +72,12 @@ jobs:
                       lineas_filtradas.append(linea)
                       skip_next = True
 
-          # 2. Forzar la escritura en tu archivo final en mayusculas
+          # Guardar el listado limpio en tu archivo final
           with open("DANJU80", "w", encoding="utf-8") as f_out:
               f_out.write("\n".join(lineas_filtradas))
           print("¡DANJU80 sobreescrito exitosamente!")
 
-          # 3. Forzar la escritura en tu txt de render
+          # Guardar la URL en tu txt para el hosting
           with open("lista_canales_render.txt", "w", encoding="utf-8") as f_render:
               f_render.write("https://raw.githubusercontent.com/damjuarez80-Gif/DANJU80/main/DANJU80")
           print("¡lista_canales_render.txt sobreescrito exitosamente!")
@@ -88,15 +88,14 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
-          # Hacemos un pull previo para evitar cualquier conflicto de sincronizacion
           git pull origin main --rebase
           
-          # Forzamos el rastreo exacto de tus dos archivos reales
+          # Rastrea los dos archivos reales para subirlos juntos
           git add DANJU80 lista_canales_render.txt
           
           if ! git diff --cached --quiet; then
-            git commit -m "Filtro Automatico: Canales en vivo listos"
+            git commit -m "Filtro Automatico: DANJU80 y render actualizados sin VOD"
             git push origin main
           else
-            echo "Sin cambios detectados en la lista de canales."
+            echo "Sin cambios detectados en la lista."
           fi
