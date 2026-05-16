@@ -29,7 +29,7 @@ def segmentar_listas_puras():
             linea_inf_lower = linea_inf.lower()
             linea_url_lower = linea_url.lower()
 
-            # Filtros para separar Películas
+            # Filtros ultra flexibles para separar Películas
             es_pelicula = (
                 "/movie" in linea_url_lower or 
                 ".mp4" in linea_url_lower or 
@@ -38,7 +38,7 @@ def segmentar_listas_puras():
                 "pelic" in linea_inf_lower
             )
             
-            # Filtros para separar Series
+            # Filtros ultra flexibles para separar Series
             es_serie = (
                 "/series" in linea_url_lower or 
                 "serie" in linea_inf_lower or
