@@ -3,10 +3,10 @@ name: Actualizar Lista Danju80 Cada 15 Minutos
 on:
   schedule:
     - cron: '*/15 * * * *'
-  workflow_dispatch:
+  workflow_dispatch: # Activa el botón manual en GitHub
 
 permissions:
-  contents: write
+  contents: write # Permiso crucial para que el bot pueda guardar los dos archivos
 
 jobs:
   build:
@@ -22,77 +22,26 @@ jobs:
           python-version: '3.10'
 
       - name: Instalar Dependencias
-        run: pip install requests
-
-      - name: Crear y Ejecutar Filtro en Caliente
         run: |
-          cat << 'EOF' > filtro_automatico.py
-          import requests
+          python -m pip install --upgrade pip
+          pip install requests || true
 
-          # Pon aquí ABAJO el link de tu lista M3U original (la que tiene películas)
-          url_m3u_gigante = "AQUÍ_VA_EL_LINK_DE_TU_LISTA_COMPLETA" 
-          
-          try:
-              print("Descargando lista original...")
-              respuesta = requests.get(url_m3u_gigante, timeout=30)
-              if respuesta.status_code == 200:
-                  lineas = respuesta.text.splitlines()
-                  lineas_filtradas = []
-                  skip_next = False
-                  
-                  if lineas and lineas[0].startswith("#EXTM3U"):
-                      lineas_filtradas.append(lineas[0])
-                  
-                  for i in range(1, len(lineas)):
-                      linea = lineas[i].strip()
-                      
-                      if skip_next:
-                          if linea.startswith("http"):
-                              lineas_filtradas.append(linea)
-                          skip_next = False
-                          continue
-                          
-                      if linea.startswith("#EXTINF"):
-                          linea_lower = linea.lower()
-                          url_abajo = ""
-                          if i + 1 < len(lineas):
-                              url_abajo = lineas[i + 1].lower()
-                          
-                          # Volamos de raíz películas, series y formatos pesados
-                          es_vod = (
-                              "/movie/" in url_abajo or 
-                              "/series/" in url_abajo or 
-                              ".mp4" in url_abajo or 
-                              ".mkv" in url_abajo or
-                              'group-title="películas"' in linea_lower or
-                              'group-title="series"' in linea_lower or
-                              'group-title="vod"' in linea_lower
-                          )
-                          
-                          if not es_vod:
-                              lineas_filtradas.append(linea)
-                              skip_next = True
-                              
-                  with open("lista_canales_en_vivo.m3u", "w", encoding="utf-8") as f:
-                      f.write("\n".join(lineas_filtradas))
-                  print("¡Lista filtrada guardada con éxito!")
-              else:
-                  print(f"Error en servidor: Status {respuesta.status_code}")
-          except Exception as e:
-              print(f"Error procesando el M3U: {e}")
-          EOF
-          python filtro_automatico.py
+      - name: Ejecutar Extractor Completo
+        # Si tu script está en la raíz, pon el nombre exacto abajo (ej: danju80.py, extractor.py, etc.)
+        # Si está dentro de una carpeta, pon: python nombre_carpeta/tu_script.py
+        run: python danju80.py 
 
       - name: Guardar Cambios en GitHub (Git Commit & Push)
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
-          git add lista_canales_en_vivo.m3u || true 
+          # Rastrea absolutamente todos los cambios en el repositorio (M3U, render.txt, etc.)
+          git add -A
           
           if ! git diff --cached --quiet; then
-            git commit -m "Automatización: Limpieza sin películas realizada con éxito"
+            git commit -m "Automatización: M3U y render.txt actualizados (Sin películas)"
             git push origin main
           else
-            echo "La lista sigue igual, sin cambios pendientes."
+            echo "No se detectaron cambios en los archivos."
           fi
