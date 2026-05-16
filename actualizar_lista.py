@@ -1,4 +1,4 @@
-name: Dividir y Actualizar Listas Separadas Cada 15 Minutos
+name: Actualizar Lista Danju80 Cada 15 Minutos
 
 on:
   schedule:
@@ -54,9 +54,9 @@ jobs:
                   linea_inf_lower = linea_inf.lower()
                   linea_url_lower = linea_url.lower()
 
-                  # Clasificación estricta por contenedor
-                  es_pelicula = "/movie/" in linea_url_lower or 'group-title="películas"' in linea_inf_lower or ".mp4" in linea_url_lower or ".mkv" in linea_url_lower
-                  es_serie = "/series/" in linea_url_lower or 'group-title="series"' in linea_inf_lower
+                  # Clasificación estricta por tipo de link
+                  es_pelicula = "/movie/" in linea_url_lower or "group-title=\"películas\"" in linea_inf_lower or ".mp4" in linea_url_lower or ".mkv" in linea_url_lower
+                  es_serie = "/series/" in linea_url_lower or "group-title=\"series\"" in linea_inf_lower
 
                   if es_pelicula:
                       listado_movies.append(linea_inf)
@@ -71,7 +71,7 @@ jobs:
               else:
                   i += 1
 
-          # Guardar los 3 archivos independientes
+          # Forzamos la creación de los tres archivos de texto en la raíz
           with open("DANJU80", "w", encoding="utf-8") as f:
               f.write("\n".join(listado_tv))
           with open("DANJU_MOVIES", "w", encoding="utf-8") as f:
@@ -81,7 +81,8 @@ jobs:
 
           # Tu archivo txt de sincronización para Render
           with open("lista_canales_render.txt", "w", encoding="utf-8") as f:
-              f.write("https://raw.githubusercontent.com/danyjuarez80-Gif/DANJU80/main/DANJU80")
+              f.write("https://raw.githubusercontent.com/damjuarez80-Gif/DANJU80/main/DANJU80")
+          print("¡Los 3 archivos individuales se procesaron en memoria!")
           '
 
       - name: Enviar los 3 archivos a GitHub
@@ -89,13 +90,13 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
-          # Añadimos los tres archivos destino
+          # IMPORTANTE: Obligamos a git a meter los tres archivos al repositorio
           git add DANJU80 DANJU_MOVIES DANJU_SERIES lista_canales_render.txt
           
           if ! git diff --cached --quiet; then
-            git commit -m "Automatización: Listas segmentadas (LiveTV, Pelis, Series)"
+            git commit -m "Automatización: Separación en 3 listas completada"
             git pull origin main --rebase
             git push origin main
           else
-            echo "Sin cambios en los listados."
+            echo "No se detectaron cambios en las listas."
           fi
