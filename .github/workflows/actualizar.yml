@@ -2,12 +2,12 @@ name: Actualizar Lista Danju80 Cada 15 Minutos
 
 on:
   schedule:
-    # Corre exactamente cada 15 minutos (cron: minuto/quince, hora, dia, mes, dia_semana)
+    # Corre automáticamente cada 15 minutos
     - cron: '*/15 * * * *'
-  workflow_dispatch: # Esto te deja picarle al botón de "Run workflow" manualmente si quieres probar al tiro
+  workflow_dispatch: # Activa el botón para correrlo manual cuando quieras
 
 permissions:
-  contents: write # CRUCIAL: Le da permiso a GitHub de guardar y actualizar el archivo M3U modificado
+  contents: write # Permiso obligatorio para guardar los cambios en tu GitHub
 
 jobs:
   build:
@@ -26,22 +26,16 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          # Por si usas requests para bajar tu lista original
+          pip install requests || true
 
       - name: Ejecutar Extractor y Limpiador
-        run: python tu_script.py # <-- CAMBIA ESTO por el nombre real de tu archivo .py
+        run: python danju80.py # <-- Ya corregido con el nombre de tu script
 
       - name: Guardar Cambios en GitHub (Git Commit & Push)
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
-          # Añade el archivo M3U que genera tu script (cambia el nombre si es necesario)
-          git add lista_canales_en_vivo.m3u || true 
-          
-          # Solo hace commit si de verdad cambiaron los enlaces de los canales
-          if ! git diff --cached --quiet; then
-            git commit -m "Automatización: Canales actualizados sin películas (Cada 15 min)"
-            git push origin main
-          else
-            echo "No hay cambios en los canales en vivo. Saltando commit."
-          fi
+          # Agrega la lista filtrada que genera el script
+          git add lista_canales
