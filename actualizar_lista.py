@@ -11,12 +11,12 @@ def procesar_canales():
         with open(archivo_entrada, 'r', encoding='utf-8', errors='ignore') as f:
             contenido = f.read()
     except FileNotFoundError:
-        print("Error: No se encontro el archivo dan88.txt")
+        print("Error: No se encontro el archivo dan88.txt en el repositorio.")
         return
 
-    # Separamos el archivo por bloques usando #EXTINF:
+    # Separamos por bloques usando #EXTINF:
     bloques = contenido.split("#EXTINF:")
-    print(f"Total de bloques detectados: {len(bloques)}")
+    print(f"Total de bloques detectados: {len(bloques) - 1}")
     
     for bloque in bloques:
         if not bloque.strip():
@@ -26,38 +26,37 @@ def procesar_canales():
         if len(lineas_bloque) < 2:
             continue
             
-        # Reconstruimos la linea de informacion del canal
+        # Reconstruimos la cabecera del canal
         extinf_line = "#EXTINF:" + lineas_bloque[0]
-        # La ultima linea del bloque es la URL original
+        # La última línea siempre contiene la URL
         url_line = lineas_bloque[-1].strip()
         
-        # FILTRO EXCLUSIVO: Si es pelicula o serie, la ignoramos por completo
+        # FILTRO CRÍTICO: Si detecta que es película o serie, la ignora por completo
         if "/movie/" in url_line or "/series/" in url_line:
             continue
             
-        # Si es un canal en vivo de tu servidor viejo, lo pasamos al formato nuevo
+        # Si contiene la IP y puerto viejo, reestructuramos el link
         if "planettvweb.com:8091" in url_line:
             id_match = re.search(r'/(\d+)$', url_line)
-            if id_match and id_match.group(1) is not invalid:
+            if id_match and id_match.group(1) is not None:
                 id_canal = id_match.group(1)
                 nueva_url = f"{url_render}/canal/{id_canal}"
             else:
-                # PARCHE DE SEGURIDAD: Si no termina en numero limpio, reemplaza la base sin romper el script
-                nueva_url = url_line.replace("http://planettvweb.com:8091", f"{url_render}/canal")
-                # Limpiamos posibles dobles diagonales por si acaso
-                nueva_url = nueva_url.replace("/canal//", "/canal/")
+                # Si la URL viene rara o con texto extra, extrae la última parte limpiamente
+                id_limpio = url_line.split("/")[-1]
+                nueva_url = f"{url_render}/canal/{id_limpio}"
         else:
-            # Si tienes enlaces externos en tus listas (como Pluto u otros), se quedan igual
+            # Si el canal es un enlace externo (Pluto TV, etc.), se conserva idéntico
             nueva_url = url_line
             
-        # Guardamos el canal manteniendo su group-title (categoria) original intacto
+        # Guardamos la info del canal y el nuevo link con formato /canal/ID
         lineas_resultado.append(extinf_line + "\n")
         lineas_resultado.append(nueva_url + "\n\n")
 
     with open(archivo_salida, 'w', encoding='utf-8') as f_out:
         f_out.writelines(lineas_resultado)
         
-    print(f"Proceso terminado con exito. Archivo '{archivo_salida}' generado.")
+    print(f"¡Proceso completado! Se generó '{archivo_salida}' con éxito.")
 
 if __name__ == "__main__":
     procesar_canales()
