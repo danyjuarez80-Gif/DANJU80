@@ -6,7 +6,6 @@ def procesar_canales():
     archivo_salida_2 = "DANJU80"
     
     url_render = "https://danju80.onrender.com"
-    url_storage_peliculas = "http://53.217.93:25461"
     
     lineas_resultado = ["#EXTM3U\n\n"]
     
@@ -38,14 +37,15 @@ def procesar_canales():
         else:
             group_actual = "VARIOS"
 
-        # 2. CIRUGÍA INTELIGENTE DE ENLACES
-        if "planettvweb.com:8091" in url_line:
-            # Si es Película o Serie, cambiamos el dominio a la IP real de almacenamiento (Storage)
-            if "/movie/" in url_line or "/series/" in url_line:
-                nueva_url = url_line.replace("http://planettvweb.com:8091", url_storage_peliculas)
-            else:
-                # Si es Canal en Vivo, lo mandamos directo a tu Render
-                nueva_url = url_line.replace("http://planettvweb.com:8091", url_render)
+        # 2. FILTRADO INTELIGENTE:
+        # Si es Película o Serie, dejamos el enlace ORIGINAL intacto (no le tocamos nada)
+        if "/movie/" in url_line or "/series/" in url_line:
+            nueva_url = url_line
+        
+        # Si es Canal en Vivo (TV en vivo) y tiene el dominio viejo, lo mandamos a tu Render
+        elif "planettvweb.com" in url_line:
+            # Reemplaza el dominio viejo por tu ruta de Render
+            nueva_url = url_line.replace("http://planettvweb.com", url_render)
         else:
             nueva_url = url_line
 
@@ -67,7 +67,7 @@ def procesar_canales():
     with open(archivo_salida_2, 'w', encoding='utf-8') as f_out2:
         f_out2.writelines(lineas_resultado)
         
-    print(f"¡Joyita lograda! Canales a Render y Pelis/Series directo a la IP real {url_storage_peliculas}")
+    print(f"¡Al centavo! TV en vivo va a Render; películas y series se quedaron originales.")
 
 if __name__ == "__main__":
     procesar_canales()
