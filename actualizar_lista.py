@@ -1,7 +1,7 @@
 import os
 import re
 
-def procesar_listas_alwaysdata():
+def procesar_listas_vercel():
     # Nombre del archivo original que descarga tu extractor
     archivo_origen = "dan88.m3u"
     
@@ -9,7 +9,7 @@ def procesar_listas_alwaysdata():
         print("ERROR: No se encontró dan88.m3u en la raíz del repositorio.")
         return
 
-    print("Procesando lista: Alwaysdata proxy para TV, enlaces originales para VOD...")
+    print("Procesando lista: Vercel proxy para TV, enlaces originales para VOD...")
     
     with open(archivo_origen, "r", encoding="utf-8", errors="ignore") as f:
         lineas = f.read().splitlines()
@@ -45,15 +45,15 @@ def procesar_listas_alwaysdata():
                 if linea_url: 
                     listado_movies.append(linea_url)
                 
-            # 3. EN VIVO (DANJU80): Aquí se aplica la magia para Alwaysdata
+            # 3. EN VIVO (DANJU80): Aquí se aplica la magia para Vercel
             else:
                 if linea_url:
                     # Extrae el ID numérico al final de la URL de Planet Web
                     match = re.search(r'/([^/]+)$', linea_url)
                     if match:
                         id_canal = match.group(1)
-                        # Reemplaza por tu nuevo dominio del servidor PHP
-                        linea_url = f"http://tvtv.alwaysdata.net/{id_canal}"
+                        # Reemplaza por tu nuevo dominio en Vercel (con HTTPS)
+                        linea_url = f"https://danju-80.vercel.app/{id_canal}"
                 
                 listado_tv.append(linea_inf)
                 if linea_url: 
@@ -73,7 +73,7 @@ def procesar_listas_alwaysdata():
     with open("DANJU_SERIES", "w", encoding="utf-8") as f:
         f.write("\n".join(listado_series))
 
-    print("¡Listas generadas con éxito apuntando a tvtv.alwaysdata.net!")
+    print("¡Listas generadas con éxito apuntando a danju-80.vercel.app!")
 
 if __name__ == "__main__":
-    procesar_listas_alwaysdata()
+    procesar_listas_vercel()
