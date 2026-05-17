@@ -2,14 +2,14 @@ import os
 import re
 
 def procesar_listas_vercel():
-    # Nombre del archivo original actualizado a dany88.txt
-    archivo_origen = "dany88.txt"
+    # CAMBIADO: Ahora busca exactamente "dan88.txt" como se ve en tu GitHub
+    archivo_origen = "dan88.txt"
     
     if not os.path.exists(archivo_origen):
-        print("ERROR: No se encontró dany88.txt en la raíz del repositorio.")
+        print(f"ERROR: No se encontró {archivo_origen} en la raíz del repositorio.")
         return
 
-    print("Procesando lista: Inyectando máscara de iPhone desde dany88.txt...")
+    print(f"Procesando lista: Inyectando máscara de iPhone desde {archivo_origen}...")
     
     with open(archivo_origen, "r", encoding="utf-8", errors="ignore") as f:
         lineas = f.read().splitlines()
@@ -36,14 +36,14 @@ def procesar_listas_vercel():
             linea_inf_lower = linea_inf.lower()
             linea_url_lower = linea_url.lower()
 
-            # 1. FILTRO PARA SERIES: Mantienen enlace original + Máscara
+            # 1. FILTRO PARA SERIES
             if "/series" in linea_url_lower or 'group-title="series' in linea_inf_lower:
                 listado_series.append(linea_inf)
                 listado_series.append(mascara_iphone)
                 if linea_url: 
                     listado_series.append(linea_url)
                 
-            # 2. FILTRO PARA PELÍCULAS (VOD): Mantienen enlace original + Máscara
+            # 2. FILTRO PARA PELÍCULAS (VOD)
             elif "/movie" in linea_url_lower or ".mp4" in linea_url_lower or ".mkv" in linea_url_lower or "movie" in linea_inf_lower or "pelic" in linea_inf_lower:
                 listado_movies.append(linea_inf)
                 listado_movies.append(mascara_iphone)
