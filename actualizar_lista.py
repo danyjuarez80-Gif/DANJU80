@@ -39,11 +39,39 @@ def procesar_listas_vercel():
             # 1. FILTRO PARA SERIES: Mantienen enlace original + Máscara
             if "/series" in linea_url_lower or 'group-title="series' in linea_inf_lower:
                 listado_series.append(linea_inf)
-                listado_series.append(mascara_iphone)  # Inyecta máscara
+                listado_series.append(mascara_iphone)  # Corregido aquí
                 if linea_url: 
                     listado_series.append(linea_url)
                 
             # 2. FILTRO PARA PELÍCULAS (VOD): Mantienen enlace original + Máscara
             elif "/movie" in linea_url_lower or ".mp4" in linea_url_lower or ".mkv" in linea_url_lower or "movie" in linea_inf_lower or "pelic" in linea_inf_lower:
                 listado_movies.append(linea_inf)
-                listado_movies.append(mascara_iphone
+                listado_movies.append(mascara_iphone)  # Corregido aquí
+                if linea_url: 
+                    listado_movies.append(linea_url)
+                
+            # 3. EN VIVO (DANJU80): Enlace original directo + Máscara
+            else:
+                listado_tv.append(linea_inf)
+                listado_tv.append(mascara_iphone)  # Corregido aquí
+                if linea_url: 
+                    listado_tv.append(linea_url)
+            
+            i += 2
+        else:
+            i += 1
+
+    # Guardar los archivos finales actualizados en tu repositorio
+    with open("DANJU80", "w", encoding="utf-8") as f:
+        f.write("\n".join(listado_tv))
+    
+    with open("DANJU_MOVIES", "w", encoding="utf-8") as f:
+        f.write("\n".join(listado_movies))
+        
+    with open("DANJU_SERIES", "w", encoding="utf-8") as f:
+        f.write("\n".join(listado_series))
+
+    print("¡Listas generadas con éxito con la máscara directa de iPhone!")
+
+if __name__ == "__main__":
+    procesar_listas_vercel()
