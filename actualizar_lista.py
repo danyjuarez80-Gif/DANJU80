@@ -39,21 +39,21 @@ def procesar_listas_vercel():
             # 1. FILTRO PARA SERIES: Mantienen enlace original + Máscara
             if "/series" in linea_url_lower or 'group-title="series' in linea_inf_lower:
                 listado_series.append(linea_inf)
-                listado_series.append(mascara_iphone)  # Corregido aquí
+                listado_series.append(mascara_iphone)
                 if linea_url: 
                     listado_series.append(linea_url)
                 
             # 2. FILTRO PARA PELÍCULAS (VOD): Mantienen enlace original + Máscara
             elif "/movie" in linea_url_lower or ".mp4" in linea_url_lower or ".mkv" in linea_url_lower or "movie" in linea_inf_lower or "pelic" in linea_inf_lower:
                 listado_movies.append(linea_inf)
-                listado_movies.append(mascara_iphone)  # Corregido aquí
+                listado_movies.append(mascara_iphone)
                 if linea_url: 
                     listado_movies.append(linea_url)
                 
-            # 3. EN VIVO (DANJU80): Enlace original directo + Máscara
+            # 3. EN VIVO (DANJU80): Canales de TV directo + Máscara
             else:
                 listado_tv.append(linea_inf)
-                listado_tv.append(mascara_iphone)  # Corregido aquí
+                listado_tv.append(mascara_iphone)
                 if linea_url: 
                     listado_tv.append(linea_url)
             
