@@ -3,62 +3,55 @@ from playwright.async_api import async_playwright
 
 async def run():
     async with async_playwright() as p:
-        print("🚀 Iniciando simulación estilo Web Video Caster...")
+        print("🔥 Iniciando Modo Agresivo (Intento 2)...")
         
-        # 🛠️ AQUÍ ESTÁ EL PARCHE: Agregamos 'await' antes de p.chromium.launch
         browser = await p.chromium.launch(headless=True)
-        
-        # También le metemos await al contexto
         context = await browser.new_context(
-            user_agent="Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36"
+            user_agent="Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36",
+            viewport={"width": 360, "height": 740} # Simula pantalla exacta de celular
         )
         page = await context.new_page()
         
-        # Aquí guardaremos los enlaces sospechosos que encontremos
-        enlaces_encontrados = []
+        todo_el_trafico = []
 
-        # 1. ESCUCHAR PETICIONES DE RED (Filtro por texto de URL)
-        page.on("request", lambda req: 
-            enlaces_encontrados.append(f"[URL] {req.url}") 
-            if any(ext in req.url for ext in [".m3u8", ".ts", "master", "playlist", "live"]) else None
-        )
-
-        # 2. ESCUCHAR RESPUESTAS DE RED (Filtro avanzado por tipo de contenido, como los Blobs ocultos)
-        page.on("response", lambda res: 
-            enlaces_encontrados.append(f"[MIME: {res.headers.get('content-type')}] -> {res.url}")
-            if res.headers.get('content-type') and ("mpegurl" in res.headers.get('content-type').lower() or "video/mp2t" in res.headers.get('content-type').lower()) else None
-        )
+        # Capturar ABSOLUTAMENTE TODO lo que pida la página sin filtros
+        page.on("request", lambda req: todo_el_trafico.append(f"[REQ] -> {req.url}"))
+        page.on("response", lambda res: todo_el_trafico.append(f"[RES ({res.status})] -> {res.url} | MIME: {res.headers.get('content-type')}"))
 
         try:
-            # 💥 RECUERDA CAMBIAR ESTA URL POR LA PÁGINA QUE QUIERAS TRASTEAR
+            # 🛠️ METE AQUÍ TU URL REAL, PERRITO. Si dejas la de ejemplo va a volver a fallar
             url_a_probar = "https://TU-PAGINA-DE-STREAMING-AQUI.com" 
             
-            await page.goto(url_a_probar, wait_until="domcontentloaded", timeout=60000)
-            print(f"📡 Entrando a: {url_a_probar}")
-
-            # Esperar un momento a que carguen anuncios iniciales
+            await page.goto(url_a_probar, wait_until="load", timeout=60000)
+            print(f"📡 Navegando en la boca del lobo: {url_a_probar}")
             await asyncio.sleep(5)
-            print("👆 Simulando clic en la pantalla para activar reproductor...")
-            await page.click("body") 
 
-            # Dejamos que el video corra en el fondo 15 segundos para pescar el tráfico
+            # Intentar interactuar rudo con la página para activar reproductores flojos
+            print("👇 Tirando clics en coordenadas locas para romper anuncios...")
+            await page.mouse.click(180, 370) # Clic al centro de la pantalla simulada del cel
+            await asyncio.sleep(3)
+            await page.mouse.click(180, 370) # Segundo intento por si el primero abrió pop-up
+            
+            print("⏳ Esperando 15 segundos de reproducción de fondo...")
             await asyncio.sleep(15)
 
-        except Exception as e:
-            print(f"❌ Error al cargar la página: {e}")
+            # 📸 LA PRUEBA REINA: Tomar una foto de qué está viendo el robot
+            await page.screenshot(path="pantalla_final.png")
+            print("📸 Foto de la página guardada con éxito.")
 
+        except Exception as e:
+            print(f"❌ Tronó el proceso: {e}")
         finally:
             await browser.close()
 
-        # Guardar los resultados para revisarlos en GitHub
-        print(f"\n📊 Resultados: Se encontraron {len(enlaces_encontrados)} enlaces potenciales.")
+        # Guardar todo el reporte de tráfico bruto
         with open("resultados_trafico.txt", "w", encoding="utf-8") as f:
-            if enlaces_encontrados:
-                for enlace in set(enlaces_encontrados): # Elimina duplicados
-                    f.write(enlace + "\n")
-                    print(enlace)
+            if todo_el_trafico:
+                f.write(f"Tráfico total detectado: {len(todo_el_trafico)} peticiones.\n\n")
+                for linea in todo_el_trafico:
+                    f.write(linea + "\n")
             else:
-                f.write("No se detectó ningún flujo de video activo en esta ejecución.\n")
+                f.write("La página bloqueó por completo la salida de red del bot.\n")
 
 if __name__ == "__main__":
     asyncio.run(run())
