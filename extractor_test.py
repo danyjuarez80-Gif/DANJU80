@@ -3,14 +3,16 @@ from playwright.async_api import async_playwright
 
 async def run():
     async with async_playwright() as p:
-        # Iniciamos el navegador simulando un celular Android para imitar a Web Video Caster
-        browser = p.chromium.launch(headless=True)
+        print("🚀 Iniciando simulación estilo Web Video Caster...")
+        
+        # 🛠️ AQUÍ ESTÁ EL PARCHE: Agregamos 'await' antes de p.chromium.launch
+        browser = await p.chromium.launch(headless=True)
+        
+        # También le metemos await al contexto
         context = await browser.new_context(
             user_agent="Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36"
         )
         page = await context.new_page()
-
-        print("🚀 Iniciando simulación estilo Web Video Caster...")
         
         # Aquí guardaremos los enlaces sospechosos que encontremos
         enlaces_encontrados = []
@@ -24,22 +26,22 @@ async def run():
         # 2. ESCUCHAR RESPUESTAS DE RED (Filtro avanzado por tipo de contenido, como los Blobs ocultos)
         page.on("response", lambda res: 
             enlaces_encontrados.append(f"[MIME: {res.headers.get('content-type')}] -> {res.url}")
-            if "mpegurl" in res.headers.get("content-type", "").lower() or "video/mp2t" in res.headers.get("content-type", "").lower() else None
+            if res.headers.get('content-type') and ("mpegurl" in res.headers.get('content-type').lower() or "video/mp2t" in res.headers.get('content-type').lower()) else None
         )
 
         try:
-            # 💥 AQUÍ CAMBIAMOS LA URL POR LA PÁGINA PERRA QUE QUIERAS PROBAR
-            url_a_proBAR = "https://tvlibr3.com/" 
+            # 💥 RECUERDA CAMBIAR ESTA URL POR LA PÁGINA QUE QUIERAS TRASTEAR
+            url_a_probar = "https://TU-PAGINA-DE-STREAMING-AQUI.com" 
             
-            await page.goto(url_a_proBAR, wait_until="domcontentloaded", timeout=60000)
-            print(f"📡 Entrando a: {url_a_proBAR}")
+            await page.goto(url_a_probar, wait_until="domcontentloaded", timeout=60000)
+            print(f"📡 Entrando a: {url_a_probar}")
 
-            # Simular una espera y un clic en la pantalla por si el reproductor pide interacción
+            # Esperar un momento a que carguen anuncios iniciales
             await asyncio.sleep(5)
-            print("👆 Simulando clic en el reproductor para activar el flujo...")
-            await page.click("body") # Da un clic general en la página para activar videos auto-play
+            print("👆 Simulando clic en la pantalla para activar reproductor...")
+            await page.click("body") 
 
-            # Le damos 15 segundos a la página para que reproduzca de fondo y el script pesque el tráfico
+            # Dejamos que el video corra en el fondo 15 segundos para pescar el tráfico
             await asyncio.sleep(15)
 
         except Exception as e:
@@ -52,7 +54,7 @@ async def run():
         print(f"\n📊 Resultados: Se encontraron {len(enlaces_encontrados)} enlaces potenciales.")
         with open("resultados_trafico.txt", "w", encoding="utf-8") as f:
             if enlaces_encontrados:
-                for enlace in set(enlaces_encontrados): # 'set' elimina duplicados
+                for enlace in set(enlaces_encontrados): # Elimina duplicados
                     f.write(enlace + "\n")
                     print(enlace)
             else:
