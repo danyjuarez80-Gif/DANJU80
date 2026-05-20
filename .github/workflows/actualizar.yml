@@ -8,14 +8,35 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
-    permissions: contents: write
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v3
-      - name: Procesar
+      - name: Checkout del repositorio
+        uses: actions/checkout@v3
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Ejecutar script de procesamiento
+        run: python actualizar_lista.py
+
+      - name: Commit y Push forzado
         run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          
+          # Sincronización agresiva para evitar errores de tipo 'rejected' o 'fetch first'
+          git fetch origin main
+          git reset --hard origin/main
+          
+          # Re-ejecutar el script para asegurar que los archivos locales son los correctos
           python actualizar_lista.py
-          git config user.name 'github-actions[bot]'
-          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          
+          # Añadir solo los archivos de salida
           git add DANJU80 DANJU_MOVIES DANJU_SERIES
-          git commit -m "Organizacion de listas y mascaras" || echo "Sin cambios"
-          git push
+          
+          # Crear commit y enviar cambios
+          git commit -m "Actualizacion automatica: listas y mascaras" || echo "Sin cambios detectados"
+          git push origin main
