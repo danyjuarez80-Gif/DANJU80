@@ -1,26 +1,32 @@
-name: Actualizar Listas
+name: Actualizar Listas IPTV
 
 on:
   push:
-  workflow_dispatch:
-  schedule:
-    - cron: '0 * * * *'
+    paths:
+      - 'dan88.txt'
+      - 'actualizar_lista.py'
 
 jobs:
-  update:
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
-      - uses: actions/checkout@v3
-      - name: Ejecutar script
+      - name: Checkout del repositorio
+        uses: actions/checkout@v3
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Ejecutar script de limpieza
         run: python actualizar_lista.py
-      - name: Commit y Push
+
+      - name: Configurar usuario de git
         run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email 'github-actions[bot]@users.noreply.github.com'
-          git add DANJU80 DANJU_MOVIES DANJU_SERIES
-          git commit -m "Actualizacion completa" || echo "Sin cambios"
-          # La clave para evitar el error [rejected]
-          git pull --rebase origin main
-          git push origin main
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Subir cambios al repositorio
+        run: |
+          git add .
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-actualización de listas IPTV" && git push)
