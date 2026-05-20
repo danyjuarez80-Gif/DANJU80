@@ -1,23 +1,19 @@
-name: Actualizar Listas
-on:
-  push:
-  workflow_dispatch:
-  schedule:
-    - cron: '0 * * * *'
-
-jobs:
-  update:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v3
-      - name: Ejecutar script
-        run: python actualizar_lista.py
       - name: Commit y Push
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add .
-          git pull --rebase origin main
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Actualizacion automatica" && git push)
+          
+          # 1. Limpiamos cualquier cambio no deseado
+          git reset --hard
+          
+          # 2. Añadimos los archivos generados
+          git add DANJU80 DANJU_MOVIES DANJU_SERIES
+          
+          # 3. Solo si hay cambios, procedemos a actualizar
+          if ! git diff --quiet HEAD; then
+            git commit -m "Actualizacion automatica de listas"
+            git pull --rebase origin main
+            git push
+          else
+            echo "No hay cambios para subir."
+          fi
