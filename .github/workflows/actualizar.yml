@@ -6,11 +6,12 @@ on:
       - 'dan88.txt'
       - 'actualizar_lista.py'
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - name: Checkout del repositorio
         uses: actions/checkout@v3
@@ -30,5 +31,5 @@ jobs:
 
       - name: Subir cambios al repositorio
         run: |
-          git add DANJU_TV.m3u DANJU_MOVIES.m3u DANJU_SERIES.m3u
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-actualización de listas IPTV" && git push)
+          git add DANJU DANJU_MOVIES DANJU_SERIES
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-actualizacion de listas" && git push)
