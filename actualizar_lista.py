@@ -2,52 +2,40 @@ import os
 
 def procesar_listas():
     archivo_origen = "dan88.txt"
+    mascara = "#EXTVLCOPT:http-user-agent=Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1"
+    
+    # Listas inicializadas con la cabecera M3U
+    listas = {"DANJU80": ["#EXTM3U"], "DANJU_MOVIES": ["#EXTM3U"], "DANJU_SERIES": ["#EXTM3U"]}
+
     if not os.path.exists(archivo_origen):
-        print("Archivo origen no encontrado")
         return
 
-    mascara_vlc = "#EXTVLCOPT:http-user-agent=Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1"
-    
-    tv, movies, series = ["#EXTM3U"], ["#EXTM3U"], ["#EXTM3U"]
-
-    # Leer el archivo línea por línea
     with open(archivo_origen, "r", encoding="utf-8", errors="ignore") as f:
-        lineas = [l.strip() for l in f if l.strip()]
+        lineas = f.readlines()
 
-    # Procesar bloques detectando el patrón de Planetweb
-    i = 0
-    while i < len(lineas) - 1:
-        if lineas[i].startswith("#EXTINF"):
-            info = lineas[i]
-            # Buscar la URL en la siguiente línea o línea cercana
-            url = ""
-            for j in range(i+1, min(i+4, len(lineas))):
-                if lineas[j].startswith("http"):
-                    url = lineas[j]
-                    break
+    # Procesamiento por bloques de 2 líneas
+    for i in range(0, len(lineas) - 1, 2):
+        l1 = lineas[i].strip()
+        l2 = lineas[i+1].strip()
+        
+        if l1.startswith("#EXTINF"):
+            # Determinar destino
+            destino = "DANJU80"
+            if "series" in l2.lower() or "s0" in l1.lower():
+                destino = "DANJU_SERIES"
+            elif "movie" in l2.lower() or "movie" in l1.lower():
+                destino = "DANJU_MOVIES"
             
-            if url:
-                # Construir el bloque perfecto de 3 líneas
-                bloque = [info, mascara_vlc, url]
-                
-                # Clasificación mejorada
-                inf_low = info.lower()
-                url_low = url.lower()
-                
-                if "series" in url_low or "s0" in inf_low or "episodio" in inf_low:
-                    series.extend(bloque)
-                elif "movie" in url_low or "movie" in inf_low:
-                    movies.extend(bloque)
-                else:
-                    tv.extend(bloque)
-            i += 1
-        else:
-            i += 1
+            # Agregar el bloque formateado correctamente
+            listas[destino].append(l1)
+            listas[destino].append(mascara)
+            listas[destino].append(l2)
 
-    # Guardar archivos
-    for nombre, lista in [("DANJU80", tv), ("DANJU_MOVIES", movies), ("DANJU_SERIES", series)]:
+    # Escritura forzada de los 3 archivos
+    for nombre, contenido in listas.items():
         with open(nombre, "w", encoding="utf-8") as f:
-            f.write("\n".join(lista))
+            f.write("\n".join(contenido))
+        print(f"Archivo {nombre} generado con {len(contenido)} lineas.")
 
 if __name__ == "__main__":
     procesar_listas()
