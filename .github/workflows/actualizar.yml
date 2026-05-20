@@ -31,5 +31,5 @@ jobs:
 
       - name: Subir cambios al repositorio
         run: |
-          git add DANJU DANJU_MOVIES DANJU_SERIES
+          git add DANJU80 DANJU_MOVIES DANJU_SERIES
           git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-actualizacion de listas" && git push)
