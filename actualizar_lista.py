@@ -2,19 +2,11 @@ import os
 
 def procesar_listas_vercel():
     archivo_origen = "dan88.txt"
-    
     if not os.path.exists(archivo_origen):
-        print(f"ERROR: No se encontró {archivo_origen}")
         return
 
-    # Esta máscara es la que permite que VLC "engañe" al servidor haciéndose pasar por un iPhone
     mascara_vlc = "#EXTVLCOPT:http-user-agent=Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1"
-    palabras_4k = ["4k", "uhd", "2160p", "[4k]", "(4k)"]
-
-    def guardar_lista(nombre_archivo, lista):
-        with open(nombre_archivo, "w", encoding="utf-8") as f:
-            f.write("\n".join(lista))
-
+    
     listado_tv, listado_movies, listado_series = ["#EXTM3U"], ["#EXTM3U"], ["#EXTM3U"]
 
     with open(archivo_origen, "r", encoding="utf-8", errors="ignore") as f:
@@ -26,18 +18,13 @@ def procesar_listas_vercel():
             linea_inf = lineas[i]
             linea_url = lineas[i+1] if i + 1 < len(lineas) else ""
             
-            # Filtro 4K
-            if any(p in linea_inf.lower() for p in palabras_4k):
-                i += 2
-                continue
-
-            # Construcción del bloque de 3 líneas obligatorio para VLC
+            # Bloque base para todos
             bloque = [linea_inf, mascara_vlc, linea_url]
-
-            # Clasificación
-            if "/series" in linea_url.lower() or 'group-title="series' in linea_inf.lower():
+            
+            # Lógica de redirección original
+            if "series" in linea_url.lower() or "s0" in linea_inf.lower() or "episodio" in linea_inf.lower():
                 listado_series.extend(bloque)
-            elif any(x in linea_url.lower() for x in [".mp4", ".mkv", "/movie"]):
+            elif any(ext in linea_url.lower() for ext in [".mp4", ".mkv", ".avi", "/movie"]):
                 listado_movies.extend(bloque)
             else:
                 listado_tv.extend(bloque)
@@ -46,10 +33,10 @@ def procesar_listas_vercel():
         else:
             i += 1
 
-    guardar_lista("DANJU80.m3u", listado_tv)
-    guardar_lista("DANJU_MOVIES.m3u", listado_movies)
-    guardar_lista("DANJU_SERIES.m3u", listado_series)
-    print("¡Listas generadas correctamente con formato VLC!")
+    # Guardado con los nombres originales sin extensión
+    with open("DANJU80", "w", encoding="utf-8") as f: f.write("\n".join(listado_tv))
+    with open("DANJU_MOVIES", "w", encoding="utf-8") as f: f.write("\n".join(listado_movies))
+    with open("DANJU_SERIES", "w", encoding="utf-8") as f: f.write("\n".join(listado_series))
 
 if __name__ == "__main__":
     procesar_listas_vercel()
