@@ -2,21 +2,44 @@ name: Actualizar Listas
 
 on:
   push:
-  workflow_dispatch:  # <--- ESTO es lo que hace que aparezca el botón "Run workflow"
+  workflow_dispatch:
+  schedule:
+    - cron: '0 * * * *' # Se ejecuta automáticamente cada hora
 
 jobs:
-  update:
+  build:
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v3
-      - name: Procesar listas
+      - name: Checkout del repositorio
+        uses: actions/checkout@v3
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Ejecutar script de procesamiento
         run: python actualizar_lista.py
-      - name: Commit y Push
+
+      - name: Commit y Push de resultados
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
+          
+          # Sincronizar con el remoto para evitar conflictos
+          git fetch origin main
+          git reset --hard origin/main
+          
+          # Volver a ejecutar por si el reset borró el trabajo local
+          python actualizar_lista.py
+          
+          # Preparar archivos
           git add DANJU80 DANJU_MOVIES DANJU_SERIES
-          git commit -m "Actualizacion" || echo "Sin cambios"
-          git push --force
+          
+          # Commit si hay cambios, ignorar si no hay nada
+          git commit -m "Actualizacion de listas: TV, Movies y Series" || echo "Sin cambios detectados"
+          
+          # Empujar cambios
+          git push origin main
