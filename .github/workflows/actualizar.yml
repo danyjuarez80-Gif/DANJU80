@@ -15,22 +15,28 @@ jobs:
       - name: Checkout del repositorio
         uses: actions/checkout@v3
 
-      - name: Procesar listas y aplicar mascara
-        run: |
-          python actualizar_lista.py
-
-      - name: Commit y Push forzado
+      - name: Configurar git
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          
+
+      - name: Ejecutar script de procesamiento
+        run: python actualizar_lista.py
+
+      - name: Commit y Push seguro
+        run: |
           # Añadir cambios
           git add DANJU80 DANJU_MOVIES DANJU_SERIES
           
-          # Commit solo si hay cambios reales
+          # Verificar si hay cambios antes de hacer commit
           if ! git diff --cached --quiet; then
             git commit -m "Actualizacion automatica: listas y mascaras"
-            git push --force origin main
+            
+            # Integrar cambios remotos antes de subir para evitar el error 'rejected'
+            git pull --rebase origin main
+            
+            # Subir cambios
+            git push origin main
           else
             echo "Sin cambios detectados, omitiendo push."
           fi
