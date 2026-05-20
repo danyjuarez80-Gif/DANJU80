@@ -1,5 +1,4 @@
 import os
-import re
 
 def procesar_listas():
     archivo_origen = "dan88.txt"
@@ -22,21 +21,27 @@ def procesar_listas():
             info_low = linea_inf.lower()
             url_low = linea_url.lower()
 
-            # Clasificación robusta
             if any(x in info_low or x in url_low for x in ["series", "s01", "s02", "s03", "s04", "s05", "episodio"]):
-                # Agrupación para VLC
                 if 'group-title=' not in linea_inf:
                     linea_inf = linea_inf.replace("#EXTINF:-1", '#EXTINF:-1 group-title="Series"')
                 series.extend([linea_inf, mascara_vlc, linea_url])
-            
             elif any(ext in url_low for ext in [".mp4", ".mkv", ".avi", "/movie"]):
                 movies.extend([linea_inf, mascara_vlc, linea_url])
-            
             else:
                 tv.extend([linea_inf, mascara_vlc, linea_url])
             i += 2
         else:
             i += 1
 
-    with open("DANJU80", "w", encoding="utf-8") as f: f.write("\n".join(tv))
+    # Guardado con indentación correcta (aquí estaba el error)
+    with open("DANJU80", "w", encoding="utf-8") as f:
+        f.write("\n".join(tv))
     with open("DANJU_MOVIES", "w", encoding="utf-8") as f:
+        f.write("\n".join(movies))
+    with open("DANJU_SERIES", "w", encoding="utf-8") as f:
+        f.write("\n".join(series))
+    
+    print("Listas actualizadas correctamente.")
+
+if __name__ == "__main__":
+    procesar_listas()
