@@ -10,6 +10,16 @@ def procesar_listas_vercel():
     with open(archivo_origen, "r", encoding="utf-8", errors="ignore") as f:
         lineas = f.read().splitlines()
 
+    # Logo genérico de Apple (puedes cambiar esta URL por la que prefieras)
+    logo_iphone = 'tvg-logo="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg"'
+
+    def agregar_mascara(linea_inf):
+        """Añade el logo si no existe en la línea EXTINF."""
+        if 'tvg-logo=' not in linea_inf:
+            # Inserta el logo después de #EXTINF
+            return linea_inf.replace("#EXTINF:", f"#EXTINF:-1 {logo_iphone} ")
+        return linea_inf
+
     cabecera = "#EXTM3U"
     listado_tv = [cabecera]
     listado_movies = [cabecera]
@@ -19,7 +29,8 @@ def procesar_listas_vercel():
     while i < len(lineas):
         linea = lineas[i].strip()
         if linea.startswith("#EXTINF"):
-            linea_inf = linea
+            # Aplicamos la máscara antes de clasificar
+            linea_inf = agregar_mascara(linea)
             linea_url = lineas[i+1].strip() if i + 1 < len(lineas) else ""
             
             inf_low = linea_inf.lower()
