@@ -8,22 +8,14 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    permissions: contents: write
     steps:
       - uses: actions/checkout@v3
-      
-      - name: Limpieza y Ejecución
+      - name: Procesar
         run: |
-          # Limpieza total para evitar conflictos
-          git reset --hard HEAD
-          git clean -fd
           python actualizar_lista.py
-          
-      - name: Commit y Push
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add DANJU80
-          git commit -m "Actualizacion automatica segura" || echo "Sin cambios"
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add DANJU80 DANJU_MOVIES DANJU_SERIES
+          git commit -m "Organizacion de listas y mascaras" || echo "Sin cambios"
           git push
