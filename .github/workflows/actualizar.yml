@@ -4,20 +4,18 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  update:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    permissions: contents: write
     steps:
       - uses: actions/checkout@v3
-      
-      - name: Procesar listas
-        run: python actualizar_lista.py
-        
-      - name: Commit y Push
+      - name: Sincronizar y ejecutar
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
-          git add DANJU80
-          git commit -m "Actualizacion de listas" || exit 0
-          git push
+          git fetch origin main
+          git reset --hard origin/main
+          python actualizar_lista.py
+          git add .
+          git commit -m "Reparacion de listas" || echo "Sin cambios"
+          git push origin main --force
