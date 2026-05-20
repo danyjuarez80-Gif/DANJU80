@@ -1,4 +1,4 @@
-name: Actualizar
+name: Actualizar Listas
 on:
   push:
   workflow_dispatch:
@@ -8,32 +8,20 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    permissions: contents: write
     steps:
-      - name: Checkout del repositorio
-        uses: actions/checkout@v3
-
-      - name: Procesar listas
+      - uses: actions/checkout@v3
+      
+      - name: Procesar Clasificación
+        run: python actualizar_lista.py
+        
+      - name: Commit y Push
         run: |
-          # 1. Ejecutar el script que inyecta la máscara
-          python actualizar_lista.py
-
-      - name: Commit y Push forzado
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          
-          # 2. Sincronización agresiva para evitar errores de tipo 'rejected'
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
           git fetch origin main
           git reset --hard origin/main
-          
-          # 3. Re-ejecutar script por si el reset borró cambios
           python actualizar_lista.py
-          
-          # 4. Añadir todos los archivos finales
-          git add .
-          
-          # 5. Commit y Push forzado (ignorar si no hay cambios)
-          git commit -m "Actualizacion automatica: listas y mascaras" || echo "Sin cambios"
+          git add DANJU80 DANJU_MOVIES DANJU_SERIES
+          git commit -m "Clasificación automática: TV, Peliculas, Series" || exit 0
           git push origin main
