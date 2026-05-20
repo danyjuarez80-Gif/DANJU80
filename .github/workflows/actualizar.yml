@@ -1,4 +1,5 @@
 name: Actualizar Listas
+
 on:
   push:
   workflow_dispatch:
@@ -8,20 +9,32 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
-    permissions: contents: write
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v3
-      
-      - name: Procesar Clasificación
-        run: python actualizar_lista.py
-        
-      - name: Commit y Push
+      - name: Checkout del repositorio
+        uses: actions/checkout@v3
+
+      - name: Procesar y Sincronizar
         run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          # 1. Configuración de usuario
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          
+          # 2. Sincronizar con el repositorio remoto
           git fetch origin main
           git reset --hard origin/main
+          
+          # 3. Ejecutar el script (si falla, el workflow se detiene aquí)
           python actualizar_lista.py
+          
+          # 4. Añadir cambios
           git add DANJU80 DANJU_MOVIES DANJU_SERIES
-          git commit -m "Clasificación automática: TV, Peliculas, Series" || exit 0
-          git push origin main
+          
+          # 5. Commit si hay cambios
+          if ! git diff --cached --quiet; then
+            git commit -m "Actualizacion completa: Categorias y Mascaras"
+            git push origin main
+          else
+            echo "Sin cambios, no hay nada que subir."
+          fi
