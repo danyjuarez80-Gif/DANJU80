@@ -1,5 +1,4 @@
-name: Actualizar Listas
-
+name: Actualizar
 on:
   push:
   workflow_dispatch:
@@ -9,32 +8,14 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    permissions: contents: write
     steps:
-      - name: Checkout del repositorio
-        uses: actions/checkout@v3
-
-      - name: Procesar y Sincronizar
+      - uses: actions/checkout@v3
+      - name: Procesar
         run: |
-          # 1. Configuración de usuario
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          
-          # 2. Sincronizar con el repositorio remoto
-          git fetch origin main
-          git reset --hard origin/main
-          
-          # 3. Ejecutar el script (si falla, el workflow se detiene aquí)
           python actualizar_lista.py
-          
-          # 4. Añadir cambios
+          git config user.name 'bot'
+          git config user.email 'bot@bot.com'
           git add DANJU80 DANJU_MOVIES DANJU_SERIES
-          
-          # 5. Commit si hay cambios
-          if ! git diff --cached --quiet; then
-            git commit -m "Actualizacion completa: Categorias y Mascaras"
-            git push origin main
-          else
-            echo "Sin cambios, no hay nada que subir."
-          fi
+          git commit -m "Actualizacion" || exit 0
+          git push --force origin main
