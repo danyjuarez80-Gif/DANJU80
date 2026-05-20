@@ -29,19 +29,19 @@ def procesar_listas_vercel():
             linea_inf_lower = linea_inf.lower()
             linea_url_lower = linea_url.lower()
 
-            # 1. FILTRO PARA SERIES (Con máscara)
-            if "/series" in linea_url_lower or 'group-title="series' in linea_inf_lower:
+            # Lógica forzada: Si es serie, va a series
+            if "/series" in linea_url_lower or 'series' in linea_inf_lower:
                 listado_series.append(linea_inf)
                 listado_series.append(mascara_iphone)
                 if linea_url: listado_series.append(linea_url)
-                
-            # 2. FILTRO PARA PELÍCULAS (Con máscara)
+            
+            # Si es peli, va a pelis
             elif "/movie" in linea_url_lower or ".mp4" in linea_url_lower or ".mkv" in linea_url_lower or "movie" in linea_inf_lower or "pelic" in linea_inf_lower:
                 listado_movies.append(linea_inf)
                 listado_movies.append(mascara_iphone)
                 if linea_url: listado_movies.append(linea_url)
-                
-            # 3. EN VIVO (DANJU80): Con máscara incluida
+            
+            # Todo lo demás es TV
             else:
                 listado_tv.append(linea_inf)
                 listado_tv.append(mascara_iphone)
