@@ -12,14 +12,16 @@ def procesar_listas_vercel():
         lineas = f.read().splitlines()
 
     def limpiar_linea_inf(linea_inf):
-        """Elimina todos los atributos de logo e imagen de la línea #EXTINF."""
-        # Elimina: tvg-logo, tvg-image, logo, y atributos comunes de metadatos
+        """Elimina todos los atributos de logos e imágenes."""
         linea_limpia = re.sub(r'tvg-logo=".*?"', '', linea_inf)
         linea_limpia = re.sub(r'tvg-image=".*?"', '', linea_limpia)
         linea_limpia = re.sub(r'logo=".*?"', '', linea_limpia)
+        linea_limpia = re.sub(r'tvg-id=".*?"', '', linea_limpia)
         
-        # Limpieza final: asegura que no queden espacios dobles y mantenga el formato
+        # Eliminar espacios extra resultantes
         linea_limpia = re.sub(r'\s+', ' ', linea_limpia).strip()
+        # Asegurar que la línea no termine con coma
+        linea_limpia = linea_limpia.replace(',', ' ')
         return linea_limpia
 
     cabecera = "#EXTM3U"
@@ -35,7 +37,6 @@ def procesar_listas_vercel():
             inf_low = linea.lower()
             url_low = linea_url.lower()
 
-            # Limpiamos la línea de metadatos visuales antes de clasificar
             linea_final = limpiar_linea_inf(linea)
 
             if "/series" in url_low or 'series' in inf_low:
@@ -48,11 +49,12 @@ def procesar_listas_vercel():
         else:
             i += 1
 
-    # Guardado de archivos sin logos
-    with open("DANJU_TV.m3u", "w", encoding="utf-8") as f: f.write("\n".join(listado_tv))
-    with open("DANJU_MOVIES.m3u", "w", encoding="utf-8") as f: f.write("\n".join(listado_movies))
-    with open("DANJU_SERIES.m3u", "w", encoding="utf-8") as f: f.write("\n".join(listado_series))
-    print("Procesamiento completado: Archivos limpios generados.")
+    # Guardado con tus nombres exactos
+    with open("DANJU80", "w", encoding="utf-8") as f: f.write("\n".join(listado_tv))
+    with open("DANJU_MOVIES", "w", encoding="utf-8") as f: f.write("\n".join(listado_movies))
+    with open("DANJU_SERIES", "w", encoding="utf-8") as f: f.write("\n".join(listado_series))
+    
+    print("PROCESO TERMINADO: Archivos limpios generados.")
 
 if __name__ == "__main__":
     procesar_listas_vercel()
