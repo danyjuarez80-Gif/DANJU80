@@ -1,5 +1,4 @@
 import os
-import re
 
 def procesar_listas_vercel():
     archivo_origen = "dan88.txt"
@@ -11,8 +10,7 @@ def procesar_listas_vercel():
     with open(archivo_origen, "r", encoding="utf-8", errors="ignore") as f:
         lineas = f.read().splitlines()
 
-    cabecera = lineas[0] if lineas and lineas[0].startswith("#EXTM3U") else "#EXTM3U"
-
+    cabecera = "#EXTM3U"
     listado_tv = [cabecera]
     listado_movies = [cabecera]
     listado_series = [cabecera]
@@ -24,7 +22,6 @@ def procesar_listas_vercel():
             linea_inf = linea
             linea_url = lineas[i+1].strip() if i + 1 < len(lineas) else ""
             
-            # Clasificación sin agregar ninguna máscara
             inf_low = linea_inf.lower()
             url_low = linea_url.lower()
 
@@ -37,16 +34,16 @@ def procesar_listas_vercel():
             else:
                 listado_tv.append(linea_inf)
                 if linea_url: listado_tv.append(linea_url)
-            
             i += 2
         else:
             i += 1
 
-    # Guardado forzando el reemplazo total
-    def guardar_limpio(nombre, lista):
-        with open(nombre, "w", encoding="utf-8") as f:
-            f.truncate(0) # Vacía el archivo por completo
-            f.write("\n".join(lista))
+    with open("DANJU80", "w", encoding="utf-8") as f:
+        f.write("\n".join(listado_tv))
+    with open("DANJU_MOVIES", "w", encoding="utf-8") as f:
+        f.write("\n".join(listado_movies))
+    with open("DANJU_SERIES", "w", encoding="utf-8") as f:
+        f.write("\n".join(listado_series))
 
-    guardar_limpio("DANJU80", listado_tv)
-    guardar_limpio("DANJU_MOVIES", listado_
+if __name__ == "__main__":
+    procesar_listas_vercel()
