@@ -1,22 +1,22 @@
 name: Actualizar Listas
+
 on:
   push:
-  workflow_dispatch:
-  schedule:
-    - cron: '0 * * * *'
+  workflow_dispatch:  # <--- ESTO es lo que hace que aparezca el botón "Run workflow"
 
 jobs:
   update:
     runs-on: ubuntu-latest
-    permissions: contents: write
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
-      - name: Procesar
+      - name: Procesar listas
         run: python actualizar_lista.py
       - name: Commit y Push
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
           git add DANJU80 DANJU_MOVIES DANJU_SERIES
-          git commit -m "Actualizacion categorias" || echo "Sin cambios"
-          git push --force origin main
+          git commit -m "Actualizacion" || echo "Sin cambios"
+          git push --force
