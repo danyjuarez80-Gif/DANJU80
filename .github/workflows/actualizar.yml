@@ -1,5 +1,4 @@
 name: Actualizar Listas
-
 on:
   push:
   workflow_dispatch:
@@ -9,34 +8,15 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    permissions: contents: write
     steps:
-      - name: Checkout del repositorio
-        uses: actions/checkout@v3
-
-      - name: Configurar git
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-
-      - name: Ejecutar script de procesamiento
+      - uses: actions/checkout@v3
+      - name: Procesar
         run: python actualizar_lista.py
-
-      - name: Commit y Push seguro
+      - name: Commit y Push
         run: |
-          # Añadir cambios
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
           git add DANJU80 DANJU_MOVIES DANJU_SERIES
-          
-          # Verificar si hay cambios antes de hacer commit
-          if ! git diff --cached --quiet; then
-            git commit -m "Actualizacion automatica: listas y mascaras"
-            
-            # Integrar cambios remotos antes de subir para evitar el error 'rejected'
-            git pull --rebase origin main
-            
-            # Subir cambios
-            git push origin main
-          else
-            echo "Sin cambios detectados, omitiendo push."
-          fi
+          git commit -m "Actualizacion categorias" || echo "Sin cambios"
+          git push --force origin main
