@@ -7,42 +7,18 @@ on:
     - cron: '0 * * * *'
 
 jobs:
-  update-listas:
+  update:
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-      - name: 1. Checkout del Repositorio
-        uses: actions/checkout@v3
-
-      - name: 2. Configurar Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
-
-      - name: 3. Ejecutar Clasificador y Aplicador de Máscara
+      - uses: actions/checkout@v3
+      - name: Ejecutar procesamiento
         run: python actualizar_lista.py
-
-      - name: 4. Sincronización y Envío de Cambios
+      - name: Commit y Push
         run: |
-          # Configuración de identidad
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
-          
-          # Asegurar que el entorno local esté sincronizado con el remoto
-          git fetch origin main
-          git reset --hard origin/main
-          
-          # Re-ejecutar el script para asegurar integridad total antes de subir
-          python actualizar_lista.py
-          
-          # Añadir los tres archivos generados
           git add DANJU80 DANJU_MOVIES DANJU_SERIES
-          
-          # Commit y Push solo si hubo cambios reales
-          if ! git diff --cached --quiet; then
-            git commit -m "Actualización: Clasificación y Máscaras 4K activas"
-            git push origin main
-          else
-            echo "Sin cambios detectados en las listas."
-          fi
+          git commit -m "Actualizacion completa" || echo "Sin cambios"
+          git push
