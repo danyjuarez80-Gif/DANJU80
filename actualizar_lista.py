@@ -1,24 +1,30 @@
 import os
 
-def aplicar_mascara():
-    archivo_origen = "dan88.txt"
+def actualizar():
+    # Solo procesamos si el archivo origen tiene contenido
+    if not os.path.exists("dan88.txt") or os.path.getsize("dan88.txt") == 0:
+        print("Error: dan88.txt vacío o no encontrado.")
+        return
+
     mascara = "#EXTVLCOPT:http-user-agent=Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1"
     
-    with open(archivo_origen, "r", encoding="utf-8", errors="ignore") as f:
+    with open("dan88.txt", "r", encoding="utf-8") as f:
         lineas = f.readlines()
 
-    # Procesamos el archivo línea a línea
-    resultado = []
+    nueva_lista = []
     for linea in lineas:
         linea = linea.strip()
-        resultado.append(linea)
-        # Si la línea es una URL, inyectamos la máscara inmediatamente después
+        if not linea: continue
+        nueva_lista.append(linea)
+        # Inyectar máscara solo después de enlaces http
         if linea.startswith("http"):
-            resultado.append(mascara)
-            
-    # Guardamos el archivo final (mantiene el nombre original o lo sobrescribes)
-    with open("DANJU80", "w", encoding="utf-8") as f:
-        f.write("\n".join(resultado))
+            nueva_lista.append(mascara)
+
+    # Solo guardamos si la lista tiene más de 1 línea (evitamos vaciar archivos)
+    if len(nueva_lista) > 1:
+        with open("DANJU80", "w", encoding="utf-8") as f:
+            f.write("\n".join(nueva_lista))
+        print("DANJU80 actualizado con éxito.")
 
 if __name__ == "__main__":
-    aplicar_mascara()
+    actualizar()
