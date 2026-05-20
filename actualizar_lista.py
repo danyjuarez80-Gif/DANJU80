@@ -7,8 +7,6 @@ def procesar_listas_vercel():
     if not os.path.exists(archivo_origen):
         print(f"ERROR: No se encontró {archivo_origen} en la raíz del repositorio.")
         return
-
-    print(f"Procesando lista: Inyectando máscara solo en TV y eliminando contenido 4K...")
     
     with open(archivo_origen, "r", encoding="utf-8", errors="ignore") as f:
         lineas = f.read().splitlines()
@@ -75,5 +73,3 @@ def procesar_listas_vercel():
 
 if __name__ == "__main__":
     procesar_listas_vercel()
-
-edita los encabezados para vlc puede visualizar los canales.
