@@ -24,20 +24,16 @@ def procesar_listas_vercel():
             linea_inf = linea
             linea_url = lineas[i+1].strip() if i + 1 < len(lineas) else ""
             
-            linea_inf_lower = linea_inf.lower()
-            linea_url_lower = linea_url.lower()
+            # Clasificación sin agregar ninguna máscara
+            inf_low = linea_inf.lower()
+            url_low = linea_url.lower()
 
-            # 1. FILTRO PARA SERIES (Sin máscara)
-            if "/series" in linea_url_lower or 'series' in linea_inf_lower:
+            if "/series" in url_low or 'series' in inf_low:
                 listado_series.append(linea_inf)
                 if linea_url: listado_series.append(linea_url)
-                
-            # 2. FILTRO PARA PELÍCULAS (Sin máscara)
-            elif "/movie" in linea_url_lower or ".mp4" in linea_url_lower or ".mkv" in linea_url_lower or "movie" in linea_inf_lower or "pelic" in linea_inf_lower:
+            elif "/movie" in url_low or ".mp4" in url_low or ".mkv" in url_low or "movie" in inf_low or "pelic" in inf_low:
                 listado_movies.append(linea_inf)
                 if linea_url: listado_movies.append(linea_url)
-                
-            # 3. EN VIVO (Sin máscara)
             else:
                 listado_tv.append(linea_inf)
                 if linea_url: listado_tv.append(linea_url)
@@ -46,9 +42,11 @@ def procesar_listas_vercel():
         else:
             i += 1
 
-    with open("DANJU80", "w", encoding="utf-8") as f: f.write("\n".join(listado_tv))
-    with open("DANJU_MOVIES", "w", encoding="utf-8") as f: f.write("\n".join(listado_movies))
-    with open("DANJU_SERIES", "w", encoding="utf-8") as f: f.write("\n".join(listado_series))
+    # Guardado forzando el reemplazo total
+    def guardar_limpio(nombre, lista):
+        with open(nombre, "w", encoding="utf-8") as f:
+            f.truncate(0) # Vacía el archivo por completo
+            f.write("\n".join(lista))
 
-if __name__ == "__main__":
-    procesar_listas_vercel()
+    guardar_limpio("DANJU80", listado_tv)
+    guardar_limpio("DANJU_MOVIES", listado_
