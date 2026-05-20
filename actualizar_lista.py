@@ -1,77 +1,55 @@
 import os
-import re
 
 def procesar_listas_vercel():
     archivo_origen = "dan88.txt"
     
     if not os.path.exists(archivo_origen):
-        print(f"ERROR: No se encontró {archivo_origen} en la raíz del repositorio.")
+        print(f"ERROR: No se encontró {archivo_origen}")
         return
 
-    print(f"Procesando lista: Inyectando máscara solo en TV y eliminando contenido 4K...")
-    
+    # Esta máscara es la que permite que VLC "engañe" al servidor haciéndose pasar por un iPhone
+    mascara_vlc = "#EXTVLCOPT:http-user-agent=Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1"
+    palabras_4k = ["4k", "uhd", "2160p", "[4k]", "(4k)"]
+
+    def guardar_lista(nombre_archivo, lista):
+        with open(nombre_archivo, "w", encoding="utf-8") as f:
+            f.write("\n".join(lista))
+
+    listado_tv, listado_movies, listado_series = ["#EXTM3U"], ["#EXTM3U"], ["#EXTM3U"]
+
     with open(archivo_origen, "r", encoding="utf-8", errors="ignore") as f:
         lineas = f.read().splitlines()
 
-    cabecera = lineas[0] if lineas and lineas[0].startswith("#EXTM3U") else "#EXTM3U"
-
-    listado_tv = [cabecera]
-    listado_movies = [cabecera]
-    listado_series = [cabecera]
-
-    mascara_iphone = "#EXTVLCOPT:http-user-agent=Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1"
-    palabras_4k = ["4k", "uhd", "2160p", "[4k]", "(4k)"]
-
-    i = 1
+    i = 0
     while i < len(lineas):
-        linea = lineas[i].strip()
-        if linea.startswith("#EXTINF"):
-            linea_inf = linea
-            linea_url = ""
-            if i + 1 < len(lineas):
-                linea_url = lineas[i + 1].strip()
+        if lineas[i].startswith("#EXTINF"):
+            linea_inf = lineas[i]
+            linea_url = lineas[i+1] if i + 1 < len(lineas) else ""
             
-            linea_inf_lower = linea_inf.lower()
-            linea_url_lower = linea_url.lower()
+            # Filtro 4K
+            if any(p in linea_inf.lower() for p in palabras_4k):
+                i += 2
+                continue
 
-            es_contenido_4k = any(palabra in linea_inf_lower for palabra in palabras_4k)
+            # Construcción del bloque de 3 líneas obligatorio para VLC
+            bloque = [linea_inf, mascara_vlc, linea_url]
 
-            # 1. FILTRO PARA SERIES (Sin máscara)
-            if "/series" in linea_url_lower or 'group-title="series' in linea_inf_lower:
-                if not es_contenido_4k:
-                    listado_series.append(linea_inf)
-                    if linea_url: 
-                        listado_series.append(linea_url)
-                
-            # 2. FILTRO PARA PELÍCULAS (Sin máscara)
-            elif "/movie" in linea_url_lower or ".mp4" in linea_url_lower or ".mkv" in linea_url_lower or "movie" in linea_inf_lower or "pelic" in linea_inf_lower:
-                if not es_contenido_4k:
-                    listado_movies.append(linea_inf)
-                    if linea_url: 
-                        listado_movies.append(linea_url)
-                
-            # 3. EN VIVO (DANJU80): Con máscara incluida
+            # Clasificación
+            if "/series" in linea_url.lower() or 'group-title="series' in linea_inf.lower():
+                listado_series.extend(bloque)
+            elif any(x in linea_url.lower() for x in [".mp4", ".mkv", "/movie"]):
+                listado_movies.extend(bloque)
             else:
-                listado_tv.append(linea_inf)
-                listado_tv.append(mascara_iphone)
-                if linea_url: 
-                    listado_tv.append(linea_url)
+                listado_tv.extend(bloque)
             
             i += 2
         else:
             i += 1
 
-    # Guardado de archivos
-    with open("DANJU80", "w", encoding="utf-8") as f:
-        f.write("\n".join(listado_tv))
-    
-    with open("DANJU_MOVIES", "w", encoding="utf-8") as f:
-        f.write("\n".join(listado_movies))
-        
-    with open("DANJU_SERIES", "w", encoding="utf-8") as f:
-        f.write("\n".join(listado_series))
-
-    print(f"¡Proceso terminado con éxito!")
+    guardar_lista("DANJU80.m3u", listado_tv)
+    guardar_lista("DANJU_MOVIES.m3u", listado_movies)
+    guardar_lista("DANJU_SERIES.m3u", listado_series)
+    print("¡Listas generadas correctamente con formato VLC!")
 
 if __name__ == "__main__":
     procesar_listas_vercel()
