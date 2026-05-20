@@ -1,7 +1,7 @@
 import os
 import re
 
-def procesar_listas():
+def procesar_listas_vercel():
     archivo_origen = "dan88.txt"
     if not os.path.exists(archivo_origen):
         return
@@ -53,4 +53,4 @@ def procesar_listas():
     with open("DANJU_SERIES", "w", encoding="utf-8") as f: f.write("\n".join(listado_series))
 
 if __name__ == "__main__":
-    procesar_listas()
+    procesar_listas_vercel()
