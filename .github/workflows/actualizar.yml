@@ -12,17 +12,18 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v3
-      - name: Procesar listas
-        run: python actualizar_lista.py
-      - name: Commit y Push Forzado
+      
+      - name: Limpieza y Ejecución
+        run: |
+          # Limpieza total para evitar conflictos
+          git reset --hard HEAD
+          git clean -fd
+          python actualizar_lista.py
+          
+      - name: Commit y Push
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          # Sincronización agresiva para evitar conflictos
-          git fetch origin main
-          git reset --hard origin/main
-          # Re-ejecutar script tras reset
-          python actualizar_lista.py
           git add DANJU80
-          git commit -m "Actualizacion de seguridad y mascaras" || echo "Sin cambios"
-          git push origin main
+          git commit -m "Actualizacion automatica segura" || echo "Sin cambios"
+          git push
