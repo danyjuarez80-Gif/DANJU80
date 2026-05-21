@@ -14,7 +14,8 @@ jobs:
 
       - name: Descargar lista completa desde Dropbox
         run: |
-          curl -L -o completa.m3u "https://www.dropbox.com/scl/fi/ew83hymmvlrfl5muiodhm/danju89.m3u?rlkey=xws5j2n3uwwnxf6gny7zo9xmk&st=icseqhgp&dl=1"
+          # Usamos el subdominio directo de Dropbox para servidores (dl.dropboxusercontent.com)
+          curl -L -o completa.m3u "https://dl.dropboxusercontent.com/scl/fi/ew83hymmvlrfl5muiodhm/danju89.m3u?rlkey=xws5j2n3uwwnxf6gny7zo9xmk"
 
       - name: Separar M3U conservando categorías en TV
         run: |
