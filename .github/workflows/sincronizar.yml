@@ -16,14 +16,14 @@ jobs:
         run: |
           curl -L -o completa.m3u "https://www.dropbox.com/scl/fi/ew83hymmvlrfl5muiodhm/danju89.m3u?rlkey=xws5j2n3uwwnxf6gny7zo9xmk&st=icseqhgp&dl=1"
 
-      - name: Separar M3U y Eliminar Logos/Metadatos
+      - name: Separar M3U conservando categorías en TV
         run: |
           # Crear cabeceras estándar para los 3 archivos m3u
           echo "#EXTM3U" > tv.m3u
           echo "#EXTM3U" > peliculas.m3u
           echo "#EXTM3U" > series.m3u
 
-          # Script en Python para clasificar y limpiar metadatos pesados
+          # Script en Python para clasificar, limpiar logos y mantener grupos en TV
           python3 -c "
           import re
 
@@ -38,37 +38,46 @@ jobs:
                   continue
               
               if line_strip.startswith('#EXTINF:'):
-                  # Usamos expresiones regulares para extraer únicamente la duración y el nombre final del canal
-                  # Ejemplo original: #EXTINF:-1 tvg-id='...' tvg-logo='http://...',Nombre del Canal
-                  # Resultado limpio: #EXTINF:-1,Nombre del Canal
-                  
-                  # 1. Buscamos el texto que está justo después de la última coma (el nombre real del contenido)
-                  match_name = re.search(r',([^,]*)$', line_strip)
-                  # 2. Buscamos la duración original (usualmente -1 en IPTV en vivo)
-                  match_duration = re.search(r'^#EXTINF:(\s*[-]?\d+)', line_strip)
-                  
-                  if match_name and match_duration:
-                      duracion = match_duration.group(1)
-                      nombre = match_name.group(1).strip()
-                      # Reconstruimos la línea de forma ultra ligera sin logos ni IDs
-                      current_extinf = f'#EXTINF:{duracion},{nombre}\n'
-                  else:
-                      # Si no coincide la estructura estricta, dejamos la línea base simplificada
-                      current_extinf = '#EXTINF:-1,Canal Sin Nombre\n'
+                  # Guardamos la línea original para procesarla junto con su URL
+                  current_extinf = line_strip
                       
               elif line_strip.startswith('http'):
                   if current_extinf:
+                      # 1. Extraer el nombre del contenido (lo que está después de la última coma)
+                      match_name = re.search(r',([^,]*)$', current_extinf)
+                      # 2. Extraer la duración original
+                      match_duration = re.search(r'^#EXTINF:(\s*[-]?\d+)', current_extinf)
+                      
+                      duracion = match_duration.group(1) if match_duration else '-1'
+                      nombre = match_name.group(1).strip() if match_name else 'Contenido Sin Nombre'
+                      
                       # Clasificación por tipo de contenido según la URL
                       if '/movie/' in line_strip:
+                          # Películas limpias (sin logos ni categorías) para carga rápida
+                          linea_limpia = f'#EXTINF:{duracion},{nombre}\n'
                           with open('peliculas.m3u', 'a', encoding='utf-8') as f_out:
-                              f_out.write(current_extinf + line_strip + '\n')
+                              f_out.write(linea_limpia + line_strip + '\n')
+                              
                       elif '/series/' in line_strip:
+                          # Series limpias (sin logos ni categorías)
+                          linea_limpia = f'#EXTINF:{duracion},{nombre}\n'
                           with open('series.m3u', 'a', encoding='utf-8') as f_out:
-                              f_out.write(current_extinf + line_strip + '\n')
+                              f_out.write(linea_limpia + line_strip + '\n')
+                              
                       else:
-                          # Canales de TV en vivo
+                          # Canales de TV en vivo: Buscamos si tiene la etiqueta group-title
+                          match_group = re.search(r'group-title=\"([^\"]+)\"', current_extinf)
+                          
+                          if match_group:
+                              categoria = match_group.group(1)
+                              # Conservamos el grupo de la categoría pero omitimos logos e IDs
+                              linea_tv = f'#EXTINF:{duracion} group-title=\"{categoria}\",{nombre}\n'
+                          else:
+                              linea_tv = f'#EXTINF:{duracion},{nombre}\n'
+                              
                           with open('tv.m3u', 'a', encoding='utf-8') as f_out:
-                              f_out.write(current_extinf + line_strip + '\n')
+                              f_out.write(linea_tv + line_strip + '\n')
+                              
                       current_extinf = None
           "
           # Limpieza del archivo original pesado
@@ -79,4 +88,4 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add tv.m3u peliculas.m3u series.m3u
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Listas optimizadas sin logos actualizadas automáticamente" && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Listas optimizadas con categorías en TV" && git push)
