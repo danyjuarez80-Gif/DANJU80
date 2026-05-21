@@ -20,7 +20,7 @@ jobs:
 
       - name: Separar M3U Limpiando Logos y Manteniendo Categorías
         run: |
-          # Forzamos la creación limpia de los archivos temporales
+          # Forzamos la creación limpia de tus 3 archivos m3u temporales
           echo "#EXTM3U" > tv_tmp.m3u
           echo "#EXTM3U" > peliculas_tmp.m3u
           echo "#EXTM3U" > series_tmp.m3u
@@ -58,19 +58,19 @@ jobs:
                       
                       url_lower = line_strip.lower()
                       
-                      # Clasificación ultra flexible para películas y series
+                      # Clasificación ultra flexible para películas y series (fijándose en la URL)
                       if '/movie/' in url_lower or '/movies/' in url_lower or 'movie' in url_lower:
                           linea_limpia = f'#EXTINF:{duracion},{nombre}\n'
                           with open('peliculas_tmp.m3u', 'a', encoding='utf-8') as f_out:
                               f_out.write(linea_limpia + line_strip + '\n')
                               
-                      elif '/series/' in url_lower or '/show/' in url_lower or 'series' in url_lower:
+                      elif '/series/' in url_lower or '/shows/' in url_lower or 'series' in url_lower:
                           linea_limpia = f'#EXTINF:{duracion},{nombre}\n'
                           with open('series_tmp.m3u', 'a', encoding='utf-8') as f_out:
                               f_out.write(linea_limpia + line_strip + '\n')
                               
                       else:
-                          # TV EN VIVO: Buscar categoría con comillas dobles, simples o sin ellas
+                          # TV EN VIVO: Buscar categoría ignorando por completo logos e imágenes pesadas
                           match_group = re.search(r'group-title=["\']?([^"\',]+)["\']?', current_extinf, re.IGNORECASE)
                           
                           if match_group:
@@ -86,6 +86,7 @@ jobs:
           EOF
 
           python3 ejecutar_filtro.py
+          # Sobreescribimos con seguridad únicamente tus tres archivos m3u
           mv tv_tmp.m3u tv.m3u
           mv peliculas_tmp.m3u peliculas.m3u
           mv series_tmp.m3u series.m3u
@@ -96,8 +97,8 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
           
+          # Solo agregamos tus 3 archivos m3u tradicionales
           git add tv.m3u peliculas.m3u series.m3u
           
-          # Forzamos el commit eliminando filtros viejos
           git commit -m "Sincronizacion inteligente de listas m3u" || exit 0
           git push origin HEAD:${{ github.ref_name }}
