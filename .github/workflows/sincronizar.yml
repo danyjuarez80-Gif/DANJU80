@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Clonar repositorio
         uses: actions/checkout@v3
+        with:
+          persist-credentials: true # Asegura que use el token nativo con permisos de escritura
 
       - name: Descargar lista completa desde Dropbox
         run: |
@@ -23,7 +25,7 @@ jobs:
           echo "#EXTM3U" > peliculas.m3u
           echo "#EXTM3U" > series.m3u
 
-          # Script en Python corregido y limpio
+          # Script en Python para clasificar, limpiar logos y mantener grupos en TV
           python3 -c "
           import re
           import os
@@ -76,12 +78,20 @@ jobs:
                               
                       current_extinf = None
           "
-          # Borrado correcto en la terminal de Linux
+          # Borrado de la lista pesada descargada
           rm -f completa.m3u
 
       - name: Guardar cambios en GitHub
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          # Configuración forzada del usuario de Git
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          
+          # Forzar la adición de los archivos creados
           git add tv.m3u peliculas.m3u series.m3u
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Listas actualizadas sin errores" && git push)
+          
+          # Hacemos el commit. Si no hay cambios, el script continuará sin romperse
+          git commit -m "Listas M3U sincronizadas y limpias" || exit 0
+          
+          # Empujamos los cambios directamente a la rama principal de forma segura
+          git push origin HEAD:${{ github.ref_name }}
