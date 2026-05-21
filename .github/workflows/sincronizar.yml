@@ -20,23 +20,24 @@ jobs:
 
       - name: Separar M3U Limpiando Logos y Manteniendo Categorías
         run: |
-          # Generamos archivos temporales limpios
-          echo "#EXTM3U" > tv_tmp.m3u
-          echo "#EXTM3U" > peliculas_tmp.m3u
-          echo "#EXTM3U" > series_tmp.m3u
-
-          # Escribimos el script dinámicamente usando EOF para evitar conflictos de comillas en la consola
+          # Escribimos el script dinámicamente forzando un bloque limpio con EOF
           cat << 'EOF' > ejecutar_filtro.py
           import re
           import os
 
-          if not os.path.exists('completa.m3u') or os.path.getsize('completa.m3u') < 10240:
-              print('Error crítico: Archivo vacío o descarga fallida.')
+          if not os.path.exists('completa.m3u') or os.path.getsize('completa.m3u') < 5000:
+              print('Error crítico: Archivo vacío o de tamaño incorrecto.')
               exit(1)
 
-          with open('completa.m3u', 'r', encoding='utf-8', errors='ignore') as f:
-              lines = f.readlines()
+          # Forzamos la creación limpia de los archivos temporales
+          with open('tv_tmp.m3u', 'w', encoding='utf-8') as f: f.write('#EXTM3U\n')
+          with open('peliculas_tmp.m3u', 'w', encoding='utf-8') as f: f.write('#EXTM3U\n')
+          with open('series_tmp.m3u', 'w', encoding='utf-8') as f: f.write('#EXTM3U\n')
 
+          with open('completa.m3u', 'r', encoding='utf-8', errors='ignore') as f:
+              texto_completo = f.read().replace('\r', '') # Limpieza absoluta de saltos de línea de Windows
+
+          lines = texto_completo.split('\n')
           current_extinf = None
           
           for line in lines:
@@ -47,25 +48,28 @@ jobs:
               if line_strip.startswith('#EXTINF:'):
                   current_extinf = line_strip
                       
-              elif line_strip.startswith('http'):
+              elif line_strip.startswith('http://') or line_strip.startswith('https://'):
                   if current_extinf:
+                      # Extraer el nombre real (lo que esté después de la última coma)
                       match_name = re.search(r',([^,]*)$', current_extinf)
                       match_duration = re.search(r'^#EXTINF:(\s*[-]?\d+)', current_extinf)
                       
                       duracion = match_duration.group(1) if match_duration else '-1'
                       nombre = match_name.group(1).strip() if match_name else 'Contenido Sin Nombre'
                       
-                      if '/movie/' in line_strip:
+                      # Busqueda flexible por secciones clásicas de IPTV
+                      if '/movie/' in line_strip or 'movie' in line_strip.lower():
                           linea_limpia = f'#EXTINF:{duracion},{nombre}\n'
                           with open('peliculas_tmp.m3u', 'a', encoding='utf-8') as f_out:
                               f_out.write(linea_limpia + line_strip + '\n')
                               
-                      elif '/series/' in line_strip:
+                      elif '/series/' in line_strip or 'series' in line_strip.lower():
                           linea_limpia = f'#EXTINF:{duracion},{nombre}\n'
                           with open('series_tmp.m3u', 'a', encoding='utf-8') as f_out:
                               f_out.write(linea_limpia + line_strip + '\n')
                               
                       else:
+                          # TV EN VIVO: Extraer categoría (group-title) omitiendo logos
                           match_group = re.search(r'group-title=\"([^\"]+)\"', current_extinf)
                           if match_group:
                               categoria = match_group.group(1)
@@ -79,7 +83,7 @@ jobs:
                       current_extinf = None
           EOF
 
-          # Ejecutamos el script generado internamente y limpiamos basuras
+          # Ejecutamos con Python nativo y reemplazamos los viejos de forma segura
           python3 ejecutar_filtro.py
           mv tv_tmp.m3u tv.m3u
           mv peliculas_tmp.m3u peliculas.m3u
@@ -93,5 +97,5 @@ jobs:
           
           git add tv.m3u peliculas.m3u series.m3u
           
-          git commit -m "Sincronización: Listas limpias con categorías sin archivos extras" || exit 0
+          git commit -m "Sincronización: Listas depuradas sin conflicto de formato" || exit 0
           git push origin HEAD:${{ github.ref_name }}
