@@ -16,7 +16,6 @@ jobs:
 
       - name: Descargar lista completa desde Dropbox
         run: |
-          # Enlace directo optimizado para evitar bloqueos del servidor
           curl -L -o completa.m3u "https://dl.dropboxusercontent.com/scl/fi/ew83hymmvlrfl5muiodhm/danju89.m3u?rlkey=xws5j2n3uwwnxf6gny7zo9xmk"
 
       - name: Separar M3U en TV, Películas y Series
@@ -26,7 +25,7 @@ jobs:
           echo "#EXTM3U" > peliculas.m3u
           echo "#EXTM3U" > series.m3u
 
-          # Script en Python optimizado usando tu estructura exacta
+          # Script en Python optimizado con expresiones regulares ultra-flexibles
           python3 -c "
           import re
           import os
@@ -46,35 +45,38 @@ jobs:
                   continue
               
               if line_strip.startswith('#EXTINF:'):
-                  # Limpieza quirúrgica: Borramos logos e imágenes de la cabecera del canal
-                  linea_limpia = re.sub(r'tvg-logo=\".*?\"', '', line_strip)
-                  linea_limpia = re.sub(r'tvg-image=\".*?\"', '', linea_limpia)
-                  linea_limpia = re.sub(r'logo=\".*?\"', '', linea_limpia)
+                  # Limpieza inteligente: Borra tvg-logo, tvg-image o logo sin importar si usan comillas simples, dobles o mayúsculas
+                  linea_limpia = re.sub(r'tvg-logo=["\'].*?["\']', '', line_strip, flags=re.IGNORECASE)
+                  linea_limpia = re.sub(r'tvg-image=["\'].*?["\']', '', linea_limpia, flags=re.IGNORECASE)
+                  linea_limpia = re.sub(r'\blogo=["\'].*?["\']', '', linea_limpia, flags=re.IGNORECASE)
                   
-                  # Limpiamos espacios dobles que dejen los reemplazos
+                  # Removemos otros metadatos pesados de la guía para dejar solo el grupo y el nombre
+                  linea_limpia = re.sub(r'tvg-id=["\'].*?["\']', '', linea_limpia, flags=re.IGNORECASE)
+                  linea_limpia = re.sub(r'tvg-name=["\'].*?["\']', '', linea_limpia, flags=re.IGNORECASE)
+                  
+                  # Limpiamos espacios dobles sobrantes
                   current_extinf = re.sub(r'\s+', ' ', linea_limpia).strip() + '\n'
                   
               elif line_strip.startswith('http'):
                   if current_extinf:
                       url_low = line_strip.lower()
                       
-                      # Clasificación por patrones comunes
-                      if '/movie/' in url_low:
-                          # Para películas borramos también el grupo para dejarlo ultra ligero
-                          peli_limpia = re.sub(r'group-title=\".*?\"', '', current_extinf)
+                      # Clasificación por patrones comunes usando tu lógica estable
+                      if '/movie/' in url_low or '/movies/' in url_low:
+                          # Para películas y series limpiamos el group-title para que no interfiera en el VOD
+                          peli_limpia = re.sub(r'group-title=["\'].*?["\']', '', current_extinf, flags=re.IGNORECASE)
                           peli_limpia = re.sub(r',\s*', ',', peli_limpia).strip() + '\n'
                           with open('peliculas.m3u', 'a', encoding='utf-8') as f_out:
                               f_out.write(peli_limpia + line_strip + '\n')
                               
-                      elif '/series/' in url_low:
-                          # Para series borramos el grupo
-                          serie_limpia = re.sub(r'group-title=\".*?\"', '', current_extinf)
+                      elif '/series/' in url_low or '/shows/' in url_low:
+                          serie_limpia = re.sub(r'group-title=["\'].*?["\']', '', current_extinf, flags=re.IGNORECASE)
                           serie_limpia = re.sub(r',\s*', ',', serie_limpia).strip() + '\n'
                           with open('series.m3u', 'a', encoding='utf-8') as f_out:
                               f_out.write(serie_limpia + line_strip + '\n')
                               
                       else:
-                          # TV EN VIVO: Se guarda manteniendo estrictamente su category/group-title original sin logos
+                          # TV EN VIVO: Conserva estrictamente su grupo/categoría original intacto
                           with open('tv.m3u', 'a', encoding='utf-8') as f_out:
                               f_out.write(current_extinf + line_strip + '\n')
                               
@@ -88,5 +90,5 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
           git add tv.m3u peliculas.m3u series.m3u
-          git commit -m "Listas divididas: TV con categorias y limpia de logos" || exit 0
+          git commit -m "Listas actualizadas: TV con categorias limpias de logos" || exit 0
           git push origin HEAD:${{ github.ref_name }} --force
