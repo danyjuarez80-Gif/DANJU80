@@ -23,7 +23,7 @@ jobs:
           echo "#EXTM3U" > peliculas.m3u
           echo "#EXTM3U" > series.m3u
 
-          # Tu script original exacto, SOLO agrega la limpieza de logos mediante re.sub
+          # Tu script original exacto con soporte para comillas curvas de Dropbox
           python3 -c "
           import re
 
@@ -38,10 +38,10 @@ jobs:
                   continue
               
               if line_strip.startswith('#EXTINF:'):
-                  # AGREGADO: Solo borra los logos e imágenes de la línea, lo demás se queda intacto
-                  linea_limpia = re.sub(r'tvg-logo=\".*?\"', '', line)
-                  linea_limpia = re.sub(r'tvg-image=\".*?\"', '', linea_limpia)
-                  linea_limpia = re.sub(r'logo=\".*?\"', '', linea_limpia)
+                  # AGREGADO: Borra logos usando expresiones regulares que detectan comillas rectas (\") y curvas (”“)
+                  linea_limpia = re.sub(r'tvg-logo=[“\"\'\s].*?[”\"\'\s]', '', line)
+                  linea_limpia = re.sub(r'tvg-image=[“\"\'\s].*?[”\"\'\s]', '', linea_limpia)
+                  linea_limpia = re.sub(r'logo=[“\"\'\s].*?[”\"\'\s]', '', linea_limpia)
                   
                   current_extinf = linea_limpia
               elif line_strip.startswith('http'):
