@@ -14,7 +14,8 @@ jobs:
 
       - name: Descargar lista completa desde Dropbox
         run: |
-          curl -L -o completa.m3u "https://www.dropbox.com/scl/fi/ew83hymmvlrfl5muiodhm/danju89.m3u?rlkey=xws5j2n3uwwnxf6gny7zo9xmk&st=icseqhgp&dl=1"
+          # Usamos la URL directa con el subdominio dl.dropboxusercontent.com y simulamos un navegador (User-Agent)
+          curl -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)" -L -o completa.m3u "https://dl.dropboxusercontent.com/scl/fi/ew83hymmvlrfl5muiodhm/danju89.m3u?rlkey=xws5j2n3uwwnxf6gny7zo9xmk&st=icseqhgp"
 
       - name: Separar M3U conservando categorías en TV
         run: |
@@ -26,6 +27,11 @@ jobs:
           # Script en Python para clasificar, limpiar logos y mantener grupos en TV
           python3 -c "
           import re
+          import os
+
+          if not os.path.exists('completa.m3u') or os.path.getsize('completa.m3u') < 100:
+              print('Error: El archivo descargado está vacío o es demasiado pequeño.')
+              exit(0)
 
           with open('completa.m3u', 'r', encoding='utf-8', errors='ignore') as f:
               lines = f.readlines()
@@ -38,39 +44,30 @@ jobs:
                   continue
               
               if line_strip.startswith('#EXTINF:'):
-                  # Guardamos la línea original para procesarla junto con su URL
                   current_extinf = line_strip
                       
               elif line_strip.startswith('http'):
                   if current_extinf:
-                      # 1. Extraer el nombre del contenido (lo que está después de la última coma)
                       match_name = re.search(r',([^,]*)$', current_extinf)
-                      # 2. Extraer la duración original
                       match_duration = re.search(r'^#EXTINF:(\s*[-]?\d+)', current_extinf)
                       
                       duracion = match_duration.group(1) if match_duration else '-1'
                       nombre = match_name.group(1).strip() if match_name else 'Contenido Sin Nombre'
                       
-                      # Clasificación por tipo de contenido según la URL
                       if '/movie/' in line_strip:
-                          # Películas limpias (sin logos ni categorías) para carga rápida
                           linea_limpia = f'#EXTINF:{duracion},{nombre}\n'
                           with open('peliculas.m3u', 'a', encoding='utf-8') as f_out:
                               f_out.write(linea_limpia + line_strip + '\n')
                               
                       elif '/series/' in line_strip:
-                          # Series limpias (sin logos ni categorías)
                           linea_limpia = f'#EXTINF:{duracion},{nombre}\n'
                           with open('series.m3u', 'a', encoding='utf-8') as f_out:
                               f_out.write(linea_limpia + line_strip + '\n')
                               
                       else:
-                          # Canales de TV en vivo: Buscamos si tiene la etiqueta group-title
                           match_group = re.search(r'group-title=\"([^\"]+)\"', current_extinf)
-                          
                           if match_group:
                               categoria = match_group.group(1)
-                              # Conservamos el grupo de la categoría pero omitimos logos e IDs
                               linea_tv = f'#EXTINF:{duracion} group-title=\"{categoria}\",{nombre}\n'
                           else:
                               linea_tv = f'#EXTINF:{duracion},{nombre}\n'
@@ -80,12 +77,13 @@ jobs:
                               
                       current_extinf = None
           "
-          # Limpieza del archivo original pesado
-          rm completa.m3u
+          # Limpieza
+          if os.path.exists('completa.m3u'):
+              rm completa.m3u
 
       - name: Guardar cambios en GitHub
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add tv.m3u peliculas.m3u series.m3u
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Listas optimizadas con categorías en TV" && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Listas actualizadas con descarga segura" && git push)
