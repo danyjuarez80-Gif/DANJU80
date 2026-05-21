@@ -12,27 +12,28 @@ jobs:
       - name: Clonar repositorio
         uses: actions/checkout@v3
         with:
-          persist-credentials: true # Asegura que use el token nativo con permisos de escritura
+          persist-credentials: true
 
       - name: Descargar lista completa desde Dropbox
         run: |
+          # Descarga segura simulando un navegador para evitar bloqueos
           curl -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)" -L -o completa.m3u "https://dl.dropboxusercontent.com/scl/fi/ew83hymmvlrfl5muiodhm/danju89.m3u?rlkey=xws5j2n3uwwnxf6gny7zo9xmk&st=icseqhgp"
 
-      - name: Separar M3U conservando categorías en TV
+      - name: Separar M3U Limpiando Logos y Manteniendo Categorías
         run: |
-          # Crear cabeceras estándar para los 3 archivos m3u
-          echo "#EXTM3U" > tv.m3u
-          echo "#EXTM3U" > peliculas.m3u
-          echo "#EXTM3U" > series.m3u
+          # Creamos los archivos temporales limpios
+          echo "#EXTM3U" > tv_tmp.m3u
+          echo "#EXTM3U" > peliculas_tmp.m3u
+          echo "#EXTM3U" > series_tmp.m3u
 
-          # Script en Python para clasificar, limpiar logos y mantener grupos en TV
           python3 -c "
           import re
           import os
 
-          if not os.path.exists('completa.m3u') or os.path.getsize('completa.m3u') < 100:
-              print('Error: El archivo descargado está vacío o es demasiado pequeño.')
-              exit(0)
+          # SEGURO: Si el archivo está corrupto o vacío, cancelamos para proteger tus listas vigentes
+          if not os.path.exists('completa.m3u') or os.path.getsize('completa.m3u') < 10240:
+              print('Error crítico: Archivo vacío o descarga fallida. Operación cancelada.')
+              exit(1)
 
           with open('completa.m3u', 'r', encoding='utf-8', errors='ignore') as f:
               lines = f.readlines()
@@ -49,6 +50,7 @@ jobs:
                       
               elif line_strip.startswith('http'):
                   if current_extinf:
+                      # Extraer el nombre real (lo que esté después de la última coma)
                       match_name = re.search(r',([^,]*)$', current_extinf)
                       match_duration = re.search(r'^#EXTINF:(\s*[-]?\d+)', current_extinf)
                       
@@ -56,42 +58,45 @@ jobs:
                       nombre = match_name.group(1).strip() if match_name else 'Contenido Sin Nombre'
                       
                       if '/movie/' in line_strip:
+                          # Películas: Solo duración, nombre y enlace (sin categorías)
                           linea_limpia = f'#EXTINF:{duracion},{nombre}\n'
-                          with open('peliculas.m3u', 'a', encoding='utf-8') as f_out:
+                          with open('peliculas_tmp.m3u', 'a', encoding='utf-8') as f_out:
                               f_out.write(linea_limpia + line_strip + '\n')
                               
                       elif '/series/' in line_strip:
+                          # Series: Solo duración, nombre y enlace
                           linea_limpia = f'#EXTINF:{duracion},{nombre}\n'
-                          with open('series.m3u', 'a', encoding='utf-8') as f_out:
+                          with open('series_tmp.m3u', 'a', encoding='utf-8') as f_out:
                               f_out.write(linea_limpia + line_strip + '\n')
                               
                       else:
+                          # TV EN VIVO: Extraer únicamente la categoría ignorando logos e imágenes
                           match_group = re.search(r'group-title=\"([^\"]+)\"', current_extinf)
                           if match_group:
                               categoria = match_group.group(1)
+                              # Formato ultra-limpio: Solo duración, categoría y nombre del canal
                               linea_tv = f'#EXTINF:{duracion} group-title=\"{categoria}\",{nombre}\n'
                           else:
                               linea_tv = f'#EXTINF:{duracion},{nombre}\n'
                               
-                          with open('tv.m3u', 'a', encoding='utf-8') as f_out:
+                          with open('tv_tmp.m3u', 'a', encoding='utf-8') as f_out:
                               f_out.write(linea_tv + line_strip + '\n')
                               
                       current_extinf = None
           "
-          # Borrado de la lista pesada descargada
+          # Si todo el proceso en Python fue exitoso, sobreescribimos con seguridad
+          mv tv_tmp.m3u tv.m3u
+          mv peliculas_tmp.m3u peliculas.m3u
+          mv series_tmp.m3u series.m3u
           rm -f completa.m3u
 
       - name: Guardar cambios en GitHub
         run: |
-          # Configuración forzada del usuario de Git
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
           
-          # Forzar la adición de los archivos creados
           git add tv.m3u peliculas.m3u series.m3u
           
-          # Hacemos el commit. Si no hay cambios, el script continuará sin romperse
-          git commit -m "Listas M3U sincronizadas y limpias" || exit 0
-          
-          # Empujamos los cambios directamente a la rama principal de forma segura
+          # Hacemos commit y subimos directamente a la rama activa
+          git commit -m "Sincronización: Canales optimizados sólo con enlace y categoría" || exit 0
           git push origin HEAD:${{ github.ref_name }}
