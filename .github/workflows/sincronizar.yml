@@ -1,4 +1,4 @@
-name: Separar y Sincronizar M3U desde Dropbox
+name: Separar, Limpiar y Sincronizar M3U desde Dropbox
 
 on:
   schedule:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch: # Permite ejecución manual
 
 jobs:
-  sync_and_split:
+  sync_and_clean:
     runs-on: ubuntu-latest
     steps:
       - name: Clonar repositorio
@@ -16,14 +16,14 @@ jobs:
         run: |
           curl -L -o completa.m3u "https://www.dropbox.com/scl/fi/ew83hymmvlrfl5muiodhm/danju89.m3u?rlkey=xws5j2n3uwwnxf6gny7zo9xmk&st=icseqhgp&dl=1"
 
-      - name: Separar M3U en TV, Películas y Series
+      - name: Separar M3U y Eliminar Logos/Metadatos
         run: |
           # Crear cabeceras estándar para los 3 archivos m3u
           echo "#EXTM3U" > tv.m3u
           echo "#EXTM3U" > peliculas.m3u
           echo "#EXTM3U" > series.m3u
 
-          # Script en Python integrado para separar inteligentemente por etiquetas de Xtream Codes
+          # Script en Python para clasificar y limpiar metadatos pesados
           python3 -c "
           import re
 
@@ -38,23 +38,40 @@ jobs:
                   continue
               
               if line_strip.startswith('#EXTINF:'):
-                  current_extinf = line
+                  # Usamos expresiones regulares para extraer únicamente la duración y el nombre final del canal
+                  # Ejemplo original: #EXTINF:-1 tvg-id='...' tvg-logo='http://...',Nombre del Canal
+                  # Resultado limpio: #EXTINF:-1,Nombre del Canal
+                  
+                  # 1. Buscamos el texto que está justo después de la última coma (el nombre real del contenido)
+                  match_name = re.search(r',([^,]*)$', line_strip)
+                  # 2. Buscamos la duración original (usualmente -1 en IPTV en vivo)
+                  match_duration = re.search(r'^#EXTINF:(\s*[-]?\d+)', line_strip)
+                  
+                  if match_name and match_duration:
+                      duracion = match_duration.group(1)
+                      nombre = match_name.group(1).strip()
+                      # Reconstruimos la línea de forma ultra ligera sin logos ni IDs
+                      current_extinf = f'#EXTINF:{duracion},{nombre}\n'
+                  else:
+                      # Si no coincide la estructura estricta, dejamos la línea base simplificada
+                      current_extinf = '#EXTINF:-1,Canal Sin Nombre\n'
+                      
               elif line_strip.startswith('http'):
                   if current_extinf:
-                      # Clasificación por patrones comunes en los enlaces de Xtream Codes
+                      # Clasificación por tipo de contenido según la URL
                       if '/movie/' in line_strip:
                           with open('peliculas.m3u', 'a', encoding='utf-8') as f_out:
-                              f_out.write(current_extinf + line)
+                              f_out.write(current_extinf + line_strip + '\n')
                       elif '/series/' in line_strip:
                           with open('series.m3u', 'a', encoding='utf-8') as f_out:
-                              f_out.write(current_extinf + line)
+                              f_out.write(current_extinf + line_strip + '\n')
                       else:
-                          # Todo lo demás (generalmente en vivo o canales de TV con /live/)
+                          # Canales de TV en vivo
                           with open('tv.m3u', 'a', encoding='utf-8') as f_out:
-                              f_out.write(current_extinf + line)
+                              f_out.write(current_extinf + line_strip + '\n')
                       current_extinf = None
           "
-          # Eliminar el archivo pesado original para no saturar el repositorio
+          # Limpieza del archivo original pesado
           rm completa.m3u
 
       - name: Guardar cambios en GitHub
@@ -62,4 +79,4 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add tv.m3u peliculas.m3u series.m3u
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Listas divididas actualizadas automáticamente" && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Listas optimizadas sin logos actualizadas automáticamente" && git push)
