@@ -20,24 +20,23 @@ jobs:
 
       - name: Separar M3U Limpiando Logos y Manteniendo Categorías
         run: |
-          # Escribimos el script dinámicamente forzando un bloque limpio con EOF
+          # Forzamos la creación limpia de los archivos temporales
+          echo "#EXTM3U" > tv_tmp.m3u
+          echo "#EXTM3U" > peliculas_tmp.m3u
+          echo "#EXTM3U" > series_tmp.m3u
+
           cat << 'EOF' > ejecutar_filtro.py
           import re
           import os
 
           if not os.path.exists('completa.m3u') or os.path.getsize('completa.m3u') < 5000:
-              print('Error crítico: Archivo vacío o de tamaño incorrecto.')
+              print('Error: Archivo muy pequeño o inexistente.')
               exit(1)
 
-          # Forzamos la creación limpia de los archivos temporales
-          with open('tv_tmp.m3u', 'w', encoding='utf-8') as f: f.write('#EXTM3U\n')
-          with open('peliculas_tmp.m3u', 'w', encoding='utf-8') as f: f.write('#EXTM3U\n')
-          with open('series_tmp.m3u', 'w', encoding='utf-8') as f: f.write('#EXTM3U\n')
-
           with open('completa.m3u', 'r', encoding='utf-8', errors='ignore') as f:
-              texto_completo = f.read().replace('\r', '') # Limpieza absoluta de saltos de línea de Windows
+              texto = f.read().replace('\r', '')
 
-          lines = texto_completo.split('\n')
+          lines = texto.split('\n')
           current_extinf = None
           
           for line in lines:
@@ -50,30 +49,33 @@ jobs:
                       
               elif line_strip.startswith('http://') or line_strip.startswith('https://'):
                   if current_extinf:
-                      # Extraer el nombre real (lo que esté después de la última coma)
+                      # Extraer nombre final de forma segura
                       match_name = re.search(r',([^,]*)$', current_extinf)
                       match_duration = re.search(r'^#EXTINF:(\s*[-]?\d+)', current_extinf)
                       
                       duracion = match_duration.group(1) if match_duration else '-1'
                       nombre = match_name.group(1).strip() if match_name else 'Contenido Sin Nombre'
                       
-                      # Busqueda flexible por secciones clásicas de IPTV
-                      if '/movie/' in line_strip or 'movie' in line_strip.lower():
+                      url_lower = line_strip.lower()
+                      
+                      # Clasificación ultra flexible para películas y series
+                      if '/movie/' in url_lower or '/movies/' in url_lower or 'movie' in url_lower:
                           linea_limpia = f'#EXTINF:{duracion},{nombre}\n'
                           with open('peliculas_tmp.m3u', 'a', encoding='utf-8') as f_out:
                               f_out.write(linea_limpia + line_strip + '\n')
                               
-                      elif '/series/' in line_strip or 'series' in line_strip.lower():
+                      elif '/series/' in url_lower or '/show/' in url_lower or 'series' in url_lower:
                           linea_limpia = f'#EXTINF:{duracion},{nombre}\n'
                           with open('series_tmp.m3u', 'a', encoding='utf-8') as f_out:
                               f_out.write(linea_limpia + line_strip + '\n')
                               
                       else:
-                          # TV EN VIVO: Extraer categoría (group-title) omitiendo logos
-                          match_group = re.search(r'group-title=\"([^\"]+)\"', current_extinf)
+                          # TV EN VIVO: Buscar categoría con comillas dobles, simples o sin ellas
+                          match_group = re.search(r'group-title=["\']?([^"\',]+)["\']?', current_extinf, re.IGNORECASE)
+                          
                           if match_group:
-                              categoria = match_group.group(1)
-                              linea_tv = f'#EXTINF:{duracion} group-title=\"{categoria}\",{nombre}\n'
+                              categoria = match_group.group(1).strip()
+                              linea_tv = f'#EXTINF:{duracion} group-title="{categoria}",{nombre}\n'
                           else:
                               linea_tv = f'#EXTINF:{duracion},{nombre}\n'
                               
@@ -83,7 +85,6 @@ jobs:
                       current_extinf = None
           EOF
 
-          # Ejecutamos con Python nativo y reemplazamos los viejos de forma segura
           python3 ejecutar_filtro.py
           mv tv_tmp.m3u tv.m3u
           mv peliculas_tmp.m3u peliculas.m3u
@@ -97,5 +98,6 @@ jobs:
           
           git add tv.m3u peliculas.m3u series.m3u
           
-          git commit -m "Sincronización: Listas depuradas sin conflicto de formato" || exit 0
+          # Forzamos el commit eliminando filtros viejos
+          git commit -m "Sincronizacion inteligente de listas m3u" || exit 0
           git push origin HEAD:${{ github.ref_name }}
