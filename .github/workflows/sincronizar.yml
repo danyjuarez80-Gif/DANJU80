@@ -11,10 +11,12 @@ jobs:
     steps:
       - name: Clonar repositorio
         uses: actions/checkout@v3
+        with:
+          persist-credentials: true
 
       - name: Descargar lista completa desde Dropbox
         run: |
-          # Usamos el subdominio directo de Dropbox para servidores (dl.dropboxusercontent.com)
+          # Enlace directo optimizado para descargas de servidor
           curl -L -o completa.m3u "https://dl.dropboxusercontent.com/scl/fi/ew83hymmvlrfl5muiodhm/danju89.m3u?rlkey=xws5j2n3uwwnxf6gny7zo9xmk"
 
       - name: Separar M3U conservando categorías en TV
@@ -24,14 +26,22 @@ jobs:
           echo "#EXTM3U" > peliculas.m3u
           echo "#EXTM3U" > series.m3u
 
-          # Script en Python para clasificar, limpiar logos y mantener grupos en TV
+          # Script con rastreo de canales en la consola de GitHub
           python3 -c "
           import re
+          import os
+
+          if not os.path.exists('completa.m3u'):
+              print('--- CONSOLA: El archivo completa.m3u NO EXISTE ---')
+              exit(1)
 
           with open('completa.m3u', 'r', encoding='utf-8', errors='ignore') as f:
               lines = f.readlines()
 
+          print(f'--- CONSOLA: Se leyeron {len(lines)} líneas del archivo de Dropbox ---')
+
           current_extinf = None
+          c_tv, c_movies, c_series = 0, 0, 0
           
           for line in lines:
               line_strip = line.strip()
@@ -39,39 +49,33 @@ jobs:
                   continue
               
               if line_strip.startswith('#EXTINF:'):
-                  # Guardamos la línea original para procesarla junto con su URL
                   current_extinf = line_strip
                       
               elif line_strip.startswith('http'):
                   if current_extinf:
-                      # 1. Extraer el nombre del contenido (lo que está después de la última coma)
                       match_name = re.search(r',([^,]*)$', current_extinf)
-                      # 2. Extraer la duración original
                       match_duration = re.search(r'^#EXTINF:(\s*[-]?\d+)', current_extinf)
                       
                       duracion = match_duration.group(1) if match_duration else '-1'
                       nombre = match_name.group(1).strip() if match_name else 'Contenido Sin Nombre'
                       
-                      # Clasificación por tipo de contenido según la URL
                       if '/movie/' in line_strip:
-                          # Películas limpias (sin logos ni categorías) para carga rápida
+                          c_movies += 1
                           linea_limpia = f'#EXTINF:{duracion},{nombre}\n'
                           with open('peliculas.m3u', 'a', encoding='utf-8') as f_out:
                               f_out.write(linea_limpia + line_strip + '\n')
                               
                       elif '/series/' in line_strip:
-                          # Series limpias (sin logos ni categorías)
+                          c_series += 1
                           linea_limpia = f'#EXTINF:{duracion},{nombre}\n'
                           with open('series.m3u', 'a', encoding='utf-8') as f_out:
                               f_out.write(linea_limpia + line_strip + '\n')
                               
                       else:
-                          # Canales de TV en vivo: Buscamos si tiene la etiqueta group-title
+                          c_tv += 1
                           match_group = re.search(r'group-title=\"([^\"]+)\"', current_extinf)
-                          
                           if match_group:
                               categoria = match_group.group(1)
-                              # Conservamos el grupo de la categoría pero omitimos logos e IDs
                               linea_tv = f'#EXTINF:{duracion} group-title=\"{categoria}\",{nombre}\n'
                           else:
                               linea_tv = f'#EXTINF:{duracion},{nombre}\n'
@@ -80,13 +84,19 @@ jobs:
                               f_out.write(linea_tv + line_strip + '\n')
                               
                       current_extinf = None
+
+          print(f'--- CONSOLA: Procesados -> TV: {c_tv} | Pelis: {c_movies} | Series: {c_series} ---')
           "
           # Limpieza del archivo original pesado
-          rm completa.m3u
+          rm -f completa.m3u
 
       - name: Guardar cambios en GitHub
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          
           git add tv.m3u peliculas.m3u series.m3u
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Listas optimizadas con categorías en TV" && git push)
+          
+          # Commit seguro y empuje directo forzado a tu rama activa para asegurar la escritura
+          git commit -m "Sincronizacion automatica de listas m3u" || exit 0
+          git push origin HEAD:${{ github.ref_name }}
