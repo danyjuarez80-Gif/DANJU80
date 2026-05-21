@@ -14,7 +14,6 @@ jobs:
 
       - name: Descargar lista completa desde Dropbox
         run: |
-          # Usamos la URL directa con el subdominio dl.dropboxusercontent.com y simulamos un navegador (User-Agent)
           curl -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)" -L -o completa.m3u "https://dl.dropboxusercontent.com/scl/fi/ew83hymmvlrfl5muiodhm/danju89.m3u?rlkey=xws5j2n3uwwnxf6gny7zo9xmk&st=icseqhgp"
 
       - name: Separar M3U conservando categorías en TV
@@ -24,7 +23,7 @@ jobs:
           echo "#EXTM3U" > peliculas.m3u
           echo "#EXTM3U" > series.m3u
 
-          # Script en Python para clasificar, limpiar logos y mantener grupos en TV
+          # Script en Python corregido y limpio
           python3 -c "
           import re
           import os
@@ -77,13 +76,12 @@ jobs:
                               
                       current_extinf = None
           "
-          # Limpieza
-          if os.path.exists('completa.m3u'):
-              rm completa.m3u
+          # Borrado correcto en la terminal de Linux
+          rm -f completa.m3u
 
       - name: Guardar cambios en GitHub
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add tv.m3u peliculas.m3u series.m3u
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Listas actualizadas con descarga segura" && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Listas actualizadas sin errores" && git push)
