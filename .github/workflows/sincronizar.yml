@@ -16,93 +16,20 @@ jobs:
 
       - name: Descargar lista completa desde Dropbox
         run: |
-          # Corrección para enlaces compartidos tipo SCL: se usa la URL original pero forzando ?dl=1 al final
           curl -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)" -L -o completa.m3u "https://www.dropbox.com/scl/fi/ew83hymmvlrfl5muiodhm/danju89.m3u?rlkey=xws5j2n3uwwnxf6gny7zo9xmk&st=icseqhgp&dl=1"
 
-      - name: Separar M3U Limpiando Logos y Manteniendo Categorías
+      - name: Ejecutar script de separación y limpieza
         run: |
-          # Creamos los archivos temporales limpios
-          echo "#EXTM3U" > tv_tmp.m3u
-          echo "#EXTM3U" > peliculas_tmp.m3u
-          echo "#EXTM3U" > series_tmp.m3u
-
-          python3 -c "
-          import re
-          import os
-
-          if not os.path.exists('completa.m3u'):
-              print('Error: El archivo completa.m3u no existe.')
-              exit(1)
-
-          tamano = os.path.getsize('completa.m3u')
-          print(f'Tamaño del archivo descargado: {tamano} bytes')
-
-          # Si mide menos de 10KB, lo más seguro es que Dropbox nos bloqueó o mandó un error web
-          if tamano < 10240:
-              print('Error crítico: Descarga corrupta o rechazada por Dropbox. Cancelando para no borrar tus archivos actuales.')
-              exit(1)
-
-          with open('completa.m3u', 'r', encoding='utf-8', errors='ignore') as f:
-              lines = f.readlines()
-
-          current_extinf = None
-          enlaces_procesados = 0
-          
-          for line in lines:
-              line_strip = line.strip()
-              if not line_strip:
-                  continue
-              
-              if line_strip.startswith('#EXTINF:'):
-                  current_extinf = line_strip
-                      
-              elif line_strip.startswith('http'):
-                  if current_extinf:
-                      enlaces_procesados += 1
-                      match_name = re.search(r',([^,]*)$', current_extinf)
-                      match_duration = re.search(r'^#EXTINF:(\s*[-]?\d+)', current_extinf)
-                      
-                      duracion = match_duration.group(1) if match_duration else '-1'
-                      nombre = match_name.group(1).strip() if match_name else 'Contenido Sin Nombre'
-                      
-                      if '/movie/' in line_strip:
-                          linea_limpia = f'#EXTINF:{duracion},{nombre}\n'
-                          with open('peliculas_tmp.m3u', 'a', encoding='utf-8') as f_out:
-                              f_out.write(linea_limpia + line_strip + '\n')
-                              
-                      elif '/series/' in line_strip:
-                          linea_limpia = f'#EXTINF:{duracion},{nombre}\n'
-                          with open('series_tmp.m3u', 'a', encoding='utf-8') as f_out:
-                              f_out.write(linea_limpia + line_strip + '\n')
-                              
-                      else:
-                          match_group = re.search(r'group-title=\"([^\"]+)\"', current_extinf)
-                          if match_group:
-                              categoria = match_group.group(1)
-                              linea_tv = f'#EXTINF:{duracion} group-title=\"{categoria}\",{nombre}\n'
-                          else:
-                              linea_tv = f'#EXTINF:{duracion},{nombre}\n'
-                              
-                          with open('tv_tmp.m3u', 'a', encoding='utf-8') as f_out:
-                              f_out.write(linea_tv + line_strip + '\n')
-                              
-                      current_extinf = None
-          
-          print(f'Proceso terminado. Se procesaron {enlaces_procesados} enlaces.')
-          if enlaces_procesados == 0:
-              print('Error: No se detectaron enlaces válidos. Cancelando guardado.')
-              exit(1)
-          "
-          # Si Python pasó con éxito, movemos los archivos temporales a los reales
-          mv tv_tmp.m3u tv.m3u
-          mv peliculas_tmp.m3u peliculas.m3u
-          mv series_tmp.m3u series.m3u
+          python3 procesar_lista.py
           rm -f completa.m3u
 
       - name: Guardar cambios en GitHub
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
+          git add tv.m3u peliculas.m3u series.m3u
+          git commit -m "Sincronización automatizada por script independiente" || exit 0
+          git push origin HEAD:${{ github.ref_name }}
           
           git add tv.m3u peliculas.m3u series.m3u
           
