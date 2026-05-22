@@ -1,4 +1,4 @@
-name: Separar y Sincronizar M3U
+name: Sincronizar M3U - Categorias Originales
 on:
   schedule:
     - cron: '0 */6 * * *'
@@ -9,16 +9,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Filtrado Maestro (Respeto total)
+      - name: Filtrado Quirurgico
         run: |
           curl -L -o completa.m3u "https://www.dropbox.com/scl/fi/ew83hymmvlrfl5muiodhm/danju89.m3u?rlkey=xws5j2n3uwwnxf6gny7zo9xmk&st=icseqhgp&dl=1"
           
-          # Script que separa en 3 archivos SIN tocar el formato original
           python3 -c "
           nopor = ['xxx', 'adult', 'only', 'porno', 'gays', 'pornbox', 'x4', 'stars exclusive', 'verified amateurs', 'lesbian', 'milf', 'mofos', 'sex', 'anal', 'boobs']
           
-          with open('completa.m3u', 'r', encoding='utf-8', errors='ignore') as f_in:
-              lines = f_in.readlines()
+          with open('completa.m3u', 'r', encoding='utf-8', errors='ignore') as f:
+              lines = f.readlines()
               
           f_tv = open('tv.m3u', 'w', encoding='utf-8')
           f_peli = open('peliculas.m3u', 'w', encoding='utf-8')
@@ -31,32 +30,15 @@ jobs:
           skip = False
           for i in range(len(lines)):
               line = lines[i]
-              if '#EXTINF:' in line:
+              if line.startswith('#EXTINF:'):
                   if any(p in line.lower() for p in nopor):
                       skip = True
                       continue
                   else:
                       skip = False
-                      # Identificamos a donde va cada canal
-                      if '/movie/' in lines[i+1].lower(): target = f_peli
-                      elif '/series/' in lines[i+1].lower(): target = f_serie
-                      else: target = f_tv
-                      target.write(line)
-              elif skip and line.startswith('http'):
-                  skip = False
-                  continue
-              elif not skip:
-                  if line.startswith('http'):
-                      target.write(line)
-          
-          f_tv.close(); f_peli.close(); f_serie.close()
-          "
-          rm completa.m3u
-          
-      - name: Subir cambios
-        run: |
-          git config --local user.email 'action@github.com'
-          git config --local user.name 'GitHub Action'
-          git add tv.m3u peliculas.m3u series.m3u
-          git commit -m 'Separacion por tipo manteniendo categorías originales' || echo 'Nada nuevo'
-          git push
+                      # Identificar si es peli, serie o TV basandose en la URL de la siguiente linea
+                      if i+1 < len(lines):
+                          url = lines[i+1].lower()
+                          if '/movie/' in url: target = f_peli
+                          elif '/series/' in url: target = f_serie
+                          else: target
