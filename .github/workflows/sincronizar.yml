@@ -16,13 +16,14 @@ jobs:
         run: |
           curl -L -o completa.m3u "https://www.dropbox.com/scl/fi/ew83hymmvlrfl5muiodhm/danju89.m3u?rlkey=xws5j2n3uwwnxf6gny7zo9xmk&st=icseqhgp&dl=1"
 
-      - name: Separar M3U en TV, Películas y Series (Categorías Originales Estéticas)
+      - name: Filtrar Solo Adultos y Respetar Todo lo Demás
         run: |
           # Crear cabeceras estándar para los 3 archivos m3u
           echo "#EXTM3U" > tv.m3u
           echo "#EXTM3U" > peliculas.m3u
           echo "#EXTM3U" > series.m3u
 
+          # Script estricto: Solo bloquea nopor, el resto pasa EXACTAMENTE igual
           python3 -c "
           import re
 
@@ -41,69 +42,40 @@ jobs:
               elif line_strip.startswith('http'):
                   if current_extinf:
                       url_low = line_strip.lower()
-                      
-                      # Extraemos el nombre completo del canal
-                      match_name = re.search(r',([^,]*)$', current_extinf)
-                      nombre_completo = match_name.group(1).strip() if match_name else ''
-                      nombre_low = nombre_completo.lower()
+                      line_low = current_extinf.lower()
                       
                       # =======================================================
-                      # 1. BLOQUEO TOTAL DE ADULTOS (No genera carpetas)
+                      # 1. FILTRO DE ADULTOS (Revisa toda la línea por seguridad)
                       # =======================================================
                       palabras_bloqueadas = [
                           'xxx', 'adult', 'only', 'porno', 'gays', 'estr', 
                           'pornbox', 'x4', 'stars exclusive', 'verified amateurs',
                           'lesbian', 'milf', 'milfty', 'mofos', 'sex', 'anal', 'boobs'
                       ]
-                      if any(palabra in nombre_low for palabra in palabras_bloqueadas):
-                          current_extinf = None
+                      
+                      if any(palabra in line_low for palabra in palabras_bloqueadas):
+                          current_extinf = None  # Se descarta por completo
                           continue
                       
-                      # Clasificación para Películas y Series por URL
+                      # =======================================================
+                      # 2. SEPARACIÓN EN ARCHIVOS (Pasando la línea idéntica)
+                      # =======================================================
                       if '/movie/' in url_low:
-                          linea_peli = f'#EXTINF:-1,{nombre_completo}\n'
                           with open('peliculas.m3u', 'a', encoding='utf-8') as f_out:
-                              f_out.write(linea_peli + line_strip + '\n')
+                              f_out.write(current_extinf + '\n' + line_strip + '\n')
                               
                       elif '/series/' in url_low:
-                          linea_serie = f'#EXTINF:-1,{nombre_completo}\n'
                           with open('series.m3u', 'a', encoding='utf-8') as f_out:
-                              f_out.write(linea_serie + line_strip + '\n')
+                              f_out.write(current_extinf + '\n' + line_strip + '\n')
                               
                       else:
-                          # =======================================================
-                          # 2. RECONSTRUCCIÓN ESTÉTICA DE CATEGORÍAS
-                          # =======================================================
-                          categoria = 'VARIEDADES'
-                          
-                          # Si el canal trae su barra original, respetamos esa categoría exacta
-                          if '|' in nombre_completo:
-                              partes = nombre_completo.split('|')
-                              categoria_detectada = partes[0].strip().upper()
-                              
-                              # Agrupación limpia para eventos deportivos y pases para evitar subcarpetas infinitas
-                              if any(x in categoria_detectada for x in ['MLS', 'MLB', 'LMB', 'NFL', 'NBA', 'NHL', 'LIGA MX', 'LIGUE 1', 'BUNDESLIGA', 'SUDAMERICA', 'LIBERTADORES']):
-                                  categoria = f'⚽ {categoria_detectada}'
-                              else:
-                                  categoria = categoria_detectada
-                          
-                          # Filtros secundarios por palabra clave si no traía barra original
-                          elif any(x in nombre_low for x in ['liga mx', 'champions', 'premier league', 'laliga', 'serie a', 'bundesliga']):
-                              categoria = '⚽ LIGAS DE FUTBOL'
-                          elif 'sports' in nombre_low or 'dazn' in nombre_low or 'espn' in nombre_low or 'fox one' in nombre_low:
-                              categoria = '⚽ DEPORTES'
-                          elif 'formula 1' in nombre_low or 'f1' in nombre_low:
-                              categoria = '🏎️ FORMULA 1'
-                          elif 'music' in nombre_low or 'retro' in nombre_low:
-                              categoria = '🎵 MUSICA'
-                          
-                          # Inyectamos el group-title limpio con el formato nativo
-                          linea_tv = f'#EXTINF:-1 group-title=\"{categoria}\",{nombre_completo}\n'
+                          # Va directo a TV manteniendo su group-title y nombre original intactos
                           with open('tv.m3u', 'a', encoding='utf-8') as f_out:
-                              f_out.write(linea_tv + line_strip + '\n')
+                              f_out.write(current_extinf + '\n' + line_strip + '\n')
                               
                       current_extinf = None
           "
+          # Limpiar archivo temporal
           rm completa.m3u
 
       - name: Guardar cambios en GitHub
@@ -111,4 +83,4 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add tv.m3u peliculas.m3u series.m3u
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Categorias originales restauradas y optimizadas" && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Filtro nopor aplicado manteniendo categorias originales al 100%" && git push)
