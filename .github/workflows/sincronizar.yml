@@ -13,27 +13,26 @@ jobs:
         run: |
           curl -L -o completa.m3u "https://www.dropbox.com/scl/fi/ew83hymmvlrfl5muiodhm/danju89.m3u?rlkey=xws5j2n3uwwnxf6gny7zo9xmk&st=icseqhgp&dl=1"
           
-          # Creamos el archivo limpio iniciando con el encabezado
-          echo "#EXTM3U" > tv.m3u
-          
-          # Usamos Python para extraer SOLO las categorías que contienen "deportes" o "mexico"
-          # Esto mantiene intacta la estructura original de tus carpetas
           python3 -c "
           import re
           with open('completa.m3u', 'r', encoding='utf-8', errors='ignore') as f:
-              lines = f.readlines()
+              content = f.read()
           
-          keywords = ['deportes', 'mexico']
+          # Bloque por bloque para no romper el formato
+          bloques = re.split(r'(?=#EXTINF:)', content)
           
-          current_extinf = None
-          for line in lines:
-              if line.startswith('#EXTINF:'):
-                  current_extinf = line
-              elif line.startswith('http'):
-                  if current_extinf and any(k in current_extinf.lower() for k in keywords):
-                      with open('tv.m3u', 'a', encoding='utf-8') as f:
-                          f.write(current_extinf + line)
-                  current_extinf = None
+          # Lo que queremos mantener
+          interes = ['deportes', 'mexico', 'liga', 'nba', 'nfl', 'mlb', 'formula', 'partidos', 'eventos', 'champion']
+          
+          with open('tv.m3u', 'w', encoding='utf-8') as f:
+              f.write('#EXTM3U\n')
+              for bloque in bloques:
+                  if not bloque.strip(): continue
+                  # Mantenemos el bloque solo si contiene alguna de nuestras palabras clave
+                  # y NO contiene ninguna palabra nopor
+                  if any(k in bloque.lower() for k in interes):
+                      if not any(p in bloque.lower() for p in ['xxx', 'adult', 'porno', 'sex', 'boobs', 'milf']):
+                          f.write(bloque)
           "
           rm completa.m3u
           
@@ -42,5 +41,5 @@ jobs:
           git config --local user.email 'action@github.com'
           git config --local user.name 'GitHub Action'
           git add tv.m3u
-          git commit -m 'Lista filtrada: Solo Deportes y Mexico' || echo 'Nada nuevo'
+          git commit -m 'Filtrado selectivo: Deportes y Mexico' || echo 'Nada nuevo'
           git push
