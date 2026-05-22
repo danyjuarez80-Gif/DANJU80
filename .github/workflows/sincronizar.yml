@@ -1,4 +1,4 @@
-name: Sincronizar M3U - Categorias Originales
+name: Sincronizar TV Limpia
 on:
   schedule:
     - cron: '0 */6 * * *'
@@ -9,42 +9,21 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Filtro Quirurgico por Bloques
+      - name: Limpieza 100% Original
         run: |
-          curl -L -o completa.m3u "https://www.dropbox.com/scl/fi/ew83hymmvlrfl5muiodhm/danju89.m3u?rlkey=xws5j2n3uwwnxf6gny7zo9xmk&st=icseqhgp&dl=1"
+          curl -L -o tv.m3u "https://www.dropbox.com/scl/fi/ew83hymmvlrfl5muiodhm/danju89.m3u?rlkey=xws5j2n3uwwnxf6gny7zo9xmk&st=icseqhgp&dl=1"
           
-          python3 -c "
-          import re
-          nopor = ['xxx', 'adult', 'only', 'porno', 'gays', 'pornbox', 'x4', 'stars exclusive', 'verified amateurs', 'lesbian', 'milf', 'mofos', 'sex', 'anal', 'boobs']
+          # Lista de palabras a borrar
+          nopor="xxx\|adult\|only\|porno\|gays\|pornbox\|x4\|stars exclusive\|verified amateurs\|lesbian\|milf\|mofos\|sex\|anal\|boobs"
           
-          with open('completa.m3u', 'r', encoding='utf-8', errors='ignore') as f:
-              content = f.read()
-          
-          # Separamos por bloques usando la etiqueta EXTINF
-          bloques = re.split(r'(?=#EXTINF:)', content)
-          
-          tv = ['#EXTM3U\n']
-          peli = ['#EXTM3U\n']
-          serie = ['#EXTM3U\n']
-          
-          for bloque in bloques:
-              if not bloque.strip(): continue
-              # Si no tiene palabras nopor, guardamos el bloque completo
-              if not any(p in bloque.lower() for p in nopor):
-                  if '/movie/' in bloque.lower(): peli.append(bloque)
-                  elif '/series/' in bloque.lower(): serie.append(bloque)
-                  else: tv.append(bloque)
-          
-          with open('tv.m3u', 'w', encoding='utf-8') as f: f.writelines(tv)
-          with open('peliculas.m3u', 'w', encoding='utf-8') as f: f.writelines(peli)
-          with open('series.m3u', 'w', encoding='utf-8') as f: f.writelines(serie)
-          "
-          rm completa.m3u
+          # Borramos solo las líneas que contienen las palabras nopor
+          # -i: ignora mayúsculas, -v: invierte la selección (borra lo que coincide)
+          grep -vEi "$nopor" tv.m3u > temp.m3u && mv temp.m3u tv.m3u
           
       - name: Subir cambios
         run: |
           git config --local user.email 'action@github.com'
           git config --local user.name 'GitHub Action'
-          git add tv.m3u peliculas.m3u series.m3u
-          git commit -m 'Filtro por bloques intacto' || echo 'Nada nuevo'
+          git add tv.m3u
+          git commit -m 'Lista original limpia' || echo 'Nada nuevo'
           git push
