@@ -16,11 +16,12 @@ jobs:
           echo "#EXTM3U" > peliculas.m3u
           echo "#EXTM3U" > series.m3u
           python3 -c "
-          import re
           with open('completa.m3u', 'r', encoding='utf-8', errors='ignore') as f:
               lines = f.readlines()
+          
           current_extinf = None
           palabras_nopor = ['xxx', 'adult', 'only', 'porno', 'gays', 'pornbox', 'x4', 'stars exclusive', 'verified amateurs', 'lesbian', 'milf', 'mofos', 'sex', 'anal', 'boobs']
+          
           for line in lines:
               line_strip = line.strip()
               if not line_strip: continue
@@ -28,12 +29,14 @@ jobs:
                   current_extinf = line_strip
               elif line_strip.startswith('http'):
                   if current_extinf:
+                      # Si NO es nopor, escribimos la línea EXACTA que venía en tu archivo original
                       if not any(palabra in (current_extinf + line_strip).lower() for palabra in palabras_nopor):
                           if '/movie/' in line_strip:
                               with open('peliculas.m3u', 'a', encoding='utf-8') as f: f.write(current_extinf + '\n' + line_strip + '\n')
                           elif '/series/' in line_strip:
                               with open('series.m3u', 'a', encoding='utf-8') as f: f.write(current_extinf + '\n' + line_strip + '\n')
                           else:
+                              # Aquí pasa TODO tal cual: group-title, nombres y formato original
                               with open('tv.m3u', 'a', encoding='utf-8') as f: f.write(current_extinf + '\n' + line_strip + '\n')
                       current_extinf = None
           "
@@ -43,4 +46,4 @@ jobs:
           git config --local user.email 'action@github.com'
           git config --local user.name 'GitHub Action'
           git add tv.m3u peliculas.m3u series.m3u
-          git diff --quiet && git diff --staged --quiet || (git commit -m 'Actualizado' && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m 'Lista limpia: Categorias intactas' && git push)
