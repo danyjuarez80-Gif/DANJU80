@@ -71,4 +71,4 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add tv.m3u peliculas.m3u series.m3u
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Boton Run Workflow corregido y categorias intactas" && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Estructura YML corregida al 100 por ciento" && git push)
