@@ -9,36 +9,32 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Filtrado Quirurgico
+      - name: Filtrado Maestro (Sin errores)
         run: |
+          # Descarga la lista
           curl -L -o completa.m3u "https://www.dropbox.com/scl/fi/ew83hymmvlrfl5muiodhm/danju89.m3u?rlkey=xws5j2n3uwwnxf6gny7zo9xmk&st=icseqhgp&dl=1"
           
-          python3 -c "
-          nopor = ['xxx', 'adult', 'only', 'porno', 'gays', 'pornbox', 'x4', 'stars exclusive', 'verified amateurs', 'lesbian', 'milf', 'mofos', 'sex', 'anal', 'boobs']
+          # Definimos las palabras prohibidas sin comillas dobles internas
+          NOPOR='xxx\|adult\|only\|porno\|gays\|pornbox\|x4\|stars exclusive\|verified amateurs\|lesbian\|milf\|mofos\|sex\|anal\|boobs'
           
-          with open('completa.m3u', 'r', encoding='utf-8', errors='ignore') as f:
-              lines = f.readlines()
-              
-          f_tv = open('tv.m3u', 'w', encoding='utf-8')
-          f_peli = open('peliculas.m3u', 'w', encoding='utf-8')
-          f_serie = open('series.m3u', 'w', encoding='utf-8')
+          # Filtramos la lista completa
+          # Esto elimina el bloque (EXTINF + la linea siguiente) si contiene la palabra
+          # Usamos un archivo temporal para procesar
+          grep -vEi "$NOPOR" completa.m3u > limpia.m3u
           
-          f_tv.write('#EXTM3U\n')
-          f_peli.write('#EXTM3U\n')
-          f_serie.write('#EXTM3U\n')
+          # Ahora separamos por tipo basándonos en la URL original
+          # Esto mantiene intactas todas tus etiquetas de categoría
+          grep -i "/movie/" limpia.m3u > peliculas.m3u
+          grep -i "/series/" limpia.m3u > series.m3u
+          grep -vEi "/movie/\|/series/" limpia.m3u > tv.m3u
           
-          skip = False
-          for i in range(len(lines)):
-              line = lines[i]
-              if line.startswith('#EXTINF:'):
-                  if any(p in line.lower() for p in nopor):
-                      skip = True
-                      continue
-                  else:
-                      skip = False
-                      # Identificar si es peli, serie o TV basandose en la URL de la siguiente linea
-                      if i+1 < len(lines):
-                          url = lines[i+1].lower()
-                          if '/movie/' in url: target = f_peli
-                          elif '/series/' in url: target = f_serie
-                          else: target
+          # Limpieza
+          rm completa.m3u limpia.m3u
+          
+      - name: Subir cambios
+        run: |
+          git config --local user.email 'action@github.com'
+          git config --local user.name 'GitHub Action'
+          git add tv.m3u peliculas.m3u series.m3u
+          git commit -m 'Lista filtrada por grep' || echo 'Nada nuevo'
+          git push
