@@ -16,14 +16,14 @@ jobs:
         run: |
           curl -L -o completa.m3u "https://www.dropbox.com/scl/fi/ew83hymmvlrfl5muiodhm/danju89.m3u?rlkey=xws5j2n3uwwnxf6gny7zo9xmk&st=icseqhgp&dl=1"
 
-      - name: Filtrar Solo Adultos y Respetar Todo lo Demás
+      - name: Modo Cirujano: Solo borrar Adultos, Respetar todo lo demás
         run: |
           # Crear cabeceras estándar para los 3 archivos m3u
           echo "#EXTM3U" > tv.m3u
           echo "#EXTM3U" > peliculas.m3u
           echo "#EXTM3U" > series.m3u
 
-          # Script estricto: Solo bloquea nopor, el resto pasa EXACTAMENTE igual
+          # Python estricto: Pasa las líneas nativas al 100% idénticas
           python3 -c "
           import re
 
@@ -45,7 +45,7 @@ jobs:
                       line_low = current_extinf.lower()
                       
                       # =======================================================
-                      # 1. FILTRO DE ADULTOS (Revisa toda la línea por seguridad)
+                      # 1. ESCUDO ADULTOS: Bloquea solo si la línea original trae esto
                       # =======================================================
                       palabras_bloqueadas = [
                           'xxx', 'adult', 'only', 'porno', 'gays', 'estr', 
@@ -54,11 +54,11 @@ jobs:
                       ]
                       
                       if any(palabra in line_low for palabra in palabras_bloqueadas):
-                          current_extinf = None  # Se descarta por completo
+                          current_extinf = None  # Se salta y se borra
                           continue
                       
                       # =======================================================
-                      # 2. SEPARACIÓN EN ARCHIVOS (Pasando la línea idéntica)
+                      # 2. SEPARACIÓN DIRECTA (Guardando el archivo original intacto)
                       # =======================================================
                       if '/movie/' in url_low:
                           with open('peliculas.m3u', 'a', encoding='utf-8') as f_out:
@@ -69,13 +69,13 @@ jobs:
                               f_out.write(current_extinf + '\n' + line_strip + '\n')
                               
                       else:
-                          # Va directo a TV manteniendo su group-title y nombre original intactos
+                          # Para TV: Pasa tu línea original SIN MODIFICAR NI UNA SOLA LETRA
                           with open('tv.m3u', 'a', encoding='utf-8') as f_out:
                               f_out.write(current_extinf + '\n' + line_strip + '\n')
                               
                       current_extinf = None
           "
-          # Limpiar archivo temporal
+          # Borrar archivo temporal
           rm completa.m3u
 
       - name: Guardar cambios en GitHub
@@ -83,4 +83,4 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add tv.m3u peliculas.m3u series.m3u
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Filtro nopor aplicado manteniendo categorias originales al 100%" && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Restauradas categorias originales e intactas sin nopor" && git push)
