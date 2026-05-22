@@ -16,14 +16,14 @@ jobs:
         run: |
           curl -L -o completa.m3u "https://www.dropbox.com/scl/fi/ew83hymmvlrfl5muiodhm/danju89.m3u?rlkey=xws5j2n3uwwnxf6gny7zo9xmk&st=icseqhgp&dl=1"
 
-      - name: Separar M3U en TV, Películas y Series
+      - name: Separar M3U en TV, Películas y Series (Filtro Adultos Activo)
         run: |
           # Crear cabeceras estándar para los 3 archivos m3u
           echo "#EXTM3U" > tv.m3u
           echo "#EXTM3U" > peliculas.m3u
           echo "#EXTM3U" > series.m3u
 
-          # Script inteligente que crea categorías basadas en el nombre del canal
+          # Script inteligente que fulmina los canales de adultos antes de agruparlos
           python3 -c "
           import re
 
@@ -38,57 +38,51 @@ jobs:
                   continue
               
               if line_strip.startswith('#EXTINF:'):
-                  # Guardamos la línea original (ej. #EXTINF:-1,USA| FXX HD)
                   current_extinf = line_strip
               elif line_strip.startswith('http'):
                   if current_extinf:
                       url_low = line_strip.lower()
                       
+                      # Extraemos el nombre completo del canal para revisarlo
+                      match_name = re.search(r',([^,]*)$', current_extinf)
+                      nombre_completo = match_name.group(1).strip() if match_name else ''
+                      nombre_low = nombre_completo.lower()
+                      
+                      # =======================================================
+                      # ESCUDO ANTI-ADULTOS: Si el nombre tiene estas palabras, se borra al tiro
+                      # =======================================================
+                      if 'xxx' in nombre_low or 'adult' in nombre_low or 'only' in nombre_low or 'porno' in nombre_low or 'gays' in nombre_low or 'estr' in nombre_low:
+                          current_extinf = None  # Al basurero sin tocar las carpetas buenas
+                          continue
+                      
                       # Clasificación básica para Películas y Series por URL
                       if '/movie/' in url_low:
-                          # Para películas quitamos texto extra para dejarlo limpio en tu VOD
-                          match_name = re.search(r',([^,]*)$', current_extinf)
-                          nombre = match_name.group(1).strip() if match_name else 'Pelicula'
-                          linea_peli = f'#EXTINF:-1,{nombre}\n'
+                          linea_peli = f'#EXTINF:-1,{nombre_completo}\n'
                           with open('peliculas.m3u', 'a', encoding='utf-8') as f_out:
                               f_out.write(linea_peli + line_strip + '\n')
                               
                       elif '/series/' in url_low:
-                          match_name = re.search(r',([^,]*)$', current_extinf)
-                          nombre = match_name.group(1).strip() if match_name else 'Serie'
-                          linea_serie = f'#EXTINF:-1,{nombre}\n'
+                          linea_serie = f'#EXTINF:-1,{nombre_completo}\n'
                           with open('series.m3u', 'a', encoding='utf-8') as f_out:
                               f_out.write(linea_serie + line_strip + '\n')
                               
                       else:
-                          # TV EN VIVO: Extraemos el nombre completo después de la coma
-                          match_name = re.search(r',([^,]*)$', current_extinf)
-                          if match_name:
-                              nombre_completo = match_name.group(1).strip()
-                              
-                              # Filtro inteligente para detectar o inventar la categoría
-                              categoria = 'VARIEDADES' # Por defecto si no tiene barra
-                              
-                              nombre_low = nombre_completo.lower()
-                              
-                              if '|' in nombre_completo:
-                                  # Si tiene una barra, el país es lo que está antes (ej: USA, BRA)
-                                  categoria = nombre_completo.split('|')[0].strip().upper()
-                              elif 'liga' in nombre_low or 'sports' in nombre_low or 'premiere' in nombre_low:
-                                  categoria = 'DEPORTES'
-                              elif 'music' in nombre_low:
-                                  categoria = 'MUSICA'
-                              elif nombre_completo.startswith('CA '):
-                                  categoria = 'CANADA'
-                                  nombre_completo = nombre_completo[3:].strip() # Le quita el CA del inicio para dejarlo estético
-                              elif nombre_completo.startswith('NC ') or 'abc' in nombre_low or 'nbc' in nombre_low:
-                                  categoria = 'USA LOCAL'
-                              
-                              # Armamos la línea inyectándole el group-title recién creado
-                              linea_tv = f'#EXTINF:-1 group-title=\"{categoria}\",{nombre_completo}\n'
-                          else:
-                              linea_tv = '#EXTINF:-1 group-title=\"VARIEDADES\",Canal Sin Nombre\n'
-                              
+                          # TV EN VIVO: Aquí creamos las categorías limpias
+                          categoria = 'VARIEDADES'
+                          
+                          if '|' in nombre_completo:
+                              categoria = nombre_completo.split('|')[0].strip().upper()
+                          elif 'liga' in nombre_low or 'sports' in nombre_low or 'premiere' in nombre_low:
+                              categoria = 'DEPORTES'
+                          elif 'music' in nombre_low:
+                              categoria = 'MUSICA'
+                          elif nombre_completo.startswith('CA '):
+                              categoria = 'CANADA'
+                              nombre_completo = nombre_completo[3:].strip()
+                          elif nombre_completo.startswith('NC ') or 'abc' in nombre_low or 'nbc' in nombre_low:
+                              categoria = 'USA LOCAL'
+                          
+                          linea_tv = f'#EXTINF:-1 group-title=\"{categoria}\",{nombre_completo}\n'
                           with open('tv.m3u', 'a', encoding='utf-8') as f_out:
                               f_out.write(linea_tv + line_strip + '\n')
                               
@@ -102,4 +96,4 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add tv.m3u peliculas.m3u series.m3u
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Listas divididas con categorias auto-generadas" && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Listas divididas: Eliminadas carpetas de adultos por completo" && git push)
