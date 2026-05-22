@@ -9,32 +9,42 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Filtrado Maestro (Sin errores)
+      - name: Filtro Quirurgico por Bloques
         run: |
-          # Descarga la lista
           curl -L -o completa.m3u "https://www.dropbox.com/scl/fi/ew83hymmvlrfl5muiodhm/danju89.m3u?rlkey=xws5j2n3uwwnxf6gny7zo9xmk&st=icseqhgp&dl=1"
           
-          # Definimos las palabras prohibidas sin comillas dobles internas
-          NOPOR='xxx\|adult\|only\|porno\|gays\|pornbox\|x4\|stars exclusive\|verified amateurs\|lesbian\|milf\|mofos\|sex\|anal\|boobs'
+          python3 -c "
+          import re
+          nopor = ['xxx', 'adult', 'only', 'porno', 'gays', 'pornbox', 'x4', 'stars exclusive', 'verified amateurs', 'lesbian', 'milf', 'mofos', 'sex', 'anal', 'boobs']
           
-          # Filtramos la lista completa
-          # Esto elimina el bloque (EXTINF + la linea siguiente) si contiene la palabra
-          # Usamos un archivo temporal para procesar
-          grep -vEi "$NOPOR" completa.m3u > limpia.m3u
+          with open('completa.m3u', 'r', encoding='utf-8', errors='ignore') as f:
+              content = f.read()
           
-          # Ahora separamos por tipo basándonos en la URL original
-          # Esto mantiene intactas todas tus etiquetas de categoría
-          grep -i "/movie/" limpia.m3u > peliculas.m3u
-          grep -i "/series/" limpia.m3u > series.m3u
-          grep -vEi "/movie/\|/series/" limpia.m3u > tv.m3u
+          # Separamos por bloques usando la etiqueta EXTINF
+          bloques = re.split(r'(?=#EXTINF:)', content)
           
-          # Limpieza
-          rm completa.m3u limpia.m3u
+          tv = ['#EXTM3U\n']
+          peli = ['#EXTM3U\n']
+          serie = ['#EXTM3U\n']
+          
+          for bloque in bloques:
+              if not bloque.strip(): continue
+              # Si no tiene palabras nopor, guardamos el bloque completo
+              if not any(p in bloque.lower() for p in nopor):
+                  if '/movie/' in bloque.lower(): peli.append(bloque)
+                  elif '/series/' in bloque.lower(): serie.append(bloque)
+                  else: tv.append(bloque)
+          
+          with open('tv.m3u', 'w', encoding='utf-8') as f: f.writelines(tv)
+          with open('peliculas.m3u', 'w', encoding='utf-8') as f: f.writelines(peli)
+          with open('series.m3u', 'w', encoding='utf-8') as f: f.writelines(serie)
+          "
+          rm completa.m3u
           
       - name: Subir cambios
         run: |
           git config --local user.email 'action@github.com'
           git config --local user.name 'GitHub Action'
           git add tv.m3u peliculas.m3u series.m3u
-          git commit -m 'Lista filtrada por grep' || echo 'Nada nuevo'
+          git commit -m 'Filtro por bloques intacto' || echo 'Nada nuevo'
           git push
