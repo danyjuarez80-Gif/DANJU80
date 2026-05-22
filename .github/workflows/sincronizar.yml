@@ -9,33 +9,29 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Filtrado Maestro (Respeto total)
+      - name: Filtrado de alta precision
         run: |
           curl -L -o completa.m3u "https://www.dropbox.com/scl/fi/ew83hymmvlrfl5muiodhm/danju89.m3u?rlkey=xws5j2n3uwwnxf6gny7zo9xmk&st=icseqhgp&dl=1"
           
-          # PALABRAS CLAVE PROHIBIDAS
-          nopor="xxx|adult|only|porno|gays|pornbox|x4|stars exclusive|verified amateurs|lesbian|milf|mofos|sex|anal|boobs"
-          
-          # Script que lee el archivo y solo escribe lo que NO tiene nopor
+          # Usamos un script de Python que solo busca el nopor y lo elimina
+          # SIN tocar ninguna otra línea, manteniendo intactos los group-title
           python3 -c "
-          import sys
-          nopor = ['$nopor'.split('|')]
-          # Usamos un flag para saber si el bloque anterior fue borrado
-          borrar_siguiente_url = False
-          
+          nopor = ['xxx', 'adult', 'only', 'porno', 'gays', 'pornbox', 'x4', 'stars exclusive', 'verified amateurs', 'lesbian', 'milf', 'mofos', 'sex', 'anal', 'boobs']
           with open('completa.m3u', 'r', encoding='utf-8', errors='ignore') as f_in, \
                open('tv.m3u', 'w', encoding='utf-8') as f_out:
+              skip = False
               for line in f_in:
-                  # Si detectamos nopor en el EXTINF, marcamos para borrar la URL
-                  if '#EXTINF:' in line and any(p in line.lower() for p in $nopor[0]):
-                      borrar_siguiente_url = True
+                  if '#EXTINF:' in line:
+                      if any(p in line.lower() for p in nopor):
+                          skip = True
+                          continue
+                      else:
+                          skip = False
+                  if skip and line.startswith('http'):
+                      skip = False
                       continue
-                  # Si es una URL y el EXTINF era nopor, la saltamos
-                  if borrar_siguiente_url and line.strip().startswith('http'):
-                      borrar_siguiente_url = False
-                      continue
-                  # Si no es nopor, escribimos la línea tal cual
-                  f_out.write(line)
+                  if not skip:
+                      f_out.write(line)
           "
           rm completa.m3u
           
@@ -44,5 +40,5 @@ jobs:
           git config --local user.email 'action@github.com'
           git config --local user.name 'GitHub Action'
           git add tv.m3u
-          git commit -m 'Lista filtrada respetando categorías originales' || echo 'Nada nuevo'
+          git commit -m 'Lista limpia manteniendo categorías originales' || echo 'Nada nuevo'
           git push
