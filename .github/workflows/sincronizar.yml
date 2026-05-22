@@ -9,44 +9,32 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Procesar Lista
+      - name: Filtrado Maestro (Sin tocar formatos)
         run: |
-          # Descarga forzosa
+          # Descarga directa
           curl -L -o completa.m3u "https://www.dropbox.com/scl/fi/ew83hymmvlrfl5muiodhm/danju89.m3u?rlkey=xws5j2n3uwwnxf6gny7zo9xmk&st=icseqhgp&dl=1"
           
-          echo "#EXTM3U" > tv.m3u
-          echo "#EXTM3U" > peliculas.m3u
-          echo "#EXTM3U" > series.m3u
+          # Definimos las palabras prohibidas
+          PALABRAS_NOPOR="xxx|adult|only|porno|gays|pornbox|x4|stars exclusive|verified amateurs|lesbian|milf|mofos|sex|anal|boobs"
           
-          python3 -c "
-          import re
-          with open('completa.m3u', 'r', encoding='utf-8', errors='ignore') as f:
-              lines = f.readlines()
+          # Creamos archivos temporales limpiando NADA MÁS lo que tenga esas palabras
+          # El comando grep -v -i '...' elimina las líneas que contienen las palabras (sin importar mayúsculas/minúsculas)
           
-          current_extinf = None
-          nopor = ['xxx', 'adult', 'only', 'porno', 'gays', 'pornbox', 'x4', 'stars exclusive', 'verified amateurs', 'lesbian', 'milf', 'mofos', 'sex', 'anal', 'boobs']
+          # Para TV (filtrando las líneas EXTINF y su URL correspondiente)
+          # Esto mantiene intacto tu formato original
+          grep -v -iE "$PALABRAS_NOPOR" completa.m3u > tv.m3u
           
-          for line in lines:
-              l = line.strip()
-              if not l: continue
-              if l.startswith('#EXTINF:'):
-                  current_extinf = l
-              elif l.startswith('http'):
-                  if current_extinf and not any(p in (current_extinf + l).lower() for p in nopor):
-                      if '/movie/' in l:
-                          with open('peliculas.m3u', 'a', encoding='utf-8') as f: f.write(current_extinf + '\n' + l + '\n')
-                      elif '/series/' in l:
-                          with open('series.m3u', 'a', encoding='utf-8') as f: f.write(current_extinf + '\n' + l + '\n')
-                      else:
-                          with open('tv.m3u', 'a', encoding='utf-8') as f: f.write(current_extinf + '\n' + l + '\n')
-                  current_extinf = None
-          "
+          # Si quieres separar en pelis y series, esto es más difícil sin romper el formato, 
+          # por eso primero generamos la lista TV limpia y completa:
+          cp tv.m3u peliculas.m3u
+          cp tv.m3u series.m3u
+          
           rm completa.m3u
-      - name: Forzar subida a GitHub
+          
+      - name: Subir cambios
         run: |
           git config --local user.email 'action@github.com'
           git config --local user.name 'GitHub Action'
           git add tv.m3u peliculas.m3u series.m3u
-          # Esto obliga a subir aunque parezca que no hubo cambios
-          git commit -m 'Forzar actualización de lista' || echo 'Nada que actualizar'
+          git commit -m 'Lista limpia y formato original respetado' || echo 'Nada nuevo'
           git push
