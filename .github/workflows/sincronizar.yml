@@ -1,74 +1,46 @@
-name: Separar y Sincronizar M3U desde Dropbox
-
+name: Separar y Sincronizar M3U
 on:
   schedule:
     - cron: '0 */6 * * *'
   workflow_dispatch:
-
 jobs:
-  sync_and_split:
+  sincronizar:
     runs-on: ubuntu-latest
     steps:
-      - name: Clonar repositorio
+      - name: Checkout
         uses: actions/checkout@v3
-
-      - name: Descargar lista completa desde Dropbox
+      - name: Procesar Lista
         run: |
           curl -L -o completa.m3u "https://www.dropbox.com/scl/fi/ew83hymmvlrfl5muiodhm/danju89.m3u?rlkey=xws5j2n3uwwnxf6gny7zo9xmk&st=icseqhgp&dl=1"
-
-      - name: Modo Cirujano: Solo borrar Adultos, Respetar todo lo demás
-        run: |
           echo "#EXTM3U" > tv.m3u
           echo "#EXTM3U" > peliculas.m3u
           echo "#EXTM3U" > series.m3u
-
           python3 -c "
           import re
-
           with open('completa.m3u', 'r', encoding='utf-8', errors='ignore') as f:
               lines = f.readlines()
-
           current_extinf = None
-          
+          palabras_nopor = ['xxx', 'adult', 'only', 'porno', 'gays', 'pornbox', 'x4', 'stars exclusive', 'verified amateurs', 'lesbian', 'milf', 'mofos', 'sex', 'anal', 'boobs']
           for line in lines:
               line_strip = line.strip()
-              if not line_strip:
-                  continue
-              
+              if not line_strip: continue
               if line_strip.startswith('#EXTINF:'):
                   current_extinf = line_strip
               elif line_strip.startswith('http'):
                   if current_extinf:
-                      url_low = line_strip.lower()
-                      line_low = current_extinf.lower()
-                      
-                      palabras_bloqueadas = [
-                          'xxx', 'adult', 'only', 'porno', 'gays', 'estr', 
-                          'pornbox', 'x4', 'stars exclusive', 'verified amateurs',
-                          'lesbian', 'milf', 'milfty', 'mofos', 'sex', 'anal', 'boobs'
-                      ]
-                      
-                      if any(palabra in line_low for palabra in palabras_bloqueadas):
-                          current_extinf = None
-                          continue
-                      
-                      if '/movie/' in url_low:
-                          with open('peliculas.m3u', 'a', encoding='utf-8') as f_out:
-                              f_out.write(current_extinf + '\n' + line_strip + '\n')
-                      elif '/series/' in url_low:
-                          with open('series.m3u', 'a', encoding='utf-8') as f_out:
-                              f_out.write(current_extinf + '\n' + line_strip + '\n')
-                      else:
-                          with open('tv.m3u', 'a', encoding='utf-8') as f_out:
-                              f_out.write(current_extinf + '\n' + line_strip + '\n')
-                              
+                      if not any(palabra in (current_extinf + line_strip).lower() for palabra in palabras_nopor):
+                          if '/movie/' in line_strip:
+                              with open('peliculas.m3u', 'a', encoding='utf-8') as f: f.write(current_extinf + '\n' + line_strip + '\n')
+                          elif '/series/' in line_strip:
+                              with open('series.m3u', 'a', encoding='utf-8') as f: f.write(current_extinf + '\n' + line_strip + '\n')
+                          else:
+                              with open('tv.m3u', 'a', encoding='utf-8') as f: f.write(current_extinf + '\n' + line_strip + '\n')
                       current_extinf = None
           "
           rm completa.m3u
-
-      - name: Guardar cambios en GitHub
+      - name: Subir cambios
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          git config --local user.email 'action@github.com'
+          git config --local user.name 'GitHub Action'
           git add tv.m3u peliculas.m3u series.m3u
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Estructura YML corregida al 100 por ciento" && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m 'Actualizado' && git push)
