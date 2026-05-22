@@ -16,14 +16,14 @@ jobs:
         run: |
           curl -L -o completa.m3u "https://www.dropbox.com/scl/fi/ew83hymmvlrfl5muiodhm/danju89.m3u?rlkey=xws5j2n3uwwnxf6gny7zo9xmk&st=icseqhgp&dl=1"
 
-      - name: Separar M3U en TV, Películas y Series (Filtro Adultos Activo)
+      - name: Separar M3U en TV, Películas y Series (Filtro Adultos Estricto)
         run: |
           # Crear cabeceras estándar para los 3 archivos m3u
           echo "#EXTM3U" > tv.m3u
           echo "#EXTM3U" > peliculas.m3u
           echo "#EXTM3U" > series.m3u
 
-          # Script inteligente que fulmina los canales de adultos antes de agruparlos
+          # Script con escudo reforzado para limpiar todo el contenido de adultos
           python3 -c "
           import re
 
@@ -43,16 +43,23 @@ jobs:
                   if current_extinf:
                       url_low = line_strip.lower()
                       
-                      # Extraemos el nombre completo del canal para revisarlo
+                      # Extraemos el nombre completo del canal para la revisión
                       match_name = re.search(r',([^,]*)$', current_extinf)
                       nombre_completo = match_name.group(1).strip() if match_name else ''
                       nombre_low = nombre_completo.lower()
                       
                       # =======================================================
-                      # ESCUDO ANTI-ADULTOS: Si el nombre tiene estas palabras, se borra al tiro
+                      # ESCUDO TOTAL ANTI-ADULTOS (Basado en tus capturas reales)
                       # =======================================================
-                      if 'xxx' in nombre_low or 'adult' in nombre_low or 'only' in nombre_low or 'porno' in nombre_low or 'gays' in nombre_low or 'estr' in nombre_low:
-                          current_extinf = None  # Al basurero sin tocar las carpetas buenas
+                      palabras_bloqueadas = [
+                          'xxx', 'adult', 'only', 'porno', 'gays', 'estr', 
+                          'pornbox', 'x4', 'stars exclusive', 'verified amateurs',
+                          'lesbian', 'milf', 'milfty', 'mofos', 'sex', 'anal', 'boobs'
+                      ]
+                      
+                      # Si cumple con alguna palabra de la lista negra, se elimina al instante
+                      if any(palabra in nombre_low for palabra in palabras_bloqueadas):
+                          current_extinf = None  # Al basurero directo
                           continue
                       
                       # Clasificación básica para Películas y Series por URL
@@ -67,7 +74,7 @@ jobs:
                               f_out.write(linea_serie + line_strip + '\n')
                               
                       else:
-                          # TV EN VIVO: Aquí creamos las categorías limpias
+                          # TV EN VIVO: Categorías limpias para canales permitidos
                           categoria = 'VARIEDADES'
                           
                           if '|' in nombre_completo:
@@ -96,4 +103,4 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add tv.m3u peliculas.m3u series.m3u
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Listas divididas: Eliminadas carpetas de adultos por completo" && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Filtro estricto aplicado: Eliminadas categorias X4, PORNBOX y STARS" && git push)
