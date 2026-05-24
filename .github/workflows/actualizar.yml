@@ -1,13 +1,9 @@
 name: Actualizar Listas
-
 on:
   push:
-    branches:
-      - main
   workflow_dispatch:
   schedule:
-    # Se ejecuta todos los días a las 00:00 (hora UTC)
-    - cron: '0 0 * * *'
+    - cron: '0 * * * *'
 
 jobs:
   update:
@@ -15,22 +11,17 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Checkout del repositorio
-        uses: actions/checkout@v3
-
-      - name: Configurar Python
+      - uses: actions/checkout@v3
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
-
-      - name: Ejecutar script de ordenamiento
+      - name: Run Script
         run: python actualizar_lista.py
-
-      - name: Commit y Push de archivos
+      - name: Push Changes
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
-          # Intentamos hacer commit; si no hay cambios, el script no falla
           git add DANJU80 DANJU_MOVIES DANJU_SERIES
-          git commit -m "Actualización: Orden alfabético aplicado" || echo "Sin cambios detectados"
+          git commit -m "Orden alfabético aplicado" || echo "Sin cambios"
           git push
