@@ -27,8 +27,7 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
-          # Sincronizar con cambios remotos antes de subir
           git pull origin main --rebase
           git add DANJU80 DANJU_MOVIES DANJU_SERIES
-          git commit -m "Actualización: Categorías y canales ordenados" || echo "Sin cambios"
+          git commit -m "Orden alfabético de categorías y canales preservando estructura" || echo "Sin cambios"
           git push origin main
