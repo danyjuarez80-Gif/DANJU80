@@ -2,6 +2,8 @@ name: Actualizar Listas
 
 on:
   push:
+    branches:
+      - main
   workflow_dispatch:
   schedule:
     - cron: '0 * * * *'
@@ -20,13 +22,15 @@ jobs:
         with:
           python-version: '3.9'
 
-      - name: Ejecutar script de clasificación
+      - name: Ejecutar script de clasificación y ordenamiento
         run: python actualizar_lista.py
 
       - name: Commit y Push de archivos
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
+          # Añadimos los archivos generados al repositorio
           git add DANJU80 DANJU_MOVIES DANJU_SERIES
-          git commit -m "Actualizacion automatica: Limpieza y separacion" || echo "Sin cambios"
+          # Solo hacemos commit si hubo cambios reales
+          git commit -m "Actualizacion automatica: Categorias y canales ordenados alfabeticamente" || echo "Sin cambios"
           git push
