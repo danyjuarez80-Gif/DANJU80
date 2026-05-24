@@ -1,4 +1,5 @@
 name: Actualizar Listas
+
 on:
   push:
   workflow_dispatch:
@@ -11,17 +12,23 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python
+      - name: Checkout del repositorio
+        uses: actions/checkout@v3
+
+      - name: Configurar Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
-      - name: Run Script
+
+      - name: Ejecutar script de ordenamiento
         run: python actualizar_lista.py
-      - name: Push Changes
+
+      - name: Commit y Push de archivos
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
+          # Sincronizar con cambios remotos antes de subir
+          git pull origin main --rebase
           git add DANJU80 DANJU_MOVIES DANJU_SERIES
-          git commit -m "Orden alfabético aplicado" || echo "Sin cambios"
-          git push
+          git commit -m "Actualización: Categorías y canales ordenados" || echo "Sin cambios"
+          git push origin main
