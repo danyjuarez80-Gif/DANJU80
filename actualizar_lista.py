@@ -1,60 +1,75 @@
 import os
 import re
-from collections import defaultdict
 
 def procesar_listas():
     archivo_origen = "dan88.txt"
     if not os.path.exists(archivo_origen):
-        print(f"ERROR: {archivo_origen} no encontrado.")
+        print("ERROR: Archivo origen no encontrado.")
         return
 
     with open(archivo_origen, "r", encoding="utf-8", errors="ignore") as f:
         lineas = f.read().splitlines()
 
-    # Usamos diccionarios para agrupar por categoría
-    # Estructura: categorias[nombre_categoria] = [(nombre_canal, url), ...]
-    data = {
-        "TV": [],
-        "MOVIES": [],
-        "SERIES": []
-    }
-
+    # Estructura: lista de secciones. Cada sección tiene un título y sus canales
+    secciones = []
+    seccion_actual = {"titulo": "SIN_CATEGORIA", "canales": []}
+    
     i = 0
     while i < len(lineas):
         linea = lineas[i].strip()
-        if linea.startswith("#EXTINF"):
-            linea_limpia = re.sub(r'(tvg-logo|tvg-image|logo)=".*?"', '', linea)
-            linea_limpia = re.sub(r'\s+', ' ', linea_limpia).strip()
-            url = lineas[i+1].strip() if i + 1 < len(lineas) else ""
+        
+        # Detectar si la línea es un separador de categoría (ej: ----------NOMBRE---------)
+        # O si es una línea vacía/basura, la saltamos
+        if not linea or linea.startswith("#EXTM3U"):
+            i += 1
+            continue
             
-            inf_low = linea_limpia.lower()
-            url_low = url.lower()
-
-            # Clasificación (Categoría)
-            if "/series" in url_low or "series" in inf_low:
-                data["SERIES"].append((linea_limpia, url))
-            elif "/movie" in url_low or "movie" in inf_low or "pelic" in inf_low:
-                data["MOVIES"].append((linea_limpia, url))
-            else:
-                data["TV"].append((linea_limpia, url))
+        if "----------" in linea:
+            # Guardamos la sección anterior y abrimos una nueva
+            secciones.append(seccion_actual)
+            seccion_actual = {"titulo": linea, "canales": []}
+            i += 1
+        elif linea.startswith("#EXTINF"):
+            canal = linea
+            url = lineas[i+1].strip() if i+1 < len(lineas) else ""
+            seccion_actual["canales"].append((canal, url))
             i += 2
         else:
             i += 1
+    secciones.append(seccion_actual)
 
-    # Ordenar solo los canales DENTRO de su categoría
-    for cat in data:
-        data[cat].sort(key=lambda x: x[0])
+    # Ordenar solo los canales DENTRO de cada sección
+    for s in secciones:
+        s["canales"].sort(key=lambda x: x[0])
 
-    # Guardado: Aquí escribimos los archivos manteniendo la integridad
-    def guardar(archivo, lista):
-        with open(archivo, "w", encoding="utf-8") as f:
+    # Guardar los archivos separados como los tenías (TV, MOVIES, SERIES)
+    # Creamos un diccionario para mapear qué sección va a qué archivo
+    def guardar_por_tipo(nombre_archivo, lista_secciones):
+        with open(nombre_archivo, "w", encoding="utf-8") as f:
             f.write("#EXTM3U\n")
-            for item in lista:
-                f.write(f"{item[0]}\n{item[1]}\n")
+            for s in lista_secciones:
+                if s["titulo"] != "SIN_CATEGORIA":
+                    f.write(f"\n{s['titulo']}\n")
+                for canal, url in s["canales"]:
+                    f.write(f"{canal}\n{url}\n")
 
-    guardar("DANJU80", data["TV"])
-    guardar("DANJU_MOVIES", data["MOVIES"])
-    guardar("DANJU_SERIES", data["SERIES"])
+    # Aquí clasificamos las secciones según su contenido para tus 3 archivos
+    tv_secciones, mov_secciones, ser_secciones = [], [], []
+    
+    for s in secciones:
+        titulo = s["titulo"].lower()
+        if "serie" in titulo:
+            ser_secciones.append(s)
+        elif "movie" in titulo or "pelic" in titulo:
+            mov_secciones.append(s)
+        else:
+            tv_secciones.append(s)
+
+    guardar_por_tipo("DANJU80", tv_secciones)
+    guardar_por_tipo("DANJU_MOVIES", mov_secciones)
+    guardar_por_tipo("DANJU_SERIES", ser_secciones)
+
+    print("Listas ordenadas por categoría y alfabéticamente dentro de cada una.")
 
 if __name__ == "__main__":
     procesar_listas()
