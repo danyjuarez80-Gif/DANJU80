@@ -2,51 +2,52 @@ import os
 import re
 
 def procesar_listas():
-    # Leemos la lista original dan88.txt (donde está todo junto)
     archivo_origen = "dan88.txt"
     if not os.path.exists(archivo_origen):
-        print(f"Error: {archivo_origen} no encontrado.")
+        print(f"ERROR: {archivo_origen} no encontrado.")
         return
 
     with open(archivo_origen, "r", encoding="utf-8", errors="ignore") as f:
         lineas = f.read().splitlines()
 
-    # Clasificadores
-    archivos = {"DANJU80": {}, "DANJU_MOVIES": {}, "DANJU_SERIES": {}}
+    # Listas para almacenar los canales como tuplas (nombre, url)
+    tv, movies, series = [], [], []
 
     i = 0
     while i < len(lineas):
         linea = lineas[i].strip()
         if linea.startswith("#EXTINF"):
-            url = lineas[i+1].strip() if i+1 < len(lineas) else ""
+            linea_limpia = re.sub(r'(tvg-logo|tvg-image|logo)=".*?"', '', linea)
+            linea_limpia = re.sub(r'\s+', ' ', linea_limpia).strip()
+            url = lineas[i+1].strip() if i + 1 < len(lineas) else ""
             
-            # Detectar grupo
-            match = re.search(r'group-title="([^"]+)"', linea)
-            grupo = match.group(1) if match else "GENERAL"
-            grupo_low = grupo.lower()
+            inf_low = linea_limpia.lower()
+            url_low = url.lower()
             
-            # Clasificación estricta
-            if "serie" in grupo_low:
-                target = "DANJU_SERIES"
-            elif "movie" in grupo_low or "pelic" in grupo_low:
-                target = "DANJU_MOVIES"
+            # Clasificación
+            if "/series" in url_low or "series" in inf_low:
+                series.append((linea_limpia, url))
+            elif "/movie" in url_low or "movie" in inf_low or "pelic" in inf_low:
+                movies.append((linea_limpia, url))
             else:
-                target = "DANJU80"
-                
-            archivos[target].setdefault(grupo, []).append((linea, url))
+                tv.append((linea_limpia, url))
             i += 2
         else:
             i += 1
 
-    # Escribir cada archivo
-    for nombre_archivo, grupos in archivos.items():
+    # Función para ordenar y guardar
+    def guardar_ordenado(nombre_archivo, lista):
+        # Ordenamos la lista de tuplas alfabéticamente por el nombre (x[0])
+        lista_ordenada = sorted(lista, key=lambda x: x[0])
         with open(nombre_archivo, "w", encoding="utf-8") as f:
             f.write("#EXTM3U\n")
-            # Ordenar grupos y canales
-            for nombre_grupo in sorted(grupos.keys()):
-                for extinf, url in sorted(grupos[nombre_grupo], key=lambda x: x[0]):
-                    f.write(f"{extinf}\n{url}\n")
-    print("Separación y ordenamiento estricto completado.")
+            for nombre, url in lista_ordenada:
+                f.write(f"{nombre}\n{url}\n")
+
+    guardar_ordenado("DANJU80", tv)
+    guardar_ordenado("DANJU_MOVIES", movies)
+    guardar_ordenado("DANJU_SERIES", series)
+    print("Listas procesadas, separadas y ordenadas alfabéticamente.")
 
 if __name__ == "__main__":
     procesar_listas()
