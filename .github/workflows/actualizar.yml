@@ -1,28 +1,41 @@
 name: Actualizar Listas
+
 on:
   push:
   workflow_dispatch:
   schedule:
     - cron: '0 * * * *'
+
 jobs:
   update:
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-      - name: Checkout del repositorio
+      - name: Checkout
         uses: actions/checkout@v3
+
       - name: Configurar Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
-      - name: Ejecutar script de clasificación
+
+      - name: Ejecutar script
         run: python actualizar_lista.py
-      - name: Commit y Push de archivos
+
+      - name: Commit y Push
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
-          git pull origin main --rebase
+          
+          # 1. Limpiamos cualquier rastro de cambios previos para evitar conflictos
+          git reset --hard HEAD
+          
+          # 2. Agregamos los archivos que el script acaba de generar/modificar
           git add DANJU80 DANJU_MOVIES DANJU_SERIES
-          git commit -m "Actualizacion automatica: Limpieza y orden alfabetico" || echo "Sin cambios"
-          git push origin main
+          
+          # 3. Hacemos el commit (si no hay cambios, no pasa nada)
+          git commit -m "Orden alfabetico y limpieza" || echo "Sin cambios"
+          
+          # 4. Forzamos el push para ignorar errores de "fetch first"
+          git push origin main --force
