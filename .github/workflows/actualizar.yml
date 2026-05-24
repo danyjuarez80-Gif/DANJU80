@@ -1,36 +1,15 @@
-name: Actualizar Listas
-
-on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
-  schedule:
-    - cron: '0 * * * *'
-
-jobs:
-  update:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
+# ... (tu configuración de triggers)
     steps:
       - name: Checkout del repositorio
         uses: actions/checkout@v3
 
-      - name: Configurar Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-
-      - name: Ejecutar script de clasificación y ordenamiento
+      - name: Ejecutar script de ordenamiento
         run: python actualizar_lista.py
 
       - name: Commit y Push de archivos
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
-          # Añadimos los archivos generados al repositorio
           git add DANJU80 DANJU_MOVIES DANJU_SERIES
-          # Solo hacemos commit si hubo cambios reales
-          git commit -m "Actualizacion automatica: Categorias y canales ordenados alfabeticamente" || echo "Sin cambios"
+          git commit -m "Orden alfabético de categorías y canales" || echo "Sin cambios"
           git push
