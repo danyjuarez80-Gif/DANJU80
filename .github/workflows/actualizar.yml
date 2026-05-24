@@ -12,7 +12,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Checkout del repositorio
+      - name: Checkout
         uses: actions/checkout@v3
 
       - name: Configurar Python
@@ -20,14 +20,20 @@ jobs:
         with:
           python-version: '3.9'
 
-      - name: Ejecutar script de ordenamiento
+      - name: Ejecutar script
         run: python actualizar_lista.py
 
-      - name: Commit y Push de archivos
+      - name: Commit y Push
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
-          git pull origin main --rebase
+          
+          # Borramos cualquier cambio pendiente en el repositorio
+          git reset --hard HEAD
+          
+          # Añadimos los archivos ya ordenados por el script
           git add DANJU80 DANJU_MOVIES DANJU_SERIES
-          git commit -m "Orden alfabético de categorías y canales preservando estructura" || echo "Sin cambios"
+          
+          # Hacemos commit y subimos. Si no hay cambios, el commit falla y el script termina bien.
+          git commit -m "Ordenamiento alfabético" || echo "Sin cambios"
           git push origin main
