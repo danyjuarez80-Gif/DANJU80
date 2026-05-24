@@ -12,13 +12,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Configurar Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
+      - uses: actions/checkout@v3
 
       - name: Ejecutar script
         run: python actualizar_lista.py
@@ -28,12 +22,7 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
           
-          # Borramos cualquier cambio pendiente en el repositorio
-          git reset --hard HEAD
-          
-          # Añadimos los archivos ya ordenados por el script
+          # Ignorar conflictos y forzar la subida
           git add DANJU80 DANJU_MOVIES DANJU_SERIES
-          
-          # Hacemos commit y subimos. Si no hay cambios, el commit falla y el script termina bien.
-          git commit -m "Ordenamiento alfabético" || echo "Sin cambios"
-          git push origin main
+          git commit -m "Orden alfabetico" || echo "Sin cambios"
+          git push origin main --force
