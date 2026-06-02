@@ -1,4 +1,7 @@
 #EXTM3U
+#EXTINF:-1 group-title="TV",noticias 0b
+https://lcrj3.envivoslatam.org/lb01/espn/index.m3u8?token=ad3e4e037306d023e99d963344c487191252769b-13-1780457839-1780403839&ip=163.192.149.231
+
 #EXTINF:-1 group-title="TV",noticias 0
 https://mze7u.envivoslatam.org/lb02/espn/index.m3u8?token=d9325eef4c8968535bca26887237ca713abbe100-f9-1780420938-1780366938&ip=163.192.149.231
 
