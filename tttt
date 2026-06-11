@@ -46,18 +46,6 @@ https://streaming.alwaysdata.net/tudn.php
 #EXTINF:-1 group-title="TV",noticias 52
 http://162.19.255.233:8080/play/UNbAl57p9hXZClOu56FCTVL9TbgOeYnXUEC2UjoDBYk/m3u8
 
-#EXTINF:-1 group-title="TV",noticias 53
-https://jmp2.uk/plu-65ea8b928145cb0008509426.m3u8
-
-#EXTINF:-1 group-title="TV",noticias 54
-http://190.60.40.34:8001/play/a0ef
-
-#EXTINF:-1 group-title="TV",noticias 55
-http://190.60.40.34:8001/play/a02r
-
-#EXTINF:-1 group-title="TV",noticias 56
-https://linear-893.frequency.stream:443/dist/xumo/893/hls/master/playlist_1920x1080.m3u8
-
 #EXTINF:-1 group-title="TV",noticias 57
 https://bein-esp-xumo.amagi.tv:443/playlistR720P.m3u8
 
