@@ -1,5 +1,8 @@
 #EXTM3U
 
+#EXTINF:-1 group-title="TV",noticias 02
+https://cdn10.zohanayaan.com:1686/hls/deportesplus9.m3u8?md5=HkfwU-dNNqbxu-e7JwsrSw&expires=1781298439
+
 #EXTINF:-1 group-title="TV",noticias 03
 https://cdn4.zohanayaan.com:1686/hls/deportesplus.m3u8?md5=VSKLvgrEwzlTc9evncaTqw&expires=1781298253
 
