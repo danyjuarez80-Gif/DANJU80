@@ -1,5 +1,8 @@
 #EXTM3U
 
+#EXTINF:-1 group-title="TV",noticias 04
+https://cdn3.zohanayaan.com:1686/hls/deportesplus9.m3u8?md5=oJa0f-ADV44kOjGqF-sz3Q&expires=1781298159
+
 #EXTINF:-1 group-title="TV",noticias 05
 https://b2zmawnpyww.fubo18.com/dsports/mono.m3u8?token=7e52c3b9cfe71ae20775af1fa97f44bd53b0539d-95-1781307661-1781289661
 
