@@ -1,6 +1,6 @@
 #EXTM3U
 
-#EXTINF:-1 group-title="TV",noticias 06
+#EXTINF:-1 group-title="TV",noticias 05
 https://tezfs.vivolatamz.org/lb05/tycsports/index.m3u8?token=3f716b2f3d309f05818c88b314d9ac16acac5bbd-fb-1781276117-1781222117&ip=45.191.55.42
 
 #EXTINF:-1 group-title="TV",noticias 06
