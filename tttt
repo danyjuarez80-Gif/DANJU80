@@ -1,5 +1,8 @@
 #EXTM3U
 
+#EXTINF:-1 group-title="TV",noticias 01
+https://jwzrh.vivolatamz.org/lb03/disney1/index.m3u8?token=ce25e52ded037d0ad01b54bd34b7e2d71b1c1e7a-a6-1781336853-1781282853&ip=45.191.55.27
+
 #EXTINF:-1 group-title="TV",noticias 02
 https://cdn10.zohanayaan.com:1686/hls/deportesplus9.m3u8?md5=HkfwU-dNNqbxu-e7JwsrSw&expires=1781298439
 
