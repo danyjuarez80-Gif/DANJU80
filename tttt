@@ -89,3 +89,23 @@ https://dazn-combat-rakuten.amagi.tv/hls/amagi_hls_data_rakutenAA-dazn-combat-ra
 
 #EXTINF:-1 group-title="TV",noticias 75
 http://45.5.119.43:4000/play/a05o/index.m3u8
+
+#EXTINF:-1,noticias 76
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Linux; Android 10; SM-G975F) AppleWebKit/537.36
+http://45.5.119.43:4000/play/a05o/index.m3u8
+
+#EXTINF:-1,TyC Sports
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Linux; Android 10; SM-G975F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.210 Mobile Safari/537.36
+http://45.5.119.43:4000/play/a05o/index.m3u8
+
+#EXTINF:-1,TyC Sports
+#EXTVLCOPT:http-user-agent=VLC/3.0.18 LibVLC/3.0.18
+http://45.5.119.43:4000/play/a05o/index.m3u8
+
+#EXTINF:-1,TyC Sports
+#EXTVLCOPT:http-user-agent=ExoPlayerLib/2.18.1
+http://45.5.119.43:4000/play/a05o/index.m3u8
+
+#EXTINF:-1,TyC Sports
+#EXTVLCOPT:http-user-agent=Roku/DVP-13.0 (519.00E04205A)
+http://45.5.119.43:4000/play/a05o/index.m3u8
