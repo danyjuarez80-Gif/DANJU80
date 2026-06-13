@@ -13,10 +13,10 @@ https://cdn4.zohanayaan.com:1686/hls/deportesplus.m3u8?md5=VSKLvgrEwzlTc9evncaTq
 https://cdn3.zohanayaan.com:1686/hls/deportesplus9.m3u8?md5=oJa0f-ADV44kOjGqF-sz3Q&expires=1781298159
 
 #EXTINF:-1 group-title="TV",noticias 05
-https://b2zmawnpyww.fubo18.com/dsports/mono.m3u8?token=7e52c3b9cfe71ae20775af1fa97f44bd53b0539d-95-1781307661-1781289661
+https://tezfs.vivolatamz.org/lb05/eventos/index.m3u8?token=bc47c454e76db3d1148ab5b666162347bf18984c-26-1781358081-1781304081&ip=45.191.55.27
 
 #EXTINF:-1 group-title="TV",noticias 06
-https://qxjes.vivolatamz.org:443/tycsports/index.m3u8?token=3f716b2f3d309f05818c88b314d9ac16acac5bbd-fb-1781276117-1781222117&ip=45.191.55.42
+https://tezfs.vivolatamz.org/dsports/tracks-v1a1/mono.m3u8?ip=45.191.55.27&token=a236f0ea98d94c3f2766ce2f561a4915170aadd8-71-1781358231-1781304231
 
 #EXTINF:-1 group-title="TV",noticias 07
 https://ovaut.vivolatamz.org:443/dsports/index.m3u8?token=d7eddcbbe8f3c812188dbb017a09679f74dfb0f2-1c-1781275419-1781221419&ip=45.191.55.42
